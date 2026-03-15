@@ -1,0 +1,50 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;1,400&family=Josefin+Sans:wght@200;300;400;600&display=swap');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --green-dark:  #1a4a2e;
+  --green-mid:   #2d7a4f;
+  --green-light: #4caf7d;
+  --gold:        #c9a84c;
+  --gold-light:  #f0d080;
+  --white:       #fafcf8;
+  --cream:       #f5f0e8;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Josefin Sans', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+.playfair { font-family: 'Playfair Display', serif; }
+.italic   { font-style: italic; }
+
+/* Scrollbar */
+::-webkit-scrollbar       { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: #0d2b1a; }
+::-webkit-scrollbar-thumb { background: #c9a84c; border-radius: 3px; }
+
+/* Animations */
+@keyframes fadeIn   { from { opacity:0; transform:translateY(12px); } to { opacity:1; transform:none; } }
+@keyframes float    { 0%,100% { transform:translateY(0); } 50% { transform:translateY(-8px); } }
+@keyframes shimmer  { 0% { background-position:-200% 0; } 100% { background-position:200% 0; } }
+@keyframes pulse-gold { 0%,100% { box-shadow:0 0 0 0 rgba(201,168,76,0.4); } 50% { box-shadow:0 0 0 8px rgba(201,168,76,0); } }
+
+.fade-in    { animation: fadeIn 0.4s ease-out; }
+.float      { animation: float 3s ease-in-out infinite; }
+.pulse-gold { animation: pulse-gold 2s infinite; }
+
+/* Gold top bar on cards */
+.gold-bar::before {
+  content:''; position:absolute; top:0; left:0; right:0;
+  height:3px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-light), var(--gold));
+}
+
+/* Drag & drop */
+.dragging { opacity:0.5; cursor:grabbing; }
+.drag-over { outline: 2px dashed #c9a84c; outline-offset:2px; }
