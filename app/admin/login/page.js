@@ -4,10 +4,11 @@
 // ─────────────────────────────────────────────────
 
 'use client'
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect, useRef, Suspense } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 
-export default function AdminLogin() {
+// Composant interne qui utilise useSearchParams — doit être dans <Suspense>
+function LoginForm() {
   const [password, setPassword]   = useState('')
   const [error,    setError]      = useState('')
   const [loading,  setLoading]    = useState(false)
@@ -219,5 +220,20 @@ export default function AdminLogin() {
         }
       `}</style>
     </div>
+  )
+}
+
+// Page par défaut — enveloppe LoginForm dans Suspense (requis par Next.js 14)
+export default function AdminLogin() {
+  return (
+    <Suspense fallback={
+      <div style={{ minHeight:'100vh', background:'#0d2b1a', display:'flex', alignItems:'center', justifyContent:'center' }}>
+        <div style={{ color:'#c9a84c', fontFamily:'serif', fontSize:'1.2rem', fontStyle:'italic' }}>
+          🌺 Chargement...
+        </div>
+      </div>
+    }>
+      <LoginForm />
+    </Suspense>
   )
 }
