@@ -15,6 +15,8 @@ export function middleware(request) {
     pathname.startsWith('/bienvenue') ||
     pathname.startsWith('/admin/login') ||
     pathname.startsWith('/api/auth') ||
+    pathname.startsWith('/api/public-tables') ||
+    pathname.startsWith('/api/rsvp') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
     pathname === '/'

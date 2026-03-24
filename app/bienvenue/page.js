@@ -51,40 +51,20 @@ function Countdown({ dateISO }) {
 
 /* ── NAV ── */
 const NAV_LINKS = [
-  { id:'accueil',   label:'Accueil'    },
+  { id:'accueil',   label:'Accueil'       },
   { id:'histoire',  label:'Notre Histoire' },
-  { id:'programme', label:'Programme'  },
-  { id:'menu',      label:'Menu'       },
-  { id:'dresscode', label:'Dress Code' },
-  { id:'acces',     label:'Accès'      },
-  { id:'tables',    label:'Tables'     },
-  { id:'rsvp',      label:'RSVP'       },
+  { id:'programme', label:'Programme'     },
+  { id:'menu',      label:'Menu'          },
+  { id:'acces',     label:'Accès'         },
+  { id:'tables',    label:'Tables'        },
+  { id:'livredor',  label:'Livre d\'or'   },
 ]
 
 export default function Bienvenue() {
   const [menuOpen, setMenuOpen] = useState(false)
-  const [rsvp, setRsvp] = useState({ nom:'',prenom:'',telephone:'',presence:'oui',personnes:'1',menu:'standard',message:'' })
-  const [rsvpSent, setRsvpSent] = useState(false)
-  const [rsvpLoad, setRsvpLoad] = useState(false)
-  const setR = (k,v) => setRsvp(r=>({...r,[k]:v}))
 
-  async function submitRsvp(e) {
-    e.preventDefault()
-    if (!rsvp.nom || !rsvp.prenom) { alert('Merci de renseigner votre nom et prénom.'); return }
-    setRsvpLoad(true)
-    try {
-      await fetch('/api/rsvp', {
-        method:'POST', headers:{'Content-Type':'application/json'},
-        body: JSON.stringify(rsvp),
-      })
-    } catch(e) {}
-    await new Promise(r=>setTimeout(r,900))
-    setRsvpSent(true)
-    setRsvpLoad(false)
-  }
 
-  const IC = "w-full bg-white border border-green-mid/25 rounded-xl px-4 py-3 text-green-dark text-sm focus:outline-none focus:border-gold transition-all"
-  const SC = "w-full bg-white border border-green-mid/25 rounded-xl px-4 py-3 text-green-dark text-sm focus:outline-none focus:border-gold"
+
 
   return (
     <div style={{fontFamily:'"Josefin Sans",sans-serif', minHeight:'100vh'}}>
@@ -102,11 +82,7 @@ export default function Bienvenue() {
           ))}
         </div>
         <div className="flex gap-2 items-center">
-          <a href="#rsvp"
-             className="px-4 py-1.5 text-xs tracking-widest uppercase font-bold text-green-dark rounded-full"
-             style={{background:'linear-gradient(135deg,#c9a84c,#f0d080)'}}>
-            ✉️ RSVP
-          </a>
+
           <button className="md:hidden text-white/60 text-xl ml-1" onClick={()=>setMenuOpen(m=>!m)}>☰</button>
         </div>
       </nav>
@@ -124,51 +100,38 @@ export default function Bienvenue() {
         </div>
       )}
 
-      {/* ══ HERO — fond CSS pur, zéro image avec texte ══ */}
+      {/* ══ HERO — fond CSS pur + feuilles animées ══ */}
       <div id="accueil" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
 
         {/* Fond dégradé tropical profond */}
         <div className="absolute inset-0" style={{
-          background: 'linear-gradient(135deg, #071a0e 0%, #0d2b1a 30%, #1a4a2e 60%, #0d2b1a 100%)'
+          background: 'linear-gradient(160deg, #071a0e 0%, #0d2b1a 30%, #1a4a2e 60%, #0d2b1a 100%)'
         }}/>
 
-        {/* Fleurs déco COINS — emojis géants, aucun texte */}
-        {/* Coin haut-gauche */}
-        <div className="absolute top-0 left-0 pointer-events-none select-none" style={{zIndex:1}}>
-          <div style={{fontSize:'9rem',lineHeight:1,transform:'rotate(-20deg) translate(-20px,-20px)',opacity:0.55,filter:'blur(1px)'}}>🌺</div>
-          <div style={{fontSize:'5rem',lineHeight:1,transform:'rotate(10deg) translate(30px,-40px)',opacity:0.45}}>🌸</div>
-          <div style={{fontSize:'4rem',lineHeight:1,transform:'rotate(-5deg) translate(10px,-10px)',opacity:0.4}}>🌿</div>
-          <div style={{fontSize:'6rem',lineHeight:1,transform:'rotate(15deg) translate(-10px,-20px)',opacity:0.35}}>🌻</div>
+        {/* ── Feuilles tropicales animées (inspiré du skill) ── */}
+        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex:1}}>
+          {['🌿','🍃','🌴','🌺','🌸','🦋','🌿','🍃','🌺','🌴','🌸','🦋'].map((e,i) => (
+            <div key={i} className="absolute select-none" style={{
+              fontSize: `${2 + (i%3)*1.2}rem`,
+              left: `${(i*17+5)%95}%`,
+              top:  `${(i*23+10)%85}%`,
+              opacity: 0.18 + (i%3)*0.07,
+              animation: `floatLeaf ${4+i*0.6}s ease-in-out infinite alternate`,
+              animationDelay: `${i*0.5}s`,
+              filter: 'blur(0.5px)',
+            }}>{e}</div>
+          ))}
         </div>
 
-        {/* Coin haut-droit */}
-        <div className="absolute top-0 right-0 pointer-events-none select-none text-right" style={{zIndex:1}}>
-          <div style={{fontSize:'8rem',lineHeight:1,transform:'rotate(15deg) translate(20px,-20px)',opacity:0.5,filter:'blur(1px)'}}>🌸</div>
-          <div style={{fontSize:'4.5rem',lineHeight:1,transform:'rotate(-10deg) translate(-20px,-30px)',opacity:0.4}}>🌺</div>
-          <div style={{fontSize:'3.5rem',lineHeight:1,transform:'rotate(5deg) translate(5px,-5px)',opacity:0.35}}>🌷</div>
-        </div>
-
-        {/* Coin bas-gauche */}
-        <div className="absolute bottom-0 left-0 pointer-events-none select-none" style={{zIndex:1}}>
-          <div style={{fontSize:'7rem',lineHeight:1,transform:'rotate(20deg) translate(-15px,20px)',opacity:0.5,filter:'blur(1px)'}}>🌷</div>
-          <div style={{fontSize:'4rem',lineHeight:1,transform:'rotate(-8deg) translate(25px,10px)',opacity:0.4}}>🌻</div>
-          <div style={{fontSize:'3.5rem',lineHeight:1,transform:'translate(5px,5px)',opacity:0.35}}>🍃</div>
-        </div>
-
-        {/* Coin bas-droit */}
-        <div className="absolute bottom-0 right-0 pointer-events-none select-none text-right" style={{zIndex:1}}>
-          <div style={{fontSize:'9rem',lineHeight:1,transform:'rotate(-15deg) translate(20px,20px)',opacity:0.55,filter:'blur(1px)'}}>🌺</div>
-          <div style={{fontSize:'5rem',lineHeight:1,transform:'rotate(10deg) translate(-20px,15px)',opacity:0.45}}>🌸</div>
-          <div style={{fontSize:'3.5rem',lineHeight:1,transform:'rotate(-5deg) translate(-5px,5px)',opacity:0.35}}>🌿</div>
-        </div>
-
-        {/* Halo lumineux central décoratif */}
+        {/* Halo lumineux central */}
         <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 60% at 50% 45%, rgba(201,168,76,0.06) 0%, transparent 70%)',
+          background: 'radial-gradient(ellipse 70% 60% at 50% 45%, rgba(201,168,76,0.07) 0%, transparent 70%)',
           zIndex: 1,
         }}/>
 
+        {/* Contenu hero */}
         <div className="relative text-center px-6 pt-20" style={{zIndex:3}}>
+          <div className="text-5xl mb-3" style={{animation:'floatLeaf 3s ease-in-out infinite alternate'}}>🌺</div>
           <p className="text-gold-light text-xs tracking-widest uppercase mb-4 opacity-80">✿ Save the Date ✿</p>
           <h1 className="text-white drop-shadow-2xl leading-tight playfair italic"
               style={{fontSize:'clamp(3.5rem,11vw,8rem)'}}>
@@ -188,20 +151,43 @@ export default function Bienvenue() {
 
           <Countdown dateISO={WEDDING.dateISO} />
 
-          <div className="mt-8 flex flex-wrap gap-4 justify-center">
-            <a href="#programme"
-               className="px-8 py-3.5 rounded-full text-sm tracking-widest uppercase font-bold text-green-dark hover:-translate-y-1 transition-all hover:shadow-xl"
-               style={{background:'linear-gradient(135deg,#c9a84c,#f0d080)'}}>
-              🌺 Le programme
-            </a>
-            <a href="#rsvp"
-               className="px-8 py-3.5 rounded-full text-sm tracking-widest uppercase border border-white/60 text-white hover:bg-white/20 transition-all">
-              ✉️ Je confirme
-            </a>
+          {/* ── Cartes de navigation tropicales — 2 rangées × 3 ── */}
+          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'10px', width:'100%', maxWidth:'480px', margin:'32px auto 0' }}>
+            {[
+              { href:'#programme', icon:'📋', label:'Programme',      bg:'#2d6a4f', text:'white'   },
+              { href:'#menu',      icon:'🍽️', label:'Menu',           bg:'#f9c74f', text:'#1B4332' },
+              { href:'#acces',     icon:'📍', label:'Accès',          bg:'#40916c', text:'white'   },
+              { href:'#tables',    icon:'🗺️', label:'Plan de Table',  bg:'#f4845f', text:'white'   },
+              { href:'#livredor',  icon:'📖', label:"Livre d'or",     bg:'#74c69d', text:'#1B4332' },
+              { href:'#histoire',  icon:'💑', label:'Notre Histoire', bg:'#c9a84c', text:'#1B4332' },
+            ].map(item=>(
+              <a key={item.href} href={item.href}
+                 style={{
+                   display:'flex', flexDirection:'column', alignItems:'center',
+                   padding:'14px 8px', borderRadius:'16px', fontWeight:700,
+                   fontSize:'0.72rem', textDecoration:'none',
+                   background:item.bg, color:item.text,
+                   boxShadow:'0 4px 15px rgba(0,0,0,0.25)',
+                   transition:'transform 0.2s, box-shadow 0.2s',
+                   letterSpacing:'0.03em',
+                 }}
+                 onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,0.35)'}}
+                 onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.25)'}}>
+                <span style={{fontSize:'1.5rem', marginBottom:'5px'}}>{item.icon}</span>
+                {item.label}
+              </a>
+            ))}
           </div>
         </div>
 
         <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-xs tracking-widest uppercase animate-bounce" style={{zIndex:3}}>↓ découvrir</div>
+
+        <style>{`
+          @keyframes floatLeaf {
+            from { transform: translateY(0px) rotate(0deg); }
+            to   { transform: translateY(-18px) rotate(8deg); }
+          }
+        `}</style>
       </div>
 
       {/* ══ TEXTE D'ACCUEIL ══ */}
@@ -407,88 +393,6 @@ export default function Bienvenue() {
         </div>
       </Section>
 
-      {/* ══ DRESS CODE ══ */}
-      <Section id="dresscode" bg="#fafcf8">
-        <div className="py-20 px-6 md:px-16 max-w-4xl mx-auto">
-          <SectionTitle emoji="👗" title="Dress Code" sub="Balade Tropicale · 30 Juin 2026" />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-
-            {/* Femmes */}
-            <div className="rounded-2xl overflow-hidden shadow-lg" style={{border:'1px solid #e91e8c30'}}>
-              <div className="p-6 text-center" style={{background:'linear-gradient(135deg,#e91e8c15,#f39c1210)'}}>
-                <div className="text-5xl mb-3">👗</div>
-                <h3 className="text-green-dark italic text-2xl playfair">Pour les Femmes</h3>
-                <p className="text-green-mid text-xs tracking-widest uppercase mt-1">Thème Balade Tropicale</p>
-              </div>
-              {/* Photo dress code femmes */}
-              <div className="relative overflow-hidden" style={{aspectRatio:'4/3'}}>
-                <img
-                  src="/dresscode-femmes.jpg"
-                  alt="Dress code femmes — Balade Tropicale"
-                  className="w-full h-full object-cover object-top"
-                  style={{transition:'transform 0.4s'}}
-                  onMouseEnter={e=>e.currentTarget.style.transform='scale(1.03)'}
-                  onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}
-                />
-                <div className="absolute inset-0" style={{background:'linear-gradient(to top, rgba(233,30,140,0.15) 0%, transparent 50%)'}}/>
-              </div>
-              <div className="p-5 bg-white">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {['#e91e8c','#c0392b','#f39c12','#27ae60','#9b59b6','#ff7675'].map(c=>(
-                    <div key={c} className="w-8 h-8 rounded-full border-2 border-white shadow"
-                         title={c} style={{background:c}} />
-                  ))}
-                </div>
-                <p className="text-green-dark/70 text-xs leading-relaxed">
-                  Robes légères, imprimés floraux, tenues colorées tropicales. 
-                  Évitez le blanc et le noir. Bijoux dorés ou nacrés appréciés. 🌺
-                </p>
-              </div>
-            </div>
-
-            {/* Hommes */}
-            <div className="rounded-2xl overflow-hidden shadow-lg" style={{border:'1px solid #c9a84c30'}}>
-              <div className="p-6 text-center" style={{background:'linear-gradient(135deg,#d4a57415,#c9a84c10)'}}>
-                <div className="text-5xl mb-3">👔</div>
-                <h3 className="text-green-dark italic text-2xl playfair">Pour les Hommes</h3>
-                <p className="text-green-mid text-xs tracking-widest uppercase mt-1">Tons Beige & Couleurs Chaudes</p>
-              </div>
-              {/* Photo dress code hommes — costumes beige */}
-              <div className="relative overflow-hidden" style={{aspectRatio:'4/3'}}>
-                <img
-                  src="/dresscode-hommes.jpg"
-                  alt="Dress code hommes — Costume beige"
-                  className="w-full h-full object-cover object-top"
-                  style={{transition:'transform 0.4s'}}
-                  onMouseEnter={e=>e.currentTarget.style.transform='scale(1.03)'}
-                  onMouseLeave={e=>e.currentTarget.style.transform='scale(1)'}
-                />
-                <div className="absolute inset-0" style={{background:'linear-gradient(to top, rgba(201,168,76,0.15) 0%, transparent 50%)'}}/>
-              </div>
-              <div className="p-5 bg-white">
-                <div className="flex flex-wrap gap-2 mb-4">
-                  {['#f5f0e8','#d4a574','#c8a882','#8b6914','#f39c12','#1a4a2e'].map(c=>(
-                    <div key={c} className="w-8 h-8 rounded-full border-2 border-gray-200 shadow"
-                         style={{background:c}} />
-                  ))}
-                </div>
-                <p className="text-green-dark/70 text-xs leading-relaxed">
-                  Costume ou pantalon beige / lin, chemise légère. 
-                  Cravate ou pochette en couleur tropicale bienvenue. 🌴
-                </p>
-              </div>
-            </div>
-          </div>
-
-          <div className="mt-8 p-5 rounded-xl text-center"
-               style={{background:'#fff9ed',border:'1px solid #c9a84c40'}}>
-            <p className="text-green-dark text-sm">
-              🌟 <strong>Conseil :</strong> Le blanc et le noir sont réservés aux mariés. Plus c'est coloré et tropical, plus c'est festif !
-            </p>
-          </div>
-        </div>
-      </Section>
-
       {/* ══ PLAN D'ACCÈS ══ */}
       <Section id="acces" bg="linear-gradient(135deg,#1a4a2e,#0d2b1a)">
         <div className="py-20 px-6 md:px-16 max-w-5xl mx-auto">
@@ -544,7 +448,7 @@ export default function Bienvenue() {
               <span className="text-3xl">⚖️</span>
               <div>
                 <h4 className="text-gold-light italic text-lg playfair">Cérémonie Civile — 11h30</h4>
-                <p className="text-white/80 text-sm mt-1">Mairie de Créteil — 1 rue Tirard, 94000 Créteil</p>
+                <p className="text-white/80 text-sm mt-1">{WEDDING.ceremonieCivile.lieu} — {WEDDING.ceremonieCivile.adresse}</p>
                 <a href={WEDDING.ceremonieCivile.maps} target="_blank" rel="noreferrer"
                    className="inline-flex items-center gap-2 mt-2 text-xs tracking-widest uppercase text-gold hover:text-gold-light transition-colors">
                   📍 Voir sur Maps →
@@ -669,27 +573,8 @@ export default function Bienvenue() {
           {/* Plan SVG de la salle */}
           <SallePlan />
 
-          {/* Légende */}
-          <div style={{ marginTop: '40px', display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(120px,1fr))', gap: '12px' }}>
-            {TABLES.map(t => (
-              <div key={t.id} style={{
-                background: 'rgba(255,255,255,0.05)',
-                border: '1px solid rgba(201,168,76,0.25)',
-                borderRadius: '12px',
-                padding: '12px 8px',
-                textAlign: 'center',
-                transition: 'transform 0.2s',
-                cursor: 'default',
-              }}
-                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-3px)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
-              >
-                <div style={{ fontSize: '1.5rem', marginBottom: '4px' }}>{t.flower}</div>
-                <div style={{ color: '#f0d080', fontSize: '0.72rem', fontWeight: 600, lineHeight: 1.2 }}>{t.name}</div>
-                <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.6rem', marginTop: '3px' }}>{t.capacity} places</div>
-              </div>
-            ))}
-          </div>
+          {/* Légende tables — dynamique avec compteur */}
+          <LegendeTables />
 
           {/* Note bas */}
           <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.25)', fontSize: '0.72rem', marginTop: '28px', letterSpacing: '0.15em' }}>
@@ -698,93 +583,8 @@ export default function Bienvenue() {
         </div>
       </section>
 
-      {/* ══ RSVP ══ */}
-      <Section id="rsvp" bg="linear-gradient(135deg,#fdf8f0,#f0f8f0)">
-        <div className="py-20 px-6 max-w-xl mx-auto">
-          <SectionTitle emoji="✉️" title="Confirmez votre présence" sub={`Avant le ${WEDDING.rsvpLimit}`} />
-
-          {rsvpSent ? (
-            <div className="text-center p-10 rounded-2xl" style={{background:'white',border:'2px solid #4caf7d40',boxShadow:'0 8px 30px rgba(76,175,125,0.15)'}}>
-              <div className="text-5xl mb-4">🌺</div>
-              <h3 className="text-2xl italic text-green-dark playfair mb-2">Merci {rsvp.prenom} !</h3>
-              <p className="text-green-mid text-sm">Votre réponse a bien été enregistrée. Nous avons hâte de vous voir ! 🎉</p>
-            </div>
-          ) : (
-            <form onSubmit={submitRsvp} className="rounded-2xl p-8 shadow-xl"
-                  style={{background:'white',border:'1px solid rgba(201,168,76,0.2)'}}>
-
-              <div className="grid grid-cols-2 gap-3 mb-4">
-                <div>
-                  <label className="text-xs tracking-widest uppercase text-green-mid block mb-1.5">Prénom *</label>
-                  <input value={rsvp.prenom} onChange={e=>setR('prenom',e.target.value)} placeholder="Marie" required className={IC}/>
-                </div>
-                <div>
-                  <label className="text-xs tracking-widest uppercase text-green-mid block mb-1.5">Nom *</label>
-                  <input value={rsvp.nom} onChange={e=>setR('nom',e.target.value)} placeholder="Dupont" required className={IC}/>
-                </div>
-              </div>
-
-              <div className="mb-4">
-                <label className="text-xs tracking-widest uppercase text-green-mid block mb-1.5">Téléphone</label>
-                <input value={rsvp.telephone} onChange={e=>setR('telephone',e.target.value)} placeholder="+33 6 00 00 00 00" className={IC}/>
-              </div>
-
-              <div className="mb-4">
-                <label className="text-xs tracking-widest uppercase text-green-mid block mb-1.5">Serez-vous présent(e) ? *</label>
-                <div className="flex gap-3">
-                  {[{v:'oui',l:'✅ Oui, avec joie !'},{v:'non',l:'❌ Je ne pourrai pas'}].map(opt=>(
-                    <label key={opt.v} className="flex-1 cursor-pointer">
-                      <input type="radio" name="presence" value={opt.v} checked={rsvp.presence===opt.v}
-                             onChange={()=>setR('presence',opt.v)} className="sr-only"/>
-                      <div className={`text-center py-2.5 rounded-xl text-xs font-medium border-2 transition-all ${
-                        rsvp.presence===opt.v ? 'border-gold bg-gold/10 text-green-dark' : 'border-gray-200 text-gray-400 hover:border-gold/50'
-                      }`}>{opt.l}</div>
-                    </label>
-                  ))}
-                </div>
-              </div>
-
-              {rsvp.presence==='oui' && (
-                <>
-                  <div className="grid grid-cols-2 gap-3 mb-4">
-                    <div>
-                      <label className="text-xs tracking-widest uppercase text-green-mid block mb-1.5">Nombre de personnes</label>
-                      <select value={rsvp.personnes} onChange={e=>setR('personnes',e.target.value)} className={SC}>
-                        {[1,2,3,4,5,6].map(n=><option key={n} value={n}>{n} personne{n>1?'s':''}</option>)}
-                      </select>
-                    </div>
-                    <div>
-                      <label className="text-xs tracking-widest uppercase text-green-mid block mb-1.5">Menu</label>
-                      <select value={rsvp.menu} onChange={e=>setR('menu',e.target.value)} className={SC}>
-                        <option value="standard">🍽️ Standard</option>
-                        <option value="vegetarien">🥗 Végétarien</option>
-                        <option value="halal">🌙 Halal</option>
-                        <option value="casher">✡️ Casher</option>
-                        <option value="allergie">⚠️ Allergie</option>
-                      </select>
-                    </div>
-                  </div>
-                </>
-              )}
-
-              <div className="mb-6">
-                <label className="text-xs tracking-widest uppercase text-green-mid block mb-1.5">Message pour les mariés</label>
-                <textarea value={rsvp.message} onChange={e=>setR('message',e.target.value)}
-                          rows={3} placeholder="Un mot, un souvenir, une question…"
-                          className={IC+' resize-none'}/>
-              </div>
-
-              <button type="submit" disabled={rsvpLoad}
-                      className="w-full py-4 rounded-xl text-sm tracking-widest uppercase font-bold text-green-dark hover:-translate-y-1 transition-all hover:shadow-xl disabled:opacity-50"
-                      style={{background:'linear-gradient(135deg,#c9a84c,#f0d080)'}}>
-                {rsvpLoad ? '⏳ Envoi…' : '🌺 Confirmer ma présence'}
-              </button>
-
-              <p className="text-center text-green-mid/50 text-xs mt-4">Avant le <strong>{WEDDING.rsvpLimit}</strong></p>
-            </form>
-          )}
-        </div>
-      </Section>
+      {/* ══ LIVRE D'OR ══ */}
+      <LivreOr />
 
       {/* ══ FOOTER ══ */}
       <footer className="py-10 px-6 text-center"
@@ -801,10 +601,144 @@ export default function Bienvenue() {
 }
 
 /* ── Schéma de salle ── */
-function SallePlan() {
-  const [hovered, setHovered] = useState(null)
+// ══════════════════════════════════════════════
+// LÉGENDE TABLES — Dynamique avec compteur invités
+// ══════════════════════════════════════════════
+function LegendeTables() {
+  const [guests, setGuests] = useState([])
 
-  // Couleurs par table
+  useEffect(() => {
+    fetch('/api/public-tables')
+      .then(r => r.ok ? r.json() : [])
+      .then(data => Array.isArray(data) ? setGuests(data) : [])
+      .catch(() => {})
+  }, [])
+
+  const TABLE_COLORS = {
+    1:'#e74c3c', 2:'#e91e8c', 3:'#c0392b', 4:'#9b59b6', 5:'#f39c12',
+    6:'#f1c40f', 7:'#e74c3c', 8:'#27ae60', 9:'#16a085', 10:'#2ecc71',
+    11:'#c9a84c', 12:'#1abc9c', 13:'#e91e8c', 14:'#e67e22',
+  }
+
+  const totalCapacity = TABLES.reduce((s, t) => s + t.capacity, 0)
+  const totalPlaced   = guests.filter(g => g.tableId).length
+
+  return (
+    <div style={{ marginTop: '40px' }}>
+
+      {/* Barre globale */}
+      <div style={{ marginBottom: '24px', background: 'rgba(255,255,255,0.04)', borderRadius: '12px', padding: '14px 20px', border: '1px solid rgba(201,168,76,0.15)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
+          <span style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase' }}>
+            Remplissage global — {TABLES.length} tables
+          </span>
+          <span style={{ color: '#f0d080', fontSize: '0.75rem', fontWeight: 700 }}>
+            {totalPlaced} / {totalCapacity} places
+          </span>
+        </div>
+        <div style={{ height: '6px', background: 'rgba(255,255,255,0.08)', borderRadius: '4px', overflow: 'hidden' }}>
+          <div style={{
+            height: '100%', borderRadius: '4px',
+            width: totalCapacity ? `${Math.round(totalPlaced / totalCapacity * 100)}%` : '0%',
+            background: 'linear-gradient(90deg,#4caf7d,#c9a84c)',
+            transition: 'width 0.5s',
+          }}/>
+        </div>
+      </div>
+
+      {/* Grille 14 tables */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(130px,1fr))', gap: '10px' }}>
+        {TABLES.map(t => {
+          const count  = guests.filter(g => g.tableId === t.id).length
+          const pct    = Math.round(count / t.capacity * 100)
+          const isFull = count >= t.capacity
+          const col    = TABLE_COLORS[t.id] || '#c9a84c'
+
+          return (
+            <div key={t.id} style={{
+              background: `linear-gradient(160deg,rgba(255,255,255,0.06),rgba(255,255,255,0.02))`,
+              border: isFull ? `1px solid ${col}80` : '1px solid rgba(255,255,255,0.08)',
+              borderRadius: '14px',
+              padding: '14px 10px 10px',
+              textAlign: 'center',
+              transition: 'transform 0.2s, box-shadow 0.2s',
+              cursor: 'default',
+              position: 'relative',
+              overflow: 'hidden',
+            }}
+              onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = `0 8px 24px ${col}30` }}
+              onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
+            >
+              {/* Bande couleur en haut */}
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: col, opacity: 0.7, borderRadius: '14px 14px 0 0' }}/>
+
+              {/* Badge COMPLET */}
+              {isFull && (
+                <div style={{ position: 'absolute', top: '8px', right: '8px', background: col, color: '#fff', fontSize: '0.48rem', fontWeight: 700, padding: '2px 5px', borderRadius: '6px', letterSpacing: '0.1em' }}>
+                  COMPLET
+                </div>
+              )}
+
+              {/* Emoji */}
+              <div style={{ fontSize: '1.8rem', marginBottom: '6px', lineHeight: 1 }}>{t.flower}</div>
+
+              {/* Nom */}
+              <div style={{ color: '#f0d080', fontSize: '0.72rem', fontWeight: 600, lineHeight: 1.3, marginBottom: '4px' }}>
+                {t.name}
+              </div>
+
+              {/* Compteur */}
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '3px', marginBottom: '7px' }}>
+                <span style={{ color: col, fontSize: '0.9rem', fontWeight: 700, fontFamily: '"Playfair Display",serif' }}>{count}</span>
+                <span style={{ color: 'rgba(255,255,255,0.25)', fontSize: '0.68rem' }}>/ {t.capacity}</span>
+              </div>
+
+              {/* Barre mini */}
+              <div style={{ height: '4px', background: 'rgba(255,255,255,0.07)', borderRadius: '3px', overflow: 'hidden' }}>
+                <div style={{
+                  height: '100%', borderRadius: '3px',
+                  width: `${pct}%`,
+                  background: isFull ? `linear-gradient(90deg,${col},${col}cc)` : col,
+                  transition: 'width 0.5s',
+                  opacity: 0.85,
+                }}/>
+              </div>
+
+              {/* Chaises mini */}
+              <div style={{ display: 'flex', gap: '2px', justifyContent: 'center', marginTop: '7px', flexWrap: 'wrap' }}>
+                {Array.from({ length: t.capacity }).map((_, i) => (
+                  <div key={i} style={{
+                    width: '7px', height: '7px', borderRadius: '50%',
+                    background: i < count ? col : 'rgba(255,255,255,0.1)',
+                    border: i < count ? `1px solid ${col}` : '1px solid rgba(255,255,255,0.15)',
+                    transition: 'background 0.3s',
+                  }}/>
+                ))}
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function SallePlan() {
+  const [hovered,  setHovered]  = useState(null)
+  const [selected, setSelected] = useState(null)
+  const [guests,   setGuests]   = useState([])
+
+  useEffect(() => {
+    fetch('/api/public-tables')
+      .then(r => r.ok ? r.json() : [])
+      .then(data => Array.isArray(data) ? setGuests(data) : [])
+      .catch(() => {})
+  }, [])
+
+  const guestsAt = (tableId) => guests.filter(g => g.tableId === tableId)
+  const selTable  = selected ? TABLES.find(t => t.id === selected) : null
+  const selGuests = selected ? guestsAt(selected) : []
+
   const COLORS = {
     1:'#e74c3c', 2:'#e91e8c', 3:'#e74c3c', 4:'#9b59b6', 5:'#f39c12',
     6:'#f1c40f', 7:'#e74c3c', 8:'#27ae60', 9:'#16a085', 10:'#2ecc71',
@@ -834,28 +768,97 @@ function SallePlan() {
     { id:14, x:700, y:470 },
   ]
 
-  const hovT = hovered ? TABLES.find(t => t.id === hovered) : null
-
   return (
     <div style={{ position: 'relative', width: '100%', maxWidth: '820px', margin: '0 auto' }}>
 
-      {/* Tooltip */}
-      {hovT && (
+      {/* ── Popup invités (clic sur une table) ── */}
+      {selected && selTable && (
         <div style={{
-          position: 'absolute', top: '-48px', left: '50%', transform: 'translateX(-50%)',
-          background: 'rgba(13,43,26,0.95)', border: '1px solid #c9a84c',
-          borderRadius: '10px', padding: '8px 18px', zIndex: 10,
-          pointerEvents: 'none', whiteSpace: 'nowrap',
-          boxShadow: '0 4px 20px rgba(0,0,0,0.4)'
+          position: 'absolute', top: '-8px', left: '50%', transform: 'translateX(-50%)',
+          background: 'linear-gradient(160deg,#1a4a2e,#0d2b1a)',
+          border: `2px solid ${COLORS[selected]||'#c9a84c'}`,
+          borderRadius: '16px', padding: '16px 22px', zIndex: 20,
+          minWidth: '260px', maxWidth: '340px',
+          boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
         }}>
-          <span style={{ color: '#f0d080', fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '0.95rem' }}>
-            {hovT.flower} Table {hovT.name}
-          </span>
-          <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.7rem', marginLeft: '10px' }}>
-            {hovT.capacity} places
-          </span>
+          {/* Header popup */}
+          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'12px' }}>
+            <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
+              <span style={{ fontSize:'1.5rem' }}>{selTable.flower}</span>
+              <div>
+                <div style={{ fontFamily:'"Playfair Display",serif', fontStyle:'italic', color:'#f0d080', fontSize:'1rem' }}>
+                  Table {selTable.name}
+                </div>
+                <div style={{ color:'rgba(255,255,255,0.35)', fontSize:'0.58rem', letterSpacing:'0.2em' }}>
+                  {selGuests.length} / {selTable.capacity} places
+                </div>
+              </div>
+            </div>
+            <button
+              onClick={() => setSelected(null)}
+              style={{ background:'rgba(255,255,255,0.1)', border:'none', borderRadius:'50%', width:'24px', height:'24px', color:'rgba(255,255,255,0.6)', cursor:'pointer', fontSize:'0.85rem', display:'flex', alignItems:'center', justifyContent:'center' }}>
+              ✕
+            </button>
+          </div>
+          {/* Barre progression */}
+          <div style={{ height:'3px', background:'rgba(255,255,255,0.08)', borderRadius:'2px', marginBottom:'12px' }}>
+            <div style={{ height:'100%', borderRadius:'2px', transition:'width 0.4s',
+              width: `${Math.round(selGuests.length/selTable.capacity*100)}%`,
+              background: `linear-gradient(90deg,${COLORS[selected]||'#c9a84c'},${COLORS[selected]||'#c9a84c'}aa)`
+            }}/>
+          </div>
+          {/* Liste invités */}
+          {selGuests.length === 0 ? (
+            <div style={{ color:'rgba(255,255,255,0.3)', fontSize:'0.78rem', fontStyle:'italic', textAlign:'center', padding:'8px 0' }}>
+              Aucun invité assigné pour l'instant
+            </div>
+          ) : (
+            <div style={{ display:'flex', flexDirection:'column', gap:'4px', maxHeight:'200px', overflowY:'auto' }}>
+              {selGuests.map((g,i) => (
+                <div key={g.id} style={{
+                  display:'flex', alignItems:'center', gap:'8px',
+                  padding:'5px 8px', borderRadius:'8px',
+                  background:'rgba(255,255,255,0.05)',
+                  border:'1px solid rgba(255,255,255,0.07)',
+                }}>
+                  <span style={{ fontSize:'0.85rem' }}>
+                    {g.group==='mariee'?'👰':g.group==='marie'?'🤵':g.group==='famille'?'👨‍👩‍👧':g.group==='amis'?'👫':g.group==='collegue'?'💼':'🌺'}
+                  </span>
+                  <span style={{ color:'rgba(255,255,255,0.85)', fontSize:'0.8rem', flex:1 }}>{g.name}</span>
+                  {g.present && (
+                    <span style={{ fontSize:'0.6rem', color:'#4caf7d', background:'rgba(76,175,125,0.15)', border:'1px solid rgba(76,175,125,0.3)', borderRadius:'10px', padding:'1px 6px' }}>✓ Présent</span>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+          {/* Flèche bas */}
+          <div style={{ textAlign:'center', marginTop:'10px', color:`${COLORS[selected]||'#c9a84c'}`, fontSize:'0.6rem', letterSpacing:'0.2em', opacity:0.6 }}>
+            ▼
+          </div>
         </div>
       )}
+
+      {/* Tooltip survol (sans clic) */}
+      {hovered && !selected && (() => {
+        const hovT = TABLES.find(t => t.id === hovered)
+        return hovT ? (
+          <div style={{
+            position:'absolute', top:'-42px', left:'50%', transform:'translateX(-50%)',
+            background:'rgba(13,43,26,0.95)', border:'1px solid #c9a84c',
+            borderRadius:'10px', padding:'6px 16px', zIndex:10,
+            pointerEvents:'none', whiteSpace:'nowrap',
+            boxShadow:'0 4px 20px rgba(0,0,0,0.4)'
+          }}>
+            <span style={{ color:'#f0d080', fontFamily:'"Playfair Display",serif', fontStyle:'italic', fontSize:'0.9rem' }}>
+              {hovT.flower} Table {hovT.name}
+            </span>
+            <span style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.68rem', marginLeft:'8px' }}>
+              · {guestsAt(hovT.id).length}/{hovT.capacity} invités · Cliquer pour voir
+            </span>
+          </div>
+        ) : null
+      })()}
 
       <svg
         viewBox="0 0 800 560"
@@ -924,28 +927,61 @@ function SallePlan() {
             <g key={pos.id}
                onMouseEnter={() => setHovered(pos.id)}
                onMouseLeave={() => setHovered(null)}
-               style={{ cursor:'pointer', transition:'transform 0.2s', transform: isHov ? `translate(${pos.x}px,${pos.y}px) scale(1.12) translate(-${pos.x}px,-${pos.y}px)` : 'none' }}
+               onClick={() => setSelected(selected === pos.id ? null : pos.id)}
+               style={{ cursor:'pointer', transition:'transform 0.15s', transform: (isHov || selected===pos.id) ? `translate(${pos.x}px,${pos.y}px) scale(1.1) translate(-${pos.x}px,-${pos.y}px)` : 'none' }}
             >
               {/* Ombre */}
               <circle cx={pos.x} cy={pos.y+4} r={r} fill="rgba(0,0,0,0.3)" filter="url(#glow)"/>
-              {/* Nappe */}
-              <circle cx={pos.x} cy={pos.y} r={r} fill={`${col}22`} stroke={col} strokeWidth={isHov ? 3 : 1.5} opacity={isHov ? 1 : 0.85}/>
+              {/* Nappe — mise en valeur si sélectionnée */}
+              {selected === pos.id && <circle cx={pos.x} cy={pos.y} r={r+8} fill="none" stroke={col} strokeWidth="2" strokeDasharray="5 3" opacity="0.8"/>}
+              <circle cx={pos.x} cy={pos.y} r={r} fill={selected===pos.id ? `${col}40` : `${col}22`} stroke={col} strokeWidth={selected===pos.id ? 4 : isHov ? 3 : 1.5} opacity={1}/>
               {/* Cercle intérieur */}
               <circle cx={pos.x} cy={pos.y} r={r-10} fill={`${col}18`} stroke={`${col}`} strokeWidth="0.8" opacity="0.5"/>
-              {/* Chaises autour */}
-              {[0,45,90,135,180,225,270,315].slice(0, t.capacity > 8 ? 10 : 8).map((angle, i) => {
+              {/* Chaises autour — 8 par table */}
+              {[0,45,90,135,180,225,270,315].map((angle, i) => {
                 const rad = (angle * Math.PI) / 180
                 const cx2 = pos.x + (r+10) * Math.cos(rad)
                 const cy2 = pos.y + (r+10) * Math.sin(rad)
                 return <circle key={i} cx={cx2} cy={cy2} r="5" fill={`${col}60`} stroke={col} strokeWidth="1"/>
               })}
               {/* Emoji fleur */}
-              <text x={pos.x} y={pos.y-6} textAnchor="middle" fontSize="18" dominantBaseline="middle">{t.flower}</text>
-              {/* Numéro */}
-              <text x={pos.x} y={pos.y+14} textAnchor="middle" fill="white" fontSize="9"
-                    fontFamily="Josefin Sans,sans-serif" letterSpacing="0.5" opacity="0.9">
-                {t.name.length > 8 ? t.name.slice(0,8) : t.name}
-              </text>
+              <text x={pos.x} y={pos.y-8} textAnchor="middle" fontSize="16" dominantBaseline="middle">{t.flower}</text>
+              {/* Nom — étiquettes optimisées pour le SVG */}
+              {(() => {
+                // Étiquettes fixes optimisées pour chaque table (max ~10 px de large)
+                const LABELS = {
+                  1:  ['Hibiscus',    null],
+                  2:  ['Frangipa-',   'nier'],
+                  3:  ['Balisier',    null],
+                  4:  ['Bougan-',     'villée'],
+                  5:  ['Lantana',     null],
+                  6:  ['Alamanda',    null],
+                  7:  ['Anthurium',   null],
+                  8:  ['Heliconias',  null],
+                  9:  ['Oiseau du',   'Paradis'],
+                  10: ['Cactus',      null],
+                  11: ["Cœur",        "d'Amour"],
+                  12: ['Palmier &',   'Bambou'],
+                  13: ['Orchidée',    null],
+                  14: ['Pivoine',     'Tropicale'],
+                }
+                const [l1, l2] = LABELS[t.id] || [t.name, null]
+                if (!l2) {
+                  return (
+                    <text x={pos.x} y={pos.y+13} textAnchor="middle" fill="white" fontSize="8"
+                          fontFamily="Josefin Sans,sans-serif" letterSpacing="0.3" opacity="0.92">
+                      {l1}
+                    </text>
+                  )
+                }
+                return (
+                  <text textAnchor="middle" fill="white" fontSize="7.5"
+                        fontFamily="Josefin Sans,sans-serif" letterSpacing="0.2" opacity="0.92">
+                    <tspan x={pos.x} y={pos.y+7}>{l1}</tspan>
+                    <tspan x={pos.x} dy="11">{l2}</tspan>
+                  </text>
+                )
+              })()}
             </g>
           )
         })}
@@ -960,8 +996,138 @@ function SallePlan() {
         <rect x="22" y="490" width="130" height="30" rx="6" fill="rgba(0,0,0,0.3)"/>
         <circle cx="38" cy="505" r="6" fill="rgba(201,168,76,0.3)" stroke="#c9a84c" strokeWidth="1"/>
         <circle cx="38" cy="505" r="3" fill="rgba(201,168,76,0.5)"/>
-        <text x="50" y="509" fill="rgba(255,255,255,0.4)" fontSize="8" fontFamily="Josefin Sans,sans-serif" letterSpacing="1">Table ronde · 10 pl.</text>
+        <text x="50" y="509" fill="rgba(255,255,255,0.4)" fontSize="8" fontFamily="Josefin Sans,sans-serif" letterSpacing="1">Table ronde · 8 pl. max</text>
       </svg>
     </div>
+  )
+}
+
+// ══════════════════════════════════════════════════
+// LIVRE D'OR — Section complète avec formulaire
+// ══════════════════════════════════════════════════
+function LivreOr() {
+  const [nom,     setNom]     = useState('')
+  const [msg,     setMsg]     = useState('')
+  const [sending, setSending] = useState(false)
+  const [sent,    setSent]    = useState(false)
+  const [messages, setMessages] = useState([
+    { id:1, auteur:'Sophie & Marc',  message:'Félicitations à vous deux ! Que votre amour soit aussi chaud que le soleil des Antilles. Nous sommes tellement heureux pour vous ! 🌺', date:'2026-03-15' },
+    { id:2, auteur:'Famille Dupont', message:'Quelle belle journée en perspective ! Tous nos vœux de bonheur pour cette Balade Tropicale. Mille fois merci de nous avoir invités. 💚', date:'2026-03-18' },
+    { id:3, auteur:'Jean-Pierre',    message:'Pascal, Katty, vous méritez tout le bonheur du monde. Que votre vie ensemble soit aussi colorée et joyeuse que ce beau thème tropical ! 🌴', date:'2026-03-20' },
+  ])
+
+  async function submit(e) {
+    e.preventDefault()
+    if (!nom.trim() || !msg.trim()) return
+    setSending(true)
+    // Simulation envoi (Supabase en prod)
+    await new Promise(r => setTimeout(r, 800))
+    setMessages(prev => [{
+      id: Date.now(),
+      auteur: nom,
+      message: msg,
+      date: new Date().toISOString().slice(0,10)
+    }, ...prev])
+    setSending(false)
+    setSent(true)
+  }
+
+  return (
+    <section id="livredor" style={{ background: '#fafcf8' }}>
+      <div style={{ maxWidth: '760px', margin: '0 auto', padding: '80px 24px' }}>
+
+        {/* Titre */}
+        <div style={{ textAlign: 'center', marginBottom: '48px' }}>
+          <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📖</div>
+          <h2 style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: 'clamp(1.8rem,4vw,2.6rem)', color: '#1a4a2e', marginBottom: '8px' }}>
+            Livre d'or
+          </h2>
+          <p style={{ fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '16px' }}>
+            Laissez-nous un message d'amour
+          </p>
+          <div className="max-w-lg mx-auto" style={{ color: '#2d5a3d', fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '0.95rem', lineHeight: 1.7, padding: '20px', background: 'linear-gradient(135deg,#f0f9f4,#fff9ed)', borderRadius: '16px', border: '1px solid rgba(201,168,76,0.2)' }}>
+            "Nous t'invitons à nous transmettre tout ton amour et ta bonne humeur en signant notre livre d'or,
+            alors n'hésite pas à nous laisser un message ! Et mille fois merci de nous mettre du baume au cœur."
+            <div style={{ marginTop: '8px', color: '#c9a84c', fontWeight: 700 }}>— Pascal &amp; Katty 💕</div>
+          </div>
+        </div>
+
+        {/* Formulaire */}
+        <div style={{ background: 'white', borderRadius: '20px', padding: '32px', marginBottom: '40px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)', border: '1px solid rgba(201,168,76,0.2)' }}>
+          {sent ? (
+            <div style={{ textAlign: 'center', padding: '24px 0' }}>
+              <div style={{ fontSize: '3rem', marginBottom: '12px' }}>💚</div>
+              <p style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '1.3rem', color: '#1a4a2e', marginBottom: '8px' }}>
+                Merci pour votre message !
+              </p>
+              <p style={{ color: '#6b7280', fontSize: '0.85rem' }}>Il rejoindra notre livre d'or pour toujours. 🌺</p>
+              <button onClick={() => { setSent(false); setNom(''); setMsg('') }}
+                      style={{ marginTop: '16px', fontSize: '0.75rem', color: '#9ca3af', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>
+                Laisser un autre message
+              </button>
+            </div>
+          ) : (
+            <form onSubmit={submit}>
+              <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '20px' }}>
+                ✍️ Votre message
+              </p>
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                  Votre prénom / nom *
+                </label>
+                <input
+                  value={nom} onChange={e => setNom(e.target.value)}
+                  placeholder="Marie Dupont"
+                  autoComplete="off"
+                  required
+                  style={{ width: '100%', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                  onFocus={e => e.target.style.borderColor = '#c9a84c'}
+                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                />
+              </div>
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                  Votre message 💌 *
+                </label>
+                <textarea
+                  value={msg} onChange={e => setMsg(e.target.value)}
+                  rows={4}
+                  placeholder="Félicitations à Pascal et Katty ! Que votre amour soit aussi chaud que le soleil de la Guadeloupe…"
+                  required
+                  style={{ width: '100%', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', resize: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
+                  onFocus={e => e.target.style.borderColor = '#c9a84c'}
+                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                />
+              </div>
+              <button type="submit" disabled={sending}
+                      style={{ width: '100%', padding: '14px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg,#1a4a2e,#2d7a4f)', color: 'white', fontFamily: '"Josefin Sans",sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', cursor: sending ? 'not-allowed' : 'pointer', opacity: sending ? 0.7 : 1, transition: 'all 0.2s' }}>
+                {sending ? '⏳ Envoi en cours…' : '💌 Signer le livre d\'or'}
+              </button>
+            </form>
+          )}
+        </div>
+
+        {/* Messages */}
+        <div>
+          <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '20px', textAlign: 'center' }}>
+            {messages.length} message{messages.length > 1 ? 's' : ''} d'amour 💚
+          </p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
+            {messages.map(m => (
+              <div key={m.id} style={{ background: 'linear-gradient(135deg,#f0f9f4,#fafcf8)', borderRadius: '16px', padding: '20px 24px', border: '1px solid rgba(76,175,125,0.2)', position: 'relative', overflow: 'hidden' }}>
+                <div style={{ position: 'absolute', top: '12px', right: '16px', fontSize: '1.5rem', opacity: 0.15 }}>🌺</div>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                  <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1a4a2e' }}>🌺 {m.auteur}</span>
+                  <span style={{ fontSize: '0.7rem', color: '#9ca3af' }}>
+                    {new Date(m.date).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' })}
+                  </span>
+                </div>
+                <p style={{ color: '#374151', fontSize: '0.88rem', lineHeight: 1.7, fontStyle: 'italic' }}>"{m.message}"</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
   )
 }
