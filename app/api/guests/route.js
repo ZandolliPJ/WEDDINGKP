@@ -7,7 +7,7 @@ function toGuest(g) {
     name:        g.name,
     email:       g.email,
     phone:       g.phone,
-    tableId:     g.table_id,
+    tableId:     g.table_id ? parseInt(g.table_id) : null,
     status:      g.status,
     present:     g.present,
     arrivalTime: g.arrival_time,

@@ -61,3 +61,57 @@ CREATE POLICY "rv_all" ON rsvp        FOR ALL USING (true);
 
 -- VERIFICATION
 SELECT 'Tables créées avec succès ✅' as message;
+
+-- =====================================================
+-- TABLE BUDGET — Gestion budget par catégorie
+-- À exécuter dans SQL Editor → New Query → Run
+-- =====================================================
+
+-- Table des catégories de budget
+CREATE TABLE IF NOT EXISTS budget_categories (
+  id          TEXT PRIMARY KEY,           -- ex: 'traiteur', 'photo'
+  label       TEXT NOT NULL,              -- ex: 'Traiteur & Repas'
+  icon        TEXT,                       -- emoji
+  budgeted    NUMERIC(10,2) DEFAULT 0,    -- montant prévu
+  color       TEXT,                       -- couleur hex
+  updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Table des dépenses détaillées par catégorie
+CREATE TABLE IF NOT EXISTS budget_items (
+  id          SERIAL PRIMARY KEY,
+  category_id TEXT NOT NULL,              -- référence budget_categories.id
+  label       TEXT NOT NULL,              -- désignation de la dépense
+  amount      NUMERIC(10,2) DEFAULT 0,   -- montant
+  paid        BOOLEAN DEFAULT FALSE,      -- payé ?
+  note        TEXT,                       -- note libre
+  created_at  TIMESTAMPTZ DEFAULT NOW(),
+  updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Table config budget (budget total, etc.)
+CREATE TABLE IF NOT EXISTS budget_config (
+  key         TEXT PRIMARY KEY,
+  value       TEXT NOT NULL,
+  updated_at  TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- Permissions RLS
+ALTER TABLE budget_categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE budget_items      ENABLE ROW LEVEL SECURITY;
+ALTER TABLE budget_config     ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "bc_all" ON budget_categories;
+DROP POLICY IF EXISTS "bi_all" ON budget_items;
+DROP POLICY IF EXISTS "bcf_all" ON budget_config;
+
+CREATE POLICY "bc_all"  ON budget_categories FOR ALL USING (true);
+CREATE POLICY "bi_all"  ON budget_items      FOR ALL USING (true);
+CREATE POLICY "bcf_all" ON budget_config     FOR ALL USING (true);
+
+-- Valeur initiale du budget total
+INSERT INTO budget_config (key, value) 
+VALUES ('total_budget', '15000')
+ON CONFLICT (key) DO NOTHING;
+
+SELECT 'Tables budget créées ✅' as message;

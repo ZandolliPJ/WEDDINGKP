@@ -24,7 +24,7 @@ export default function Guests({ guests, onGuestsChange }) {
     const m = !q || g.name.toLowerCase().includes(q) ||
               (g.email||'').toLowerCase().includes(q) ||
               (g.familyGroup||'').toLowerCase().includes(q)
-    const f = filter==='all' || g.group===filter || (filter==='noTable' && !g.tableId)
+    const f = filter==='all' || g.group===filter || (filter==='noTable' && (!g.tableId || g.tableId === 0))
     return m && f
   })
 

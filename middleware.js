@@ -26,7 +26,10 @@ export function middleware(request) {
 
   // Protection des routes /admin et /api (sauf /api/auth)
   const isAdminRoute = pathname.startsWith('/admin')
-  const isApiRoute   = pathname.startsWith('/api') && !pathname.startsWith('/api/auth')
+  const isApiRoute   = pathname.startsWith('/api') && 
+    !pathname.startsWith('/api/auth') &&
+    !pathname.startsWith('/api/public-tables') &&
+    !pathname.startsWith('/api/rsvp')
 
   if (isAdminRoute || isApiRoute) {
     const session = request.cookies.get('admin_session')

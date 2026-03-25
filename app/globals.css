@@ -48,3 +48,61 @@ body {
 /* Drag & drop */
 .dragging { opacity:0.5; cursor:grabbing; }
 .drag-over { outline: 2px dashed #c9a84c; outline-offset:2px; }
+
+/* ══ MOBILE-FIRST GLOBAL ══ */
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 56px;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Touch targets minimum 44px */
+a, button, [role="button"] {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Images responsive */
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Smooth scroll inertia on iOS */
+* {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* No text overflow */
+h1, h2, h3, h4 {
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+/* Bounce animation */
+@keyframes bounce {
+  0%, 100% { transform: translateX(-50%) translateY(0); }
+  50%       { transform: translateX(-50%) translateY(6px); }
+}
+
+/* Leaf float */
+@keyframes floatLeaf {
+  from { transform: translateY(0px) rotate(0deg); }
+  to   { transform: translateY(-18px) rotate(8deg); }
+}
+
+/* Remove blue flash on tap iOS */
+* { -webkit-tap-highlight-color: rgba(0,0,0,0); }
+
+/* Section scroll margin for sticky nav */
+section[id], div[id] {
+  scroll-margin-top: 56px;
+}

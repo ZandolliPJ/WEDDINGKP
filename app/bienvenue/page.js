@@ -10,9 +10,9 @@ const Section = ({ id, children, bg='#fafcf8' }) => (
 )
 
 const SectionTitle = ({ emoji, title, sub, dark=false }) => (
-  <div className="text-center mb-12 px-4">
+  <div style={{textAlign:"center",marginBottom:"clamp(32px,6vw,56px)",padding:"0 16px"}}>
     <div className="text-4xl mb-3">{emoji}</div>
-    <h2 className={`text-4xl italic mb-2 playfair ${dark?'text-white':'text-green-dark'}`}>{title}</h2>
+    <h2 style={{fontFamily:'"Playfair Display",serif',fontStyle:'italic',fontSize:'clamp(1.8rem,5vw,2.8rem)',marginBottom:'8px',color:dark?'#fff':'#1a4a2e'}}>{title}</h2>
     <p className={`text-xs tracking-widest uppercase ${dark?'text-white/50':'text-green-mid'}`}>{sub}</p>
     <div className={`mt-4 tracking-widest opacity-30 ${dark?'text-gold-light':'text-gold'}`}>✿ ✦ ✿</div>
   </div>
@@ -37,12 +37,11 @@ function Countdown({ dateISO }) {
     return () => clearInterval(id)
   }, [dateISO])
   return (
-    <div className="flex gap-3 justify-center flex-wrap mt-8">
+    <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap",marginTop:"24px"}}>
       {[{v:t.j,l:'Jours'},{v:t.h,l:'Heures'},{v:t.m,l:'Min'},{v:t.s,l:'Sec'}].map(x=>(
-        <div key={x.l} className="text-center px-4 py-3 rounded-xl min-w-[68px]"
-             style={{background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.25)',backdropFilter:'blur(8px)'}}>
-          <div className="text-white text-2xl font-bold playfair">{String(x.v).padStart(2,'0')}</div>
-          <div className="text-white/60 text-xs tracking-widest uppercase mt-0.5">{x.l}</div>
+        <div key={x.l} style={{textAlign:"center",padding:"10px 14px",borderRadius:"12px",minWidth:"60px",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",backdropFilter:"blur(8px)"}}>
+          <div style={{color:"white",fontSize:"clamp(1.4rem,4vw,1.8rem)",fontWeight:700,fontFamily:'"Playfair Display",serif',lineHeight:1}}>{String(x.v).padStart(2,'0')}</div>
+          <div style={{color:"rgba(255,255,255,0.5)",fontSize:"0.58rem",letterSpacing:"0.25em",textTransform:"uppercase",marginTop:"3px"}}>{x.l}</div>
         </div>
       ))}
     </div>
@@ -101,7 +100,7 @@ export default function Bienvenue() {
       )}
 
       {/* ══ HERO — fond CSS pur + feuilles animées ══ */}
-      <div id="accueil" className="relative min-h-screen flex flex-col items-center justify-center overflow-hidden">
+      <div id="accueil" style={{position:"relative",minHeight:"100svh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",overflow:"hidden"}}>
 
         {/* Fond dégradé tropical profond */}
         <div className="absolute inset-0" style={{
@@ -130,21 +129,18 @@ export default function Bienvenue() {
         }}/>
 
         {/* Contenu hero */}
-        <div className="relative text-center px-6 pt-20" style={{zIndex:3}}>
+        <div style={{position:"relative",textAlign:"center",padding:"clamp(16px,4vw,24px)",paddingTop:"clamp(72px,12vw,100px)",zIndex:3,width:"100%"}}>
           <div className="text-5xl mb-3" style={{animation:'floatLeaf 3s ease-in-out infinite alternate'}}>🌺</div>
           <p className="text-gold-light text-xs tracking-widest uppercase mb-4 opacity-80">✿ Save the Date ✿</p>
-          <h1 className="text-white drop-shadow-2xl leading-tight playfair italic"
-              style={{fontSize:'clamp(3.5rem,11vw,8rem)'}}>
+          <h1 style={{fontFamily:'"Playfair Display",serif',fontStyle:"italic",color:"white",lineHeight:1.05,textShadow:"0 4px 30px rgba(0,0,0,0.4)",fontSize:"clamp(3.2rem,14vw,7.5rem)"}}>
             Katty
           </h1>
-          <div className="text-white/80 text-4xl italic playfair my-1">&amp;</div>
-          <h1 className="text-white drop-shadow-2xl leading-tight playfair italic"
-              style={{fontSize:'clamp(3.5rem,11vw,8rem)'}}>
+          <div style={{color:"rgba(255,255,255,0.7)",fontSize:"clamp(1.8rem,5vw,3rem)",fontFamily:'"Playfair Display",serif',fontStyle:"italic",margin:"4px 0"}}>&amp;</div>
+          <h1 style={{fontFamily:'"Playfair Display",serif',fontStyle:"italic",color:"white",lineHeight:1.05,textShadow:"0 4px 30px rgba(0,0,0,0.4)",fontSize:"clamp(3.2rem,14vw,7.5rem)"}}>
             Pascal
           </h1>
 
-          <div className="inline-block px-6 py-2 rounded-full mt-6 mb-2"
-               style={{background:'rgba(255,255,255,0.12)',border:'1px solid rgba(255,255,255,0.4)',backdropFilter:'blur(8px)'}}>
+          <div style={{display:"inline-block",padding:"8px 20px",borderRadius:"50px",marginTop:"20px",marginBottom:"6px",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.3)",backdropFilter:"blur(8px)"}}>
             <span className="text-gold-light text-sm tracking-widest uppercase">{WEDDING.date}</span>
           </div>
           <p className="text-white/70 text-xs tracking-widest uppercase">Salle Jasmine · Garges-lès-Gonesse</p>
@@ -180,7 +176,7 @@ export default function Bienvenue() {
           </div>
         </div>
 
-        <div className="absolute bottom-6 left-1/2 -translate-x-1/2 text-white/40 text-xs tracking-widest uppercase animate-bounce" style={{zIndex:3}}>↓ découvrir</div>
+        <div style={{position:"absolute",bottom:"20px",left:"50%",transform:"translateX(-50%)",color:"rgba(255,255,255,0.35)",fontSize:"0.6rem",letterSpacing:"0.3em",textTransform:"uppercase",animation:"bounce 1.5s ease-in-out infinite"}} style={{zIndex:3}}>↓ découvrir</div>
 
         <style>{`
           @keyframes floatLeaf {
@@ -192,7 +188,7 @@ export default function Bienvenue() {
 
       {/* ══ TEXTE D'ACCUEIL ══ */}
       <div style={{ background: '#fafcf8' }}>
-        <div className="py-16 px-6 text-center max-w-2xl mx-auto">
+        <div style={{padding:'clamp(40px,8vw,64px) clamp(20px,5vw,32px)',textAlign:'center',maxWidth:'640px',margin:'0 auto'}}>
 
           {/* Ligne déco */}
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -207,12 +203,12 @@ export default function Bienvenue() {
           </p>
 
           {/* Titre principal */}
-          <h2 style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 'clamp(1.6rem, 4vw, 2.2rem)', color: '#1a4a2e', marginBottom: '24px', lineHeight: 1.3 }}>
+          <h2 style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 'clamp(1.5rem, 5vw, 2rem)', color: '#1a4a2e', marginBottom: '20px', lineHeight: 1.35 }}>
             Bienvenue dans notre parenthèse tropicale !
           </h2>
 
           {/* Corps du texte */}
-          <div style={{ color: '#2d5a3d', fontSize: '0.95rem', lineHeight: 1.85, fontFamily: '"Josefin Sans", sans-serif', fontWeight: 300 }}>
+          <div style={{ color: '#2d5a3d', fontSize: 'clamp(0.88rem,2.5vw,0.95rem)', lineHeight: 1.8, fontFamily: '"Josefin Sans", sans-serif', fontWeight: 300 }}>
             <p style={{ marginBottom: '16px' }}>
               Nous sommes impatients de vous retrouver pour célébrer notre union sous le signe de l'évasion et de la douceur.
             </p>
@@ -243,15 +239,15 @@ export default function Bienvenue() {
 
       {/* ══ NOTRE HISTOIRE ══ */}
       <Section id="histoire" bg="linear-gradient(135deg,#1a4a2e,#0d2b1a)">
-        <div className="py-20 px-6 md:px-16 max-w-5xl mx-auto">
+        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,64px)",maxWidth:"960px",margin:"0 auto"}}>
           <SectionTitle emoji="💑" title="Notre Histoire" sub="De la rencontre aux fiançailles" dark />
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-10">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))",gap:"16px",marginBottom:"32px"}}>
             {[
               { year:'2019', icon:'☕', title:'La rencontre', text:"Un regard, un sourire lors d'une belle soirée. Tout a commencé là, simplement, naturellement." },
               { year:'2022', icon:'🌍', title:'L\'aventure', text:'Des voyages, des fous rires, une complicité qui grandit chaque jour. Deux âmes en balade.' },
               { year:'2024', icon:'💍', title:'Les fiançailles', text:"Sur une plage au coucher du soleil, Pascal a posé la question. La réponse était oui, mille fois oui !" },
             ].map((s,i)=>(
-              <div key={i} className="text-center p-6 rounded-2xl transition-all hover:-translate-y-1"
+              <div key={i} style={{textAlign:"center",padding:"clamp(16px,4vw,24px)",borderRadius:"16px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(201,168,76,0.25)"}}
                    style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(201,168,76,0.25)'}}>
                 {/* Photo placeholder — remplacez par vos vraies photos */}
                 <div className="w-full aspect-video rounded-xl mb-4 flex items-center justify-center text-5xl relative overflow-hidden"
@@ -279,22 +275,22 @@ export default function Bienvenue() {
 
       {/* ══ PROGRAMME ══ */}
       <Section id="programme" bg="#fafcf8">
-        <div className="py-20 px-6 md:px-16 max-w-3xl mx-auto">
+        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,40px)",maxWidth:"720px",margin:"0 auto"}}>
           <SectionTitle emoji="📅" title="Programme du 30 Juin" sub="Horaires & lieux de la journée" />
           <div className="relative">
             {/* Ligne verticale */}
-            <div className="absolute left-8 top-0 bottom-0 w-0.5 md:left-1/2"
+            <div style={{position:"absolute",left:"28px",top:0,bottom:0,width:"2px"}}
                  style={{background:'linear-gradient(180deg,#c9a84c,#4caf7d,#e91e8c,#f39c12,#9b59b6)'}}/>
             <div className="space-y-8">
               {TIMELINE.map((step,i)=>(
-                <div key={i} className={`flex gap-4 items-start ${i%2===1?'md:flex-row-reverse':''}`}>
+                <div key={i} style={{display:"flex",gap:"12px",alignItems:"flex-start"}}>
                   {/* Icône */}
-                  <div className="relative z-10 w-16 h-16 rounded-full flex items-center justify-center text-2xl flex-shrink-0 shadow-lg"
+                  <div style={{position:"relative",zIndex:10,width:"48px",height:"48px",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.3rem",flexShrink:0,boxShadow:"0 2px 8px rgba(0,0,0,0.15)"}}
                        style={{background:`${step.color}25`,border:`2px solid ${step.color}`,minWidth:'4rem'}}>
                     {step.icon}
                   </div>
                   {/* Contenu */}
-                  <div className="flex-1 rounded-2xl p-5 hover:-translate-y-0.5 transition-all"
+                  <div style={{flex:1,borderRadius:"16px",padding:"clamp(12px,3vw,20px)",background:"white",boxShadow:"0 2px 12px rgba(0,0,0,0.06)"}}
                        style={{background:'white',boxShadow:'0 4px 20px rgba(0,0,0,0.06)',border:`1px solid ${step.color}30`}}>
                     <div className="flex items-center gap-3 mb-1">
                       <span className="text-xl font-bold playfair" style={{color:step.color}}>{step.heure}</span>
@@ -324,9 +320,9 @@ export default function Bienvenue() {
 
       {/* ══ MENU ══ */}
       <Section id="menu" bg="linear-gradient(135deg,#1a4a2e,#0d2b1a)">
-        <div className="py-20 px-6 md:px-16 max-w-4xl mx-auto">
+        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,48px)",maxWidth:"840px",margin:"0 auto"}}>
           <SectionTitle emoji="🍽️" title="Menu Balade Tropicale" sub="Vin d'honneur — Salle Jasmine — 30 Juin 2026" dark />
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:"12px"}}>
             {/* Cocktail */}
             <div className="rounded-2xl p-6" style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(201,168,76,0.3)'}}>
               <div className="flex items-center gap-3 mb-4">
@@ -395,10 +391,10 @@ export default function Bienvenue() {
 
       {/* ══ PLAN D'ACCÈS ══ */}
       <Section id="acces" bg="linear-gradient(135deg,#1a4a2e,#0d2b1a)">
-        <div className="py-20 px-6 md:px-16 max-w-5xl mx-auto">
+        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,64px)",maxWidth:"960px",margin:"0 auto"}}>
           <SectionTitle emoji="🗺️" title="Plan d'Accès" sub="Salle Jasmine · 8 rue des Gaillards · Garges-lès-Gonesse" dark />
 
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,400px),1fr))",gap:"20px"}}>
 
             {/* Carte / Photo salle */}
             <div>
@@ -415,14 +411,13 @@ export default function Bienvenue() {
               </div>
               <a href="https://maps.google.com/?q=8+rue+des+Gaillards+95140+Garges-les-Gonesse"
                  target="_blank" rel="noreferrer"
-                 className="w-full flex items-center justify-center gap-2 py-3 rounded-xl text-sm tracking-widest uppercase font-bold text-green-dark transition-all hover:-translate-y-0.5"
-                 style={{background:'linear-gradient(135deg,#c9a84c,#f0d080)'}}>
+                 style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",padding:"14px",borderRadius:"14px",background:"linear-gradient(135deg,#c9a84c,#f0d080)",color:"#1a4a2e",fontWeight:700,fontSize:"0.72rem",letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none",marginTop:"4px"}}>
                 📍 Ouvrir dans Google Maps
               </a>
             </div>
 
             {/* Infos transport */}
-            <div className="space-y-4">
+            <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
               <h3 className="text-gold-light italic text-xl playfair mb-4">Comment venir ?</h3>
               {[
                 { icon:'🚗', title:'En voiture',      desc:"A1 direction Roissy, sortie Garges-lès-Gonesse. Parking gratuit sur place (200 places)." },
@@ -431,7 +426,7 @@ export default function Bienvenue() {
                 { icon:'🚕', title:'Taxi / VTC',       desc:"G7, Uber disponibles dans toute la région. Comptez 30 min depuis Paris." },
                 { icon:'✈️', title:'Depuis CDG',       desc:"15 minutes en voiture depuis l'aéroport Charles de Gaulle." },
               ].map((t,i)=>(
-                <div key={i} className="flex gap-4 p-4 rounded-xl" style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)'}}>
+                <div key={i} style={{display:"flex",gap:"14px",padding:"14px 16px",borderRadius:"14px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.08)"}}>
                   <span className="text-2xl flex-shrink-0">{t.icon}</span>
                   <div>
                     <div className="text-white font-medium text-sm">{t.title}</div>
@@ -443,7 +438,7 @@ export default function Bienvenue() {
           </div>
 
           {/* 2ème lieu : Mairie */}
-          <div className="mt-8 p-6 rounded-2xl" style={{background:'rgba(201,168,76,0.1)',border:'1px solid rgba(201,168,76,0.3)'}}>
+          <div style={{marginTop:"20px",padding:"clamp(16px,4vw,24px)",borderRadius:"16px",background:"rgba(201,168,76,0.08)",border:"1px solid rgba(201,168,76,0.25)"}}>
             <div className="flex items-start gap-4">
               <span className="text-3xl">⚖️</span>
               <div>
@@ -460,7 +455,7 @@ export default function Bienvenue() {
           {/* Hôtels */}
           <div className="mt-8">
             <h3 className="text-gold-light italic text-xl playfair mb-4">🏨 Hôtels à proximité</h3>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,280px),1fr))",gap:"10px"}}>
               {HOTELS.map((h,i)=>(
                 <a key={i} href={h.maps} target="_blank" rel="noreferrer"
                    className="flex items-center justify-between p-4 rounded-xl transition-all hover:-translate-y-0.5 group"
@@ -482,7 +477,7 @@ export default function Bienvenue() {
 
       {/* ══ PLAN DE TABLES ══ */}
       <section id="tables" style={{ background: 'linear-gradient(160deg,#0d2b1a 0%,#1a4a2e 50%,#0d2b1a 100%)' }}>
-        <div style={{ maxWidth: '960px', margin: '0 auto', padding: '80px 24px' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto', padding: 'clamp(40px,8vw,80px) clamp(16px,4vw,24px)' }}>
 
           {/* Titre */}
           <div style={{ textAlign: 'center', marginBottom: '48px' }}>
@@ -497,78 +492,7 @@ export default function Bienvenue() {
           </div>
 
           {/* ── Photo de la salle & piste de danse ── */}
-          <div style={{ marginBottom: '40px' }}>
-            <div style={{
-              position: 'relative',
-              borderRadius: '20px',
-              overflow: 'hidden',
-              border: '2px solid rgba(201,168,76,0.4)',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.5)',
-            }}>
-              {/* Photo */}
-              <img
-                src="/salle-jasmine.jpg"
-                alt="Salle Jasmine — Piste de danse"
-                style={{ width: '100%', height: '420px', objectFit: 'cover', objectPosition: 'center 40%', display: 'block' }}
-              />
-              {/* Voile dégradé bas */}
-              <div style={{
-                position: 'absolute', inset: 0,
-                background: 'linear-gradient(to top, rgba(10,31,18,0.85) 0%, rgba(10,31,18,0.3) 40%, transparent 70%)',
-              }}/>
-              {/* Bandeau haut */}
-              <div style={{
-                position: 'absolute', top: 0, left: 0, right: 0,
-                background: 'linear-gradient(to bottom, rgba(10,31,18,0.6) 0%, transparent 100%)',
-                height: '80px',
-              }}/>
-              {/* Badge PISTE DE DANSE au centre-bas */}
-              <div style={{
-                position: 'absolute', bottom: '28px', left: '50%',
-                transform: 'translateX(-50%)',
-                textAlign: 'center',
-              }}>
-                <div style={{
-                  display: 'inline-flex', alignItems: 'center', gap: '10px',
-                  background: 'rgba(10,31,18,0.75)',
-                  border: '1px solid rgba(201,168,76,0.5)',
-                  borderRadius: '50px',
-                  padding: '10px 28px',
-                  backdropFilter: 'blur(8px)',
-                }}>
-                  <span style={{ fontSize: '1.2rem' }}>💃</span>
-                  <span style={{ fontFamily: '"Josefin Sans",sans-serif', fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#f0d080' }}>
-                    Piste de danse au centre
-                  </span>
-                  <span style={{ fontSize: '1.2rem' }}>🕺</span>
-                </div>
-              </div>
-              {/* Coin haut-gauche : nom salle */}
-              <div style={{ position: 'absolute', top: '20px', left: '24px' }}>
-                <div style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', color: '#f0d080', fontSize: '1.1rem' }}>
-                  Salle Jasmine
-                </div>
-                <div style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.6rem', letterSpacing: '0.25em', textTransform: 'uppercase', marginTop: '2px' }}>
-                  8 rue des Gaillards · Garges-lès-Gonesse
-                </div>
-              </div>
-              {/* Fleurs déco coins */}
-              <div style={{ position: 'absolute', top: '16px', right: '20px', fontSize: '1.8rem', opacity: 0.6 }}>🌺</div>
-              <div style={{ position: 'absolute', bottom: '16px', right: '20px', fontSize: '1.4rem', opacity: 0.5 }}>🌸</div>
-              <div style={{ position: 'absolute', bottom: '16px', left: '20px', fontSize: '1.4rem', opacity: 0.5 }}>🌿</div>
-            </div>
 
-            {/* Séparateur */}
-            <div style={{ textAlign: 'center', marginTop: '28px', marginBottom: '8px' }}>
-              <div style={{ display: 'inline-flex', alignItems: 'center', gap: '16px' }}>
-                <div style={{ width: '60px', height: '1px', background: 'linear-gradient(90deg, transparent, rgba(201,168,76,0.5))' }}/>
-                <span style={{ color: 'rgba(201,168,76,0.5)', fontSize: '0.7rem', letterSpacing: '0.3em', textTransform: 'uppercase', fontFamily: '"Josefin Sans",sans-serif' }}>
-                  Vue schématique de la salle
-                </span>
-                <div style={{ width: '60px', height: '1px', background: 'linear-gradient(90deg, rgba(201,168,76,0.5), transparent)' }}/>
-              </div>
-            </div>
-          </div>
 
           {/* Plan SVG de la salle */}
           <SallePlan />
@@ -587,14 +511,20 @@ export default function Bienvenue() {
       <LivreOr />
 
       {/* ══ FOOTER ══ */}
-      <footer className="py-10 px-6 text-center"
-              style={{background:'#0d2b1a',borderTop:'1px solid rgba(201,168,76,0.2)'}}>
-        <h3 className="text-gold-light italic text-2xl playfair">Katty &amp; Pascal</h3>
-        <p className="text-white/40 text-xs tracking-widest uppercase mt-1">
+      <footer style={{
+        padding:'clamp(40px,6vw,56px) 20px',
+        textAlign:'center',
+        background:'#0d2b1a',
+        borderTop:'1px solid rgba(201,168,76,0.2)',
+      }}>
+        <h3 style={{fontFamily:'"Playfair Display",serif', fontStyle:'italic', fontSize:'1.6rem', color:'#f0d080', margin:'0 0 8px', textAlign:'center'}}>
+          Katty &amp; Pascal
+        </h3>
+        <p style={{color:'rgba(255,255,255,0.4)', fontSize:'0.62rem', letterSpacing:'0.3em', textTransform:'uppercase', margin:'0 0 16px', textAlign:'center'}}>
           Balade Tropicale · 30 Juin 2026 · Salle Jasmine · Garges-lès-Gonesse
         </p>
-        <div className="text-white/20 tracking-widest mt-4">✿ ✦ ✿ ✦ ✿</div>
-        <p className="text-white/20 text-xs mt-3">Avec tout notre amour 🌺</p>
+        <div style={{color:'rgba(201,168,76,0.3)', letterSpacing:'0.8em', marginBottom:'12px', textAlign:'center'}}>✿ ✦ ✿ ✦ ✿</div>
+        <p style={{color:'rgba(255,255,255,0.2)', fontSize:'0.72rem', margin:0, textAlign:'center'}}>Avec tout notre amour 🌺</p>
       </footer>
     </div>
   )

@@ -2,12 +2,14 @@
 
 const NAV = [
   { id:'dashboard',   e:'📊', l:'Dashboard'    },
+  { id:'budget',      e:'💰', l:'Budget'        },
   { id:'placement',   e:'🤖', l:'Placement IA'  },
   { id:'tables',      e:'🌸', l:'Tables'        },
   { id:'guests',      e:'👥', l:'Invités'       },
   { id:'invitations', e:'✉️', l:'Faire-Part'    },
   { id:'rsvp',        e:'📋', l:'RSVP reçus'    },
   { id:'checkin',     e:'✅', l:'Check-in'      },
+  { id:'export',      e:'📄', l:'Exports PDF'   },
 ]
 
 export default function Navigation({ activeTab, onTabChange }) {
