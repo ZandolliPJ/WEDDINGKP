@@ -243,19 +243,14 @@ export default function Bienvenue() {
           <SectionTitle emoji="💑" title="Notre Histoire" sub="De la rencontre aux fiançailles" dark />
           <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))",gap:"16px",marginBottom:"32px"}}>
             {[
-              { year:'2019', icon:'☕', title:'La rencontre', text:"Un regard, un sourire lors d'une belle soirée. Tout a commencé là, simplement, naturellement." },
-              { year:'2022', icon:'🌍', title:'L\'aventure', text:'Des voyages, des fous rires, une complicité qui grandit chaque jour. Deux âmes en balade.' },
-              { year:'2024', icon:'💍', title:'Les fiançailles', text:"Sur une plage au coucher du soleil, Pascal a posé la question. La réponse était oui, mille fois oui !" },
+              { year:'2019', icon:'☕', title:'La rencontre', text:"Un regard, un sourire lors d'un anniversaire. Tout a commencé là, simplement, naturellement." },
+              { year:'2024', icon:'🌍', title:'L\'aventure', text:'Citoyens du ciel de passage — Nous sommes des voyageurs, des fous rires, une complicité qui grandit chaque jour. Deux âmes en balade.' },
+              { year:'2025', icon:'💍', title:'Les fiançailles', text:"Nos regards se sont croisés, nos chemins se sont mêlés mais le temps a décidé du moment où nos cœurs se sont trouvés, maintenant enlacés nous avons pris la décision de faire un bout de chemin ensemble." },
             ].map((s,i)=>(
-              <div key={i} style={{textAlign:"center",padding:"clamp(16px,4vw,24px)",borderRadius:"16px",background:"rgba(255,255,255,0.06)",border:"1px solid rgba(201,168,76,0.25)"}}
-                   style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(201,168,76,0.25)'}}>
-                {/* Photo placeholder — remplacez par vos vraies photos */}
-                <div className="w-full aspect-video rounded-xl mb-4 flex items-center justify-center text-5xl relative overflow-hidden"
-                     style={{background:'linear-gradient(135deg,rgba(201,168,76,0.1),rgba(76,175,125,0.1))'}}>
-                  <span className="opacity-40 text-6xl">{s.icon}</span>
-                  <div className="absolute inset-0 flex items-end p-2">
-                    <span className="text-white/30 text-xs">📷 Ajoutez votre photo ici</span>
-                  </div>
+              <div key={i} style={{textAlign:"center",padding:"clamp(16px,4vw,24px)",borderRadius:"16px",background:'rgba(255,255,255,0.06)',border:'1px solid rgba(201,168,76,0.25)'}}>
+                {/* Icône décorative */}
+                <div style={{width:'100%',aspectRatio:'16/9',borderRadius:'12px',marginBottom:'16px',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,rgba(201,168,76,0.12),rgba(76,175,125,0.12))'}}>
+                  <span style={{fontSize:'3.5rem',opacity:0.6}}>{s.icon}</span>
                 </div>
                 <div className="text-gold text-xs tracking-widest uppercase mb-1">{s.year}</div>
                 <h3 className="text-white italic text-lg playfair mb-2">{s.title}</h3>
@@ -936,30 +931,71 @@ function SallePlan() {
 // LIVRE D'OR — Section complète avec formulaire
 // ══════════════════════════════════════════════════
 function LivreOr() {
-  const [nom,     setNom]     = useState('')
-  const [msg,     setMsg]     = useState('')
-  const [sending, setSending] = useState(false)
-  const [sent,    setSent]    = useState(false)
-  const [messages, setMessages] = useState([
-    { id:1, auteur:'Sophie & Marc',  message:'Félicitations à vous deux ! Que votre amour soit aussi chaud que le soleil des Antilles. Nous sommes tellement heureux pour vous ! 🌺', date:'2026-03-15' },
-    { id:2, auteur:'Famille Dupont', message:'Quelle belle journée en perspective ! Tous nos vœux de bonheur pour cette Balade Tropicale. Mille fois merci de nous avoir invités. 💚', date:'2026-03-18' },
-    { id:3, auteur:'Jean-Pierre',    message:'Pascal, Katty, vous méritez tout le bonheur du monde. Que votre vie ensemble soit aussi colorée et joyeuse que ce beau thème tropical ! 🌴', date:'2026-03-20' },
-  ])
+  const [nom,      setNom]      = useState('')
+  const [msg,      setMsg]      = useState('')
+  const [sending,  setSending]  = useState(false)
+  const [sent,     setSent]     = useState(false)
+  const [preview,  setPreview]  = useState(false)
+  const [errors,   setErrors]   = useState({})
+  const [messages, setMessages] = useState([])
+  const [loadingMsgs, setLoadingMsgs] = useState(true)
+  const [apiError, setApiError] = useState(null)
 
-  async function submit(e) {
+  // ── Charger depuis Supabase au montage ────────────
+  useEffect(() => {
+    fetch('/api/livredor')
+      .then(r => r.json())
+      .then(data => {
+        if (Array.isArray(data)) setMessages(data)
+        else setApiError('Impossible de charger les messages.')
+      })
+      .catch(() => setApiError('Connexion impossible.'))
+      .finally(() => setLoadingMsgs(false))
+  }, [])
+
+  // ── Validation ────────────────────────────────────
+  function validate() {
+    const e = {}
+    if (!nom.trim()) {
+      e.nom = 'Votre prénom / nom est requis.'
+    } else if (nom.trim().length < 3) {
+      e.nom = 'Minimum 3 caractères alphanumériques requis.'
+    }
+    if (!msg.trim()) {
+      e.msg = 'Votre message est requis.'
+    } else if (msg.trim().length < 3) {
+      e.msg = 'Minimum 3 caractères alphanumériques requis.'
+    }
+    setErrors(e)
+    return Object.keys(e).length === 0
+  }
+
+  function handlePreview(e) {
     e.preventDefault()
-    if (!nom.trim() || !msg.trim()) return
+    if (validate()) setPreview(true)
+  }
+
+  async function confirmSend() {
     setSending(true)
-    // Simulation envoi (Supabase en prod)
-    await new Promise(r => setTimeout(r, 800))
-    setMessages(prev => [{
-      id: Date.now(),
-      auteur: nom,
-      message: msg,
-      date: new Date().toISOString().slice(0,10)
-    }, ...prev])
-    setSending(false)
-    setSent(true)
+    try {
+      const res = await fetch('/api/livredor', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ auteur: nom.trim(), message: msg.trim() }),
+      })
+      const data = await res.json()
+      if (data.error) throw new Error(data.error)
+      setMessages(prev => [data, ...prev])
+      setSent(true)
+      setPreview(false)
+    } catch(e) {
+      setErrors({ submit: e.message })
+      setPreview(false)
+    } finally { setSending(false) }
+  }
+
+  function reset() {
+    setNom(''); setMsg(''); setSent(false); setPreview(false); setErrors({})
   }
 
   return (
@@ -976,8 +1012,8 @@ function LivreOr() {
             Laissez-nous un message d'amour
           </p>
           <div className="max-w-lg mx-auto" style={{ color: '#2d5a3d', fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '0.95rem', lineHeight: 1.7, padding: '20px', background: 'linear-gradient(135deg,#f0f9f4,#fff9ed)', borderRadius: '16px', border: '1px solid rgba(201,168,76,0.2)' }}>
-            "Nous t'invitons à nous transmettre tout ton amour et ta bonne humeur en signant notre livre d'or,
-            alors n'hésite pas à nous laisser un message ! Et mille fois merci de nous mettre du baume au cœur."
+            "Nous vous invitons à nous transmettre tout votre amour et votre bonne humeur en signant notre livre d'or,
+            alors n'hésitez pas à nous laisser un message ! Mille fois merci de nous mettre du baume au cœur."
             <div style={{ marginTop: '8px', color: '#c9a84c', fontWeight: 700 }}>— Pascal &amp; Katty 💕</div>
           </div>
         </div>
@@ -985,77 +1021,148 @@ function LivreOr() {
         {/* Formulaire */}
         <div style={{ background: 'white', borderRadius: '20px', padding: '32px', marginBottom: '40px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)', border: '1px solid rgba(201,168,76,0.2)' }}>
           {sent ? (
-            <div style={{ textAlign: 'center', padding: '24px 0' }}>
-              <div style={{ fontSize: '3rem', marginBottom: '12px' }}>💚</div>
-              <p style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '1.3rem', color: '#1a4a2e', marginBottom: '8px' }}>
+            /* ── Confirmation ── */
+            <div style={{ textAlign: 'center', padding: '28px 0' }}>
+              <div style={{ fontSize: '3.5rem', marginBottom: '14px' }}>💚</div>
+              <h3 style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '1.35rem', color: '#1a4a2e', marginBottom: '8px' }}>
                 Merci pour votre message !
+              </h3>
+              <p style={{ color: '#6b7280', fontSize: '0.85rem', lineHeight: 1.65, marginBottom: '24px' }}>
+                Votre message a été enregistré dans notre livre d'or pour toujours. 🌺<br/>
+                Katty &amp; Pascal vous remercient du fond du cœur.
               </p>
-              <p style={{ color: '#6b7280', fontSize: '0.85rem' }}>Il rejoindra notre livre d'or pour toujours. 🌺</p>
-              <button onClick={() => { setSent(false); setNom(''); setMsg('') }}
-                      style={{ marginTop: '16px', fontSize: '0.75rem', color: '#9ca3af', textDecoration: 'underline', background: 'none', border: 'none', cursor: 'pointer' }}>
-                Laisser un autre message
-              </button>
+              <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
+                <button onClick={reset}
+                  style={{ padding: '11px 20px', borderRadius: '12px', border: '2px solid #e5e7eb', background: 'white', color: '#6b7280', fontSize: '0.72rem', fontWeight: 600, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit' }}>
+                  ✍️ Autre message
+                </button>
+                <a href="#accueil"
+                  style={{ padding: '11px 20px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg,#1a4a2e,#2d7a4f)', color: 'white', fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.12em', textTransform: 'uppercase', cursor: 'pointer', fontFamily: 'inherit', textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: '6px' }}>
+                  🌺 Retour au début
+                </a>
+              </div>
             </div>
           ) : (
-            <form onSubmit={submit}>
+            /* ── Formulaire de saisie + envoi direct ── */
+            <div>
               <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '20px' }}>
                 ✍️ Votre message
               </p>
+
+              {/* Nom */}
               <div style={{ marginBottom: '16px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', display: 'block', marginBottom: '6px' }}>
                   Votre prénom / nom *
                 </label>
                 <input
-                  value={nom} onChange={e => setNom(e.target.value)}
+                  value={nom}
+                  onChange={e => { setNom(e.target.value); setErrors(p => ({...p, nom: null})) }}
                   placeholder="Marie Dupont"
                   autoComplete="off"
-                  required
-                  style={{ width: '100%', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s' }}
+                  style={{ width: '100%', border: `2px solid ${errors.nom ? '#e74c3c' : '#e5e7eb'}`, borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', boxSizing: 'border-box' }}
                   onFocus={e => e.target.style.borderColor = '#c9a84c'}
-                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                  onBlur={e => e.target.style.borderColor = errors.nom ? '#e74c3c' : '#e5e7eb'}
                 />
+                {errors.nom
+                  ? <p style={{ color: '#e74c3c', fontSize: '0.7rem', marginTop: '3px' }}>⚠️ {errors.nom}</p>
+                  : <p style={{ color: '#9ca3af', fontSize: '0.65rem', marginTop: '3px' }}>Minimum 3 caractères</p>
+                }
               </div>
-              <div style={{ marginBottom: '20px' }}>
-                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', display: 'block', marginBottom: '6px', letterSpacing: '0.05em' }}>
+
+              {/* Message */}
+              <div style={{ marginBottom: '16px' }}>
+                <label style={{ fontSize: '0.75rem', fontWeight: 600, color: '#6b7280', display: 'block', marginBottom: '6px' }}>
                   Votre message 💌 *
                 </label>
                 <textarea
-                  value={msg} onChange={e => setMsg(e.target.value)}
+                  value={msg}
+                  onChange={e => { setMsg(e.target.value); setErrors(p => ({...p, msg: null})) }}
                   rows={4}
-                  placeholder="Félicitations à Pascal et Katty ! Que votre amour soit aussi chaud que le soleil de la Guadeloupe…"
-                  required
-                  style={{ width: '100%', border: '2px solid #e5e7eb', borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', resize: 'none', boxSizing: 'border-box', transition: 'border-color 0.2s', fontFamily: 'inherit' }}
+                  placeholder="Félicitations à Pascal et Katty ! Que votre amour soit aussi chaud que le soleil des Antilles…"
+                  style={{ width: '100%', border: `2px solid ${errors.msg ? '#e74c3c' : '#e5e7eb'}`, borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', resize: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
                   onFocus={e => e.target.style.borderColor = '#c9a84c'}
-                  onBlur={e => e.target.style.borderColor = '#e5e7eb'}
+                  onBlur={e => e.target.style.borderColor = errors.msg ? '#e74c3c' : '#e5e7eb'}
                 />
+                {errors.msg
+                  ? <p style={{ color: '#e74c3c', fontSize: '0.7rem', marginTop: '3px' }}>⚠️ {errors.msg}</p>
+                  : <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3px' }}>
+                      <p style={{ color: '#9ca3af', fontSize: '0.65rem' }}>Minimum 3 caractères · Relisez avant d'envoyer</p>
+                      <p style={{ color: msg.length > 10 ? '#4caf7d' : '#9ca3af', fontSize: '0.65rem' }}>{msg.length} car.</p>
+                    </div>
+                }
               </div>
-              <button type="submit" disabled={sending}
-                      style={{ width: '100%', padding: '14px', borderRadius: '12px', border: 'none', background: 'linear-gradient(135deg,#1a4a2e,#2d7a4f)', color: 'white', fontFamily: '"Josefin Sans",sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', cursor: sending ? 'not-allowed' : 'pointer', opacity: sending ? 0.7 : 1, transition: 'all 0.2s' }}>
+
+              {errors.submit && <p style={{ color: '#e74c3c', fontSize: '0.75rem', marginBottom: '12px' }}>❌ {errors.submit}</p>}
+
+              {/* Bouton signer */}
+              <button
+                type="button"
+                disabled={sending}
+                onClick={async () => {
+                  const e = {}
+                  if (!nom.trim() || nom.trim().length < 3) e.nom = 'Minimum 3 caractères requis.'
+                  if (!msg.trim() || msg.trim().length < 3) e.msg = 'Minimum 3 caractères requis.'
+                  if (Object.keys(e).length > 0) { setErrors(e); return }
+                  setSending(true)
+                  try {
+                    const res = await fetch('/api/livredor', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({ auteur: nom.trim(), message: msg.trim() }),
+                    })
+                    const data = await res.json()
+                    if (data.error) throw new Error(data.error)
+                    setMessages(prev => [data, ...prev])
+                    setSent(true)
+                  } catch(err) {
+                    setErrors({ submit: err.message })
+                  } finally { setSending(false) }
+                }}
+                style={{ width: '100%', padding: '14px', borderRadius: '12px', border: 'none', background: sending ? 'rgba(26,74,46,0.5)' : 'linear-gradient(135deg,#1a4a2e,#2d7a4f)', color: 'white', fontFamily: '"Josefin Sans",sans-serif', fontSize: '0.75rem', fontWeight: 700, letterSpacing: '0.2em', textTransform: 'uppercase', cursor: sending ? 'not-allowed' : 'pointer', transition: 'all 0.2s' }}>
                 {sending ? '⏳ Envoi en cours…' : '💌 Signer le livre d\'or'}
               </button>
-            </form>
+            </div>
           )}
         </div>
 
-        {/* Messages */}
+        {/* Messages depuis Supabase */}
         <div>
-          <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '20px', textAlign: 'center' }}>
-            {messages.length} message{messages.length > 1 ? 's' : ''} d'amour 💚
-          </p>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            {messages.map(m => (
-              <div key={m.id} style={{ background: 'linear-gradient(135deg,#f0f9f4,#fafcf8)', borderRadius: '16px', padding: '20px 24px', border: '1px solid rgba(76,175,125,0.2)', position: 'relative', overflow: 'hidden' }}>
-                <div style={{ position: 'absolute', top: '12px', right: '16px', fontSize: '1.5rem', opacity: 0.15 }}>🌺</div>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
-                  <span style={{ fontWeight: 700, fontSize: '0.9rem', color: '#1a4a2e' }}>🌺 {m.auteur}</span>
-                  <span style={{ fontSize: '0.7rem', color: '#9ca3af' }}>
-                    {new Date(m.date).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' })}
-                  </span>
-                </div>
-                <p style={{ color: '#374151', fontSize: '0.88rem', lineHeight: 1.7, fontStyle: 'italic' }}>"{m.message}"</p>
+          {loadingMsgs ? (
+            <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: '0.8rem', padding: '20px' }}>⏳ Chargement des messages…</p>
+          ) : apiError ? (
+            <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: '0.8rem', fontStyle: 'italic', padding: '20px' }}>
+              🌺 Les messages apparaîtront ici après la cérémonie.
+            </p>
+          ) : (
+            <>
+              <p style={{ fontSize: '0.65rem', letterSpacing: '0.3em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '20px', textAlign: 'center' }}>
+                {messages.length} message{messages.length > 1 ? 's' : ''} d'amour 💚
+              </p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '14px' }}>
+                {messages.length === 0 ? (
+                  <p style={{ textAlign: 'center', color: '#9ca3af', fontSize: '0.82rem', fontStyle: 'italic', padding: '24px' }}>
+                    Soyez le premier à signer notre livre d'or ! 🌺
+                  </p>
+                ) : messages.map(m => (
+                  <div key={m.id} style={{ background: 'linear-gradient(135deg,#f0f9f4,#fafcf8)', borderRadius: '16px', padding: '18px 22px', border: '1px solid rgba(76,175,125,0.2)', position: 'relative', overflow: 'hidden' }}>
+                    <div style={{ position: 'absolute', top: '10px', right: '14px', fontSize: '1.3rem', opacity: 0.12 }}>🌺</div>
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg,#1a4a2e,#2d7a4f)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.9rem', fontWeight: 700, flexShrink: 0 }}>
+                          {m.auteur?.[0]?.toUpperCase() || '🌺'}
+                        </div>
+                        <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a4a2e' }}>{m.auteur}</span>
+                      </div>
+                      <span style={{ fontSize: '0.68rem', color: '#9ca3af', flexShrink: 0, marginLeft: '8px' }}>
+                        {new Date(m.created_at || m.date).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' })}
+                      </span>
+                    </div>
+                    <p style={{ color: '#374151', fontSize: '0.88rem', lineHeight: 1.7, fontStyle: 'italic', margin: 0 }}>"{m.message}"</p>
+                  </div>
+                ))}
               </div>
-            ))}
-          </div>
+            </>
+          )}
         </div>
       </div>
     </section>
