@@ -2,31 +2,31 @@
 import { useState, useEffect } from 'react'
 
 const TABLES = {
-  1: 'Hibiscus', 2: 'Frangipanier', 3: 'Balisier', 4: 'Bouganvillée',
-  5: 'Lantana', 6: 'Alamanda', 7: 'Anthurium', 8: 'Heliconias',
-  9: 'Plumeria', 10: 'Cactus', 11: "Cœur d'Amour",
-  12: 'Palmier', 13: 'Orchidée', 14: 'Bambou',
+  1:'Hibiscus',  2:'Frangipanier', 3:'Balisier',      4:'Bouganvillée',
+  5:'Lantana',   6:'Alamanda',     7:'Anthurium',      8:'Heliconias',
+  9:'Plumeria',  10:'Cactus',     11:"Cœur d'Amour",
+  12:'Palmier',  13:'Orchidée',   14:'Bambou',
 }
 const TABLE_ICONS = {
-  1: '🌺', 2: '🌸', 3: '🌷', 4: '💜', 5: '🌼', 6: '🌻', 7: '❤️',
-  8: '🦜', 9: '🌴', 10: '🌵', 11: '💛', 12: '🌴', 13: '🌸', 14: '🎋',
+  1:'🌺', 2:'🌸', 3:'🌷', 4:'💜', 5:'🌼', 6:'🌻', 7:'❤️',
+  8:'🦜', 9:'🌴', 10:'🌵', 11:'💛', 12:'🌴', 13:'🌸', 14:'🎋',
 }
 
 const PAGE_PASSWORD = 'balade2026'
 
 export default function ConfirmationPage() {
-  const [step, setStep] = useState('search')
-  const [query, setQuery] = useState('')
-  const [results, setResults] = useState([])
-  const [selected, setSelected] = useState(null)
-  const [presence, setPresence] = useState(null)
-  const [phone, setPhone] = useState('')
-  const [loading, setLoading] = useState(false)
-  const [error, setError] = useState('')
-  const [showPwdForm, setShowPwdForm] = useState(false)
-  const [pwd, setPwd] = useState('')
-  const [pwdError, setPwdError] = useState('')
-  const [showPwd, setShowPwd] = useState(false)
+  const [step,        setStep]       = useState('search')
+  const [query,       setQuery]      = useState('')
+  const [results,     setResults]    = useState([])
+  const [selected,    setSelected]   = useState(null)
+  const [presence,    setPresence]   = useState(null)
+  const [phone,       setPhone]      = useState('')
+  const [loading,     setLoading]    = useState(false)
+  const [error,       setError]      = useState('')
+  const [showPwdForm, setShowPwdForm]= useState(false)
+  const [pwd,         setPwd]        = useState('')
+  const [pwdError,    setPwdError]   = useState('')
+  const [showPwd,     setShowPwd]    = useState(false)
 
   useEffect(() => {
     // Ne pas rediriger automatiquement — l'invité doit toujours voir la page confirmation
@@ -34,16 +34,16 @@ export default function ConfirmationPage() {
 
   async function search() {
     setError('')
-    if (!query.trim()) { setError('Veuillez saisir votre prénom et nom.'); return }
-    if (query.trim().length < 3) { setError('Minimum 3 caractères requis.'); return }
+    if (!query.trim())           { setError('Veuillez saisir votre prénom et nom.'); return }
+    if (query.trim().length < 3) { setError('Minimum 3 caractères requis.');        return }
     setLoading(true)
     try {
-      const res = await fetch(`/api/confirmation?q=${encodeURIComponent(query.trim())}`)
+      const res  = await fetch(`/api/confirmation?q=${encodeURIComponent(query.trim())}`)
       const data = await res.json()
       if (data.error) throw new Error(data.error)
       if (!data.length) { setError("Aucun invité trouvé. Vérifiez l'orthographe."); return }
       setResults(data); setStep('found')
-    } catch (e) { setError(e.message) }
+    } catch(e) { setError(e.message) }
     finally { setLoading(false) }
   }
 
@@ -53,14 +53,14 @@ export default function ConfirmationPage() {
     if (phone.trim().length < 3) { setError('Numéro de portable invalide (minimum 3 caractères).'); return }
     setLoading(true); setError('')
     try {
-      const res = await fetch('/api/confirmation', {
-        method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ guestId: selected.id, presence, guestName: selected.name, phone: phone.trim() }),
+      const res  = await fetch('/api/confirmation', {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ guestId:selected.id, presence, guestName:selected.name, phone:phone.trim() }),
       })
       const data = await res.json()
       if (data.error) throw new Error(data.error)
       setStep('done')
-    } catch (e) { setError(e.message) }
+    } catch(e) { setError(e.message) }
     finally { setLoading(false) }
   }
 
@@ -101,7 +101,7 @@ export default function ConfirmationPage() {
               placeholder="Mot de passe…"
               autoFocus
               className={`confirmation-input pr-12 ${pwdError ? 'error' : ''}`}
-              style={{ letterSpacing: showPwd ? 'normal' : '3px' }}
+              style={{letterSpacing: showPwd ? 'normal' : '3px'}}
             />
             <button type="button" onClick={() => setShowPwd(s => !s)}
               className="absolute right-3 top-1/2 -translate-y-1/2
@@ -137,7 +137,7 @@ export default function ConfirmationPage() {
 
       {/* Carte principale — glassmorphism */}
       <div className="glass-card fade-up w-full max-w-lg p-8 md:p-12"
-        style={{ position: 'relative' }}>
+           style={{position:'relative'}}>
 
         {/* ── Bouton Quitter — retour étape recherche ── */}
         <button
@@ -145,22 +145,22 @@ export default function ConfirmationPage() {
           onClick={() => { setStep('search'); setQuery(''); setResults([]); setSelected(null); setPresence(null); setPhone(''); setError(''); setShowPwdForm(false); setPwd(''); setPwdError('') }}
           title="Recommencer"
           style={{
-            position: 'absolute',
-            top: '16px',
-            right: '16px',
-            width: '36px',
-            height: '36px',
+            position:   'absolute',
+            top:        '16px',
+            right:      '16px',
+            width:      '36px',
+            height:     '36px',
             borderRadius: '50%',
             background: 'rgba(255,255,255,0.15)',
-            border: '1px solid rgba(255,255,255,0.25)',
-            color: 'rgba(255,255,255,0.7)',
-            fontSize: '1.1rem',
-            cursor: 'pointer',
-            display: 'flex',
+            border:     '1px solid rgba(255,255,255,0.25)',
+            color:      'rgba(255,255,255,0.7)',
+            fontSize:   '1.1rem',
+            cursor:     'pointer',
+            display:    'flex',
             alignItems: 'center',
             justifyContent: 'center',
             transition: 'all 0.2s',
-            minHeight: 'unset',
+            minHeight:  'unset',
             lineHeight: 1,
           }}
           onMouseEnter={e => {
@@ -180,7 +180,7 @@ export default function ConfirmationPage() {
         <div className="text-center mb-8">
           <div className="text-5xl mb-3 leading-none">🌺</div>
           <h1 className="playfair text-4xl md:text-5xl text-white mb-2"
-            style={{ textShadow: '0 2px 12px rgba(0,0,0,0.5)' }}>
+              style={{textShadow:'0 2px 12px rgba(0,0,0,0.5)'}}>
             Katty &amp; Pascal
           </h1>
           <p className="josefin text-xs tracking-[0.38em] uppercase text-white/60">
@@ -297,14 +297,10 @@ export default function ConfirmationPage() {
 
             <div className="flex flex-col gap-3 mb-5">
               {[
-                {
-                  v: 'oui', label: 'Oui, je confirme ma présence !', emoji: '✅',
-                  active: 'bg-green-500/25 border-green-400', inactive: 'bg-white/8 border-white/18'
-                },
-                {
-                  v: 'non', label: 'Non, je ne pourrai pas venir.', emoji: '❌',
-                  active: 'bg-red-500/25 border-red-400', inactive: 'bg-white/8 border-white/18'
-                },
+                { v:'oui', label:'Oui, je confirme ma présence !', emoji:'✅',
+                  active:'bg-green-500/25 border-green-400', inactive:'bg-white/8 border-white/18' },
+                { v:'non', label:'Non, je ne pourrai pas venir.',   emoji:'❌',
+                  active:'bg-red-500/25 border-red-400',   inactive:'bg-white/8 border-white/18' },
               ].map(opt => (
                 <label key={opt.v}
                   className={`flex items-center gap-4 p-4 rounded-xl cursor-pointer
@@ -313,7 +309,7 @@ export default function ConfirmationPage() {
                   <input type="checkbox" checked={presence === opt.v}
                     onChange={() => { setPresence(opt.v); setError('') }}
                     className="w-5 h-5 cursor-pointer flex-shrink-0"
-                    style={{ accentColor: opt.v === 'oui' ? '#22C55E' : '#EF4444' }} />
+                    style={{accentColor: opt.v==='oui' ? '#22C55E' : '#EF4444'}}/>
                   <span className="text-white font-medium text-sm">
                     {opt.emoji} {opt.label}
                   </span>
@@ -350,11 +346,11 @@ export default function ConfirmationPage() {
               className={`btn-confirm flex items-center justify-center
                           disabled:opacity-50 disabled:cursor-not-allowed
                           ${presence === 'oui'
-                  ? '!bg-gradient-to-br !from-green-500 !to-yellow-400'
-                  : presence === 'non'
-                    ? '!bg-gradient-to-br !from-red-500 !to-orange-500'
-                    : '!bg-white/15 !shadow-none'
-                }`}>
+                            ? '!bg-gradient-to-br !from-green-500 !to-yellow-400'
+                            : presence === 'non'
+                              ? '!bg-gradient-to-br !from-red-500 !to-orange-500'
+                              : '!bg-white/15 !shadow-none'
+                          }`}>
               {loading ? '⏳ Enregistrement…' : '💌 Valider ma réponse'}
             </button>
 
@@ -378,11 +374,11 @@ export default function ConfirmationPage() {
             {presence === 'oui' ? (
               <>
                 <h2 className="playfair italic text-white text-2xl md:text-3xl mb-3"
-                  style={{ textShadow: '0 2px 10px rgba(0,0,0,0.4)' }}>
+                    style={{textShadow:'0 2px 10px rgba(0,0,0,0.4)'}}>
                   Nous serons heureux de votre présence !
                 </h2>
                 <p className="text-white/80 text-sm leading-relaxed mb-5">
-                  Votre présence a été confirmée avec joie. 🌺<br />
+                  Votre présence a été confirmée avec joie. 🌺<br/>
                   Katty &amp; Pascal vous attendent pour une{' '}
                   <strong className="text-yellow-400">Balade Tropicale</strong> inoubliable !
                 </p>
@@ -406,17 +402,17 @@ export default function ConfirmationPage() {
                     Programme du 30 Juin 2026
                   </p>
                   {[
-                    { h: '14h00', e: '⚖️', t: 'Cérémonie Civile', l: 'Mairie de Grigny', c: '#c9a84c' },
-                    { h: '19h00', e: '🥂', t: "Vin d'Honneur", l: 'Salle Jasmine', c: '#22C55E' },
-                    { h: '17h30', e: '💍', t: 'Cérémonie Laïque', l: 'Salle Jasmine', c: '#e91e8c' },
-                    { h: '19h30', e: '🍽️', t: 'Dîner de Gala', l: 'Salle Jasmine', c: '#F97316' },
-                    { h: '21h00', e: '🎶', t: 'Soirée Dansante', l: 'Salle Jasmine', c: '#9b59b6' },
-                  ].map((ev, i) => (
+                    {h:'14h00',e:'⚖️',t:'Eclosion des promesses', l:'Mairie de Grigny',c:'#c9a84c'},
+                    {h:'17h30',e:'💍',t:'Bénédiction nuptiale', l:'Salle Jasmine',   c:'#e91e8c'},
+                    {h:'19h00',e:'🥂',t:"Salutation des mariés",    l:'Salle Jasmine',   c:'#22C55E'},
+                    {h:'19h30',e:'🍽️',t:'Dîner',   l:'Salle Jasmine',   c:'#F97316'},
+                    {h:'21h00',e:'🎶',t:'Envolée du bal',  l:'Salle Jasmine',   c:'#9b59b6'},
+                  ].map((ev,i) => (
                     <div key={i} className={`flex items-center gap-2 py-2
-                                            ${i < 4 ? 'border-b border-white/8' : ''}`}>
+                                            ${i<4?'border-b border-white/8':''}`}>
                       <span className="text-lg flex-shrink-0">{ev.e}</span>
                       <span className="text-xs font-bold w-12 flex-shrink-0"
-                        style={{ color: ev.c }}>{ev.h}</span>
+                            style={{color:ev.c}}>{ev.h}</span>
                       <span className="text-white text-sm font-semibold flex-1">{ev.t}</span>
                       <span className="text-white/35 text-xs flex-shrink-0 hidden sm:block">{ev.l}</span>
                     </div>
@@ -431,7 +427,7 @@ export default function ConfirmationPage() {
                   Merci de nous avoir informés.
                 </h2>
                 <p className="text-white/80 text-sm leading-relaxed mb-5">
-                  Nous comprenons que vous ne pourrez pas être présent(e).<br />
+                  Nous comprenons que vous ne pourrez pas être présent(e).<br/>
                   Katty &amp; Pascal vous remercient chaleureusement. 💕
                 </p>
                 <div className="glass-dark p-5">
