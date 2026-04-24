@@ -66,10 +66,19 @@ export default function AdminDashboard() {
   }
 
   return (
-    <main className="min-h-screen" style={{background:'#1a4a2e'}}>
+    <main className="min-h-screen" style={{
+      background: 'var(--green-emerald)',
+      backgroundImage: `
+        radial-gradient(ellipse 70% 70% at 0%   0%,   #22C55E 0%, transparent 60%),
+        radial-gradient(ellipse 80% 60% at 100% 0%,   #EAB308 0%, transparent 60%),
+        radial-gradient(ellipse 70% 70% at 100% 100%,  #EF4444 0%, transparent 60%),
+        radial-gradient(ellipse 60% 60% at 0%   100%,  #F97316 0%, transparent 60%),
+        radial-gradient(ellipse 50% 50% at 50%  50%,   #EAB308 0%, transparent 50%)
+      `,
+    }}>
       <Header onLogout={logout}/>
       <Navigation activeTab={tab} onTabChange={setTab}/>
-      <div key={tab}>{content()}</div>
+      <div key={tab} className="fade-in">{content()}</div>
     </main>
   )
 }

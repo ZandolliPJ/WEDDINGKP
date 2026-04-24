@@ -115,3 +115,21 @@ VALUES ('total_budget', '15000')
 ON CONFLICT (key) DO NOTHING;
 
 SELECT 'Tables budget créées ✅' as message;
+
+-- =====================================================
+-- TABLE CONFIRMATIONS — Suivi présence invités
+-- =====================================================
+CREATE TABLE IF NOT EXISTS confirmations (
+  id          SERIAL PRIMARY KEY,
+  nom         TEXT NOT NULL,
+  prenom      TEXT NOT NULL,
+  presence    TEXT DEFAULT 'oui' CHECK (presence IN ('oui','non')),
+  guest_id    TEXT,
+  table_id    INT,
+  message     TEXT,
+  created_at  TIMESTAMPTZ DEFAULT NOW()
+);
+ALTER TABLE confirmations ENABLE ROW LEVEL SECURITY;
+DROP POLICY IF EXISTS "conf_all" ON confirmations;
+CREATE POLICY "conf_all" ON confirmations FOR ALL USING (true);
+SELECT 'Table confirmations créée ✅' as message;

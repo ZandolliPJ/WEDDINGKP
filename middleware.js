@@ -13,11 +13,14 @@ export function middleware(request) {
   // Routes publiques — toujours accessibles
   if (
     pathname.startsWith('/bienvenue') ||
+    pathname.startsWith('/confirmation') ||
     pathname.startsWith('/admin/login') ||
     pathname.startsWith('/api/auth') ||
     pathname.startsWith('/api/public-tables') ||
     pathname.startsWith('/api/rsvp') ||
     pathname.startsWith('/api/livredor') ||
+    pathname.startsWith('/api/confirmation') ||
+    pathname.startsWith('/api/confirm') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
     pathname === '/'
@@ -50,5 +53,6 @@ export const config = {
   matcher: [
     '/admin/:path*',
     '/api/:path*',
+    '/confirmation/:path*',
   ],
 }

@@ -81,13 +81,18 @@ function LoginForm() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center relative overflow-hidden"
-         style={{ background: '#0d2b1a', fontFamily: '"Josefin Sans", sans-serif' }}>
+         style={{ fontFamily: 'var(--font-body)' }}>
 
-      {/* Fond décoratif */}
-      <img src="/background.png" alt=""
-           className="absolute inset-0 w-full h-full object-cover opacity-20 blur-sm" />
-      <div className="absolute inset-0"
-           style={{ background: 'linear-gradient(160deg, rgba(13,43,26,0.95) 0%, rgba(13,43,26,0.85) 100%)' }} />
+      {/* Tropical Mesh Overlay — renforce le fond du body */}
+      <div className="absolute inset-0" style={{
+        background: `
+          radial-gradient(ellipse 60% 50% at 15% 25%, rgba(34,197,94,0.12)  0%, transparent 55%),
+          radial-gradient(ellipse 50% 60% at 85% 15%, rgba(234,179,8,0.08)  0%, transparent 50%),
+          radial-gradient(ellipse 40% 70% at 75% 75%, rgba(249,115,22,0.07) 0%, transparent 45%),
+          radial-gradient(ellipse 60% 40% at 25% 75%, rgba(239,68,68,0.06)  0%, transparent 50%),
+          rgba(13,43,26,0.85)
+        `,
+      }}/>
 
       {/* Particules décoratives */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">

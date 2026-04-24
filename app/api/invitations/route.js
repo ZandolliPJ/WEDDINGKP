@@ -2,7 +2,7 @@
 import { NextResponse } from 'next/server'
 import { supabase } from '../../../lib/supabase'
 
-const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://mariage.tasteandsee.fr'
+const SITE_URL = process.env.NEXT_PUBLIC_SITE_URL || 'https://baladetropicale.fr'
 const RESEND_API_KEY = process.env.RESEND_API_KEY || null
 
 // ── Template email HTML ──────────────────────────────
@@ -40,14 +40,14 @@ function buildEmailHTML(guest, tableInfo) {
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
           <span style="font-size:1.4rem;">⚖️</span>
           <div>
-            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Civile — 11h30</p>
+            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Civile — 14h00</p>
             <p style="color:#666;margin:2px 0 0;font-size:12px;">Mairie de Grigny · 19 Rte de Corbeil, 91350 Grigny</p>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
           <span style="font-size:1.4rem;">💍</span>
           <div>
-            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Laïque — 16h00</p>
+            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Laïque — 17h30</p>
             <p style="color:#666;margin:2px 0 0;font-size:12px;">Salle Jasmine · 8 rue des Gaillards, 95140 Garges-lès-Gonesse</p>
           </div>
         </div>
@@ -142,7 +142,7 @@ export async function POST(req) {
         } else {
           results.push({ id: g.id, name: g.name, status: 'error', email: g.email, error: data.message })
         }
-      } catch(e) {
+      } catch (e) {
         results.push({ id: g.id, name: g.name, status: 'error', email: g.email, error: e.message })
       }
     } else {
@@ -151,9 +151,9 @@ export async function POST(req) {
     }
   }
 
-  const sent  = results.filter(r => r.status === 'sent' || r.status === 'simulated').length
+  const sent = results.filter(r => r.status === 'sent' || r.status === 'simulated').length
   const noEmail = results.filter(r => r.status === 'no_email').length
-  const errors  = results.filter(r => r.status === 'error').length
+  const errors = results.filter(r => r.status === 'error').length
 
   return NextResponse.json({ results, sent, noEmail, errors, hasResend: !!RESEND_API_KEY })
 }

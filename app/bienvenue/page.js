@@ -3,33 +3,33 @@ import { useState, useEffect, useRef } from 'react'
 import { WEDDING, TIMELINE, MENU, HOTELS, TABLES } from '../../lib/data'
 
 /* ── helpers ── */
-const Section = ({ id, children, bg='#fafcf8' }) => (
+const Section = ({ id, children, bg = 'transparent' }) => (
   <section id={id} style={{ background: bg }}>
     {children}
   </section>
 )
 
-const SectionTitle = ({ emoji, title, sub, dark=false }) => (
-  <div style={{textAlign:"center",marginBottom:"clamp(32px,6vw,56px)",padding:"0 16px"}}>
+const SectionTitle = ({ emoji, title, sub, dark = false }) => (
+  <div style={{ textAlign: "center", marginBottom: "clamp(32px,6vw,56px)", padding: "0 16px" }}>
     <div className="text-4xl mb-3">{emoji}</div>
-    <h2 style={{fontFamily:'"Playfair Display",serif',fontStyle:'italic',fontSize:'clamp(1.8rem,5vw,2.8rem)',marginBottom:'8px',color:dark?'#fff':'#1a4a2e'}}>{title}</h2>
-    <p className={`text-xs tracking-widest uppercase ${dark?'text-white/50':'text-green-mid'}`}>{sub}</p>
-    <div className={`mt-4 tracking-widest opacity-30 ${dark?'text-gold-light':'text-gold'}`}>✿ ✦ ✿</div>
+    <h2 style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: 'clamp(1.8rem,5vw,2.8rem)', marginBottom: '8px', color: dark ? '#fff' : '#1a4a2e' }}>{title}</h2>
+    <p className={`text-xs tracking-widest uppercase ${dark ? 'text-white/50' : 'text-green-mid'}`}>{sub}</p>
+    <div className={`mt-4 tracking-widest opacity-30 ${dark ? 'text-gold-light' : 'text-gold'}`}>✿ ✦ ✿</div>
   </div>
 )
 
 /* ── Compte à rebours ── */
 function Countdown({ dateISO }) {
-  const [t, setT] = useState({ j:0,h:0,m:0,s:0 })
+  const [t, setT] = useState({ j: 0, h: 0, m: 0, s: 0 })
   useEffect(() => {
     const calc = () => {
       const diff = new Date(dateISO) - new Date()
-      if (diff<=0) return setT({j:0,h:0,m:0,s:0})
+      if (diff <= 0) return setT({ j: 0, h: 0, m: 0, s: 0 })
       setT({
-        j: Math.floor(diff/86400000),
-        h: Math.floor((diff%86400000)/3600000),
-        m: Math.floor((diff%3600000)/60000),
-        s: Math.floor((diff%60000)/1000),
+        j: Math.floor(diff / 86400000),
+        h: Math.floor((diff % 86400000) / 3600000),
+        m: Math.floor((diff % 3600000) / 60000),
+        s: Math.floor((diff % 60000) / 1000),
       })
     }
     calc()
@@ -37,11 +37,17 @@ function Countdown({ dateISO }) {
     return () => clearInterval(id)
   }, [dateISO])
   return (
-    <div style={{display:"flex",gap:"10px",justifyContent:"center",flexWrap:"wrap",marginTop:"24px"}}>
-      {[{v:t.j,l:'Jours'},{v:t.h,l:'Heures'},{v:t.m,l:'Min'},{v:t.s,l:'Sec'}].map(x=>(
-        <div key={x.l} style={{textAlign:"center",padding:"10px 14px",borderRadius:"12px",minWidth:"60px",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.2)",backdropFilter:"blur(8px)"}}>
-          <div style={{color:"white",fontSize:"clamp(1.4rem,4vw,1.8rem)",fontWeight:700,fontFamily:'"Playfair Display",serif',lineHeight:1}}>{String(x.v).padStart(2,'0')}</div>
-          <div style={{color:"rgba(255,255,255,0.5)",fontSize:"0.58rem",letterSpacing:"0.25em",textTransform:"uppercase",marginTop:"3px"}}>{x.l}</div>
+    <div style={{ display: "flex", gap: "10px", justifyContent: "center", flexWrap: "wrap", marginTop: "24px" }}>
+      {[{ v: t.j, l: 'Jours' }, { v: t.h, l: 'Heures' }, { v: t.m, l: 'Min' }, { v: t.s, l: 'Sec' }].map(x => (
+        <div key={x.l} style={{
+          textAlign: "center", padding: "12px 16px", borderRadius: "14px", minWidth: "64px",
+          background: "rgba(255,255,255,0.75)",
+          border: "1px solid rgba(201,168,76,0.5)",
+          backdropFilter: "blur(12px)",
+          boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
+        }}>
+          <div style={{ color: "#1a4a2e", fontSize: "clamp(1.4rem,4vw,1.8rem)", fontWeight: 700, fontFamily: '"Playfair Display",serif', lineHeight: 1 }}>{String(x.v).padStart(2, '0')}</div>
+          <div style={{ color: "#c9a84c", fontSize: "0.58rem", letterSpacing: "0.25em", textTransform: "uppercase", marginTop: "4px", fontWeight: 600 }}>{x.l}</div>
         </div>
       ))}
     </div>
@@ -50,14 +56,15 @@ function Countdown({ dateISO }) {
 
 /* ── NAV ── */
 const NAV_LINKS = [
-  { id:'accueil',   label:'Accueil'       },
-  { id:'histoire',  label:'Notre Histoire' },
-  { id:'programme', label:'Programme'     },
-  { id:'menu',      label:'Menu'          },
-  { id:'acces',     label:'Accès'         },
-  { id:'tables',    label:'Tables'        },
-  { id:'livredor',  label:'Livre d\'or'   },
+  { id: 'accueil', label: 'Accueil' },
+  { id: 'histoire', label: 'Notre Histoire' },
+  { id: 'programme', label: 'Programme' },
+  { id: 'menu', label: 'Menu' },
+  { id: 'acces', label: 'Accès' },
+  { id: 'tables', label: 'Tables' },
+  { id: 'livredor', label: 'Livre d\'or' },
 ]
+const NAV_CONFIRM = { href: '/confirmation', label: '✅ Confirmation' }
 
 export default function Bienvenue() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -66,117 +73,136 @@ export default function Bienvenue() {
 
 
   return (
-    <div style={{fontFamily:'"Josefin Sans",sans-serif', minHeight:'100vh'}}>
+    <div style={{ fontFamily: '"Josefin Sans",sans-serif', minHeight: '100vh' }}>
 
       {/* ══ NAV STICKY ══ */}
       <nav className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between px-4 md:px-10 py-3"
-           style={{background:'rgba(13,43,26,0.96)',backdropFilter:'blur(12px)',borderBottom:'1px solid rgba(201,168,76,0.3)'}}>
+        style={{ background: 'rgba(0,0,0,0.30)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(255,255,255,0.15)' }}>
         <span className="italic text-gold-light text-lg playfair">Katty &amp; Pascal</span>
-        <div className="hidden md:flex gap-1">
-          {NAV_LINKS.map(n=>(
+        <div className="hidden md:flex gap-1 items-center">
+          {NAV_LINKS.map(n => (
             <a key={n.id} href={`#${n.id}`}
-               className="px-3 py-1.5 text-xs tracking-widest uppercase text-white/60 hover:text-gold-light transition-colors rounded-full hover:bg-white/8">
+              className="px-3 py-1.5 text-xs tracking-widest uppercase text-white/60 hover:text-gold-light transition-colors rounded-full hover:bg-white/8">
               {n.label}
             </a>
           ))}
+          {/* Bouton Confirmation — lien externe accentué */}
+          <a href={NAV_CONFIRM.href}
+            style={{
+              marginLeft: '6px',
+              padding: '6px 14px',
+              borderRadius: '20px',
+              fontSize: '0.62rem',
+              fontWeight: 700,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              background: 'linear-gradient(135deg,#F97316,#EAB308)',
+              color: 'white',
+              textDecoration: 'none',
+              boxShadow: '0 3px 12px rgba(249,115,22,0.4)',
+              transition: 'all 0.2s',
+              whiteSpace: 'nowrap',
+            }}
+            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(249,115,22,0.5)' }}
+            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 3px 12px rgba(249,115,22,0.4)' }}>
+            {NAV_CONFIRM.label}
+          </a>
         </div>
         <div className="flex gap-2 items-center">
 
-          <button className="md:hidden text-white/60 text-xl ml-1" onClick={()=>setMenuOpen(m=>!m)}>☰</button>
+          <button className="md:hidden text-white/60 text-xl ml-1" onClick={() => setMenuOpen(m => !m)}>☰</button>
         </div>
       </nav>
 
       {/* Mobile menu */}
       {menuOpen && (
         <div className="fixed inset-0 z-40 pt-14"
-             style={{background:'rgba(13,43,26,0.98)'}}>
+          style={{ background: 'rgba(0,0,0,0.85)', backdropFilter: 'blur(20px)' }}>
           <div className="flex flex-col items-center gap-4 pt-8">
-            {NAV_LINKS.map(n=>(
-              <a key={n.id} href={`#${n.id}`} onClick={()=>setMenuOpen(false)}
-                 className="text-white/80 text-lg tracking-widest uppercase">{n.label}</a>
+            {NAV_LINKS.map(n => (
+              <a key={n.id} href={`#${n.id}`} onClick={() => setMenuOpen(false)}
+                className="text-white/80 text-lg tracking-widest uppercase">{n.label}</a>
             ))}
+            {/* Confirmation — lien externe dans le menu mobile */}
+            <a href={NAV_CONFIRM.href} onClick={() => setMenuOpen(false)}
+              style={{
+                padding: '12px 28px', borderRadius: '14px',
+                background: 'linear-gradient(135deg,#F97316,#EAB308)',
+                color: 'white', textDecoration: 'none',
+                fontSize: '0.85rem', fontWeight: 700,
+                letterSpacing: '0.18em', textTransform: 'uppercase',
+                marginTop: '8px', boxShadow: '0 4px 16px rgba(249,115,22,0.4)',
+              }}>
+              ✅ Confirmation
+            </a>
           </div>
         </div>
       )}
 
-      {/* ══ HERO — fond CSS pur + feuilles animées ══ */}
-      <div id="accueil" style={{position:"relative",minHeight:"100svh",display:"flex",flexDirection:"column",alignItems:"center",justifyContent:"center",overflow:"hidden"}}>
+      {/* ══ HERO — Image aquarelle tropicale ══ */}
+      <div id="accueil" style={{
+        position: "relative", minHeight: "100svh",
+        display: "flex", flexDirection: "column",
+        alignItems: "center", justifyContent: "center",
+        overflow: "hidden",
+        backgroundColor: "#f5f0e8",
+        isolation: "isolate",
+      }}>
 
-        {/* Fond dégradé tropical profond */}
-        <div className="absolute inset-0" style={{
-          background: 'linear-gradient(160deg, #071a0e 0%, #0d2b1a 30%, #1a4a2e 60%, #0d2b1a 100%)'
-        }}/>
+        {/* Image aquarelle fond — fleurs haut et bas */}
+        <div style={{
+          position: "absolute", inset: 0,
+          backgroundImage: "url('/hero-tropical.png')",
+          backgroundSize: "cover",
+          backgroundPosition: "top center",
+          backgroundRepeat: "no-repeat",
+          backgroundAttachment: "scroll",
+        }} />
 
-        {/* ── Feuilles tropicales animées (inspiré du skill) ── */}
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" style={{zIndex:1}}>
-          {['🌿','🍃','🌴','🌺','🌸','🦋','🌿','🍃','🌺','🌴','🌸','🦋'].map((e,i) => (
-            <div key={i} className="absolute select-none" style={{
-              fontSize: `${2 + (i%3)*1.2}rem`,
-              left: `${(i*17+5)%95}%`,
-              top:  `${(i*23+10)%85}%`,
-              opacity: 0.18 + (i%3)*0.07,
-              animation: `floatLeaf ${4+i*0.6}s ease-in-out infinite alternate`,
-              animationDelay: `${i*0.5}s`,
-              filter: 'blur(0.5px)',
-            }}>{e}</div>
-          ))}
-        </div>
+        {/* Overlay central opaque — masque tout texte résiduel de l'image */}
+        <div style={{
+          position: "absolute",
+          top: "22%", bottom: "18%", left: 0, right: 0,
+          background: 'rgba(251,252,247,0.10)',
+        }} />
 
-        {/* Halo lumineux central */}
-        <div className="absolute inset-0 pointer-events-none" style={{
-          background: 'radial-gradient(ellipse 70% 60% at 50% 45%, rgba(201,168,76,0.07) 0%, transparent 70%)',
-          zIndex: 1,
-        }}/>
+        {/* Overlay global très léger pour homogénéité */}
+        <div style={{
+          position: "absolute", inset: 0,
+          background: 'rgba(251,252,247,0.15)',
+          pointerEvents: 'none',
+        }} />
 
         {/* Contenu hero */}
-        <div style={{position:"relative",textAlign:"center",padding:"clamp(16px,4vw,24px)",paddingTop:"clamp(72px,12vw,100px)",zIndex:3,width:"100%"}}>
-          <div className="text-5xl mb-3" style={{animation:'floatLeaf 3s ease-in-out infinite alternate'}}>🌺</div>
-          <p className="text-gold-light text-xs tracking-widest uppercase mb-4 opacity-80">✿ Save the Date ✿</p>
-          <h1 style={{fontFamily:'"Playfair Display",serif',fontStyle:"italic",color:"white",lineHeight:1.05,textShadow:"0 4px 30px rgba(0,0,0,0.4)",fontSize:"clamp(3.2rem,14vw,7.5rem)"}}>
-            Katty
-          </h1>
-          <div style={{color:"rgba(255,255,255,0.7)",fontSize:"clamp(1.8rem,5vw,3rem)",fontFamily:'"Playfair Display",serif',fontStyle:"italic",margin:"4px 0"}}>&amp;</div>
-          <h1 style={{fontFamily:'"Playfair Display",serif',fontStyle:"italic",color:"white",lineHeight:1.05,textShadow:"0 4px 30px rgba(0,0,0,0.4)",fontSize:"clamp(3.2rem,14vw,7.5rem)"}}>
-            Pascal
-          </h1>
-
-          <div style={{display:"inline-block",padding:"8px 20px",borderRadius:"50px",marginTop:"20px",marginBottom:"6px",background:"rgba(255,255,255,0.1)",border:"1px solid rgba(255,255,255,0.3)",backdropFilter:"blur(8px)"}}>
-            <span className="text-gold-light text-sm tracking-widest uppercase">{WEDDING.date}</span>
-          </div>
-          <p className="text-white/70 text-xs tracking-widest uppercase">Salle Jasmine · Garges-lès-Gonesse</p>
-
-          <Countdown dateISO={WEDDING.dateISO} />
+        <div style={{ position: "relative", textAlign: "center", padding: "clamp(16px,4vw,24px)", paddingTop: "clamp(200px,38vw,320px)", zIndex: 3, width: "100%" }}>
+          <p style={{ color: '#c9a84c', fontSize: '0.65rem', letterSpacing: '0.4em', textTransform: 'uppercase', marginBottom: '16px', fontFamily: '"Josefin Sans",sans-serif' }}></p>
 
           {/* ── Cartes de navigation tropicales — 2 rangées × 3 ── */}
-          <div style={{ display:'grid', gridTemplateColumns:'repeat(3,1fr)', gap:'10px', width:'100%', maxWidth:'480px', margin:'32px auto 0' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', width: '100%', maxWidth: '480px', margin: '40px auto 0' }}>
             {[
-              { href:'#programme', icon:'📋', label:'Programme',      bg:'#2d6a4f', text:'white'   },
-              { href:'#menu',      icon:'🍽️', label:'Menu',           bg:'#f9c74f', text:'#1B4332' },
-              { href:'#acces',     icon:'📍', label:'Accès',          bg:'#40916c', text:'white'   },
-              { href:'#tables',    icon:'🗺️', label:'Plan de Table',  bg:'#f4845f', text:'white'   },
-              { href:'#livredor',  icon:'📖', label:"Livre d'or",     bg:'#74c69d', text:'#1B4332' },
-              { href:'#histoire',  icon:'💑', label:'Notre Histoire', bg:'#c9a84c', text:'#1B4332' },
-            ].map(item=>(
+
+            ].map(item => (
               <a key={item.href} href={item.href}
-                 style={{
-                   display:'flex', flexDirection:'column', alignItems:'center',
-                   padding:'14px 8px', borderRadius:'16px', fontWeight:700,
-                   fontSize:'0.72rem', textDecoration:'none',
-                   background:item.bg, color:item.text,
-                   boxShadow:'0 4px 15px rgba(0,0,0,0.25)',
-                   transition:'transform 0.2s, box-shadow 0.2s',
-                   letterSpacing:'0.03em',
-                 }}
-                 onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-3px)';e.currentTarget.style.boxShadow='0 8px 24px rgba(0,0,0,0.35)'}}
-                 onMouseLeave={e=>{e.currentTarget.style.transform='translateY(0)';e.currentTarget.style.boxShadow='0 4px 15px rgba(0,0,0,0.25)'}}>
-                <span style={{fontSize:'1.5rem', marginBottom:'5px'}}>{item.icon}</span>
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  padding: '14px 8px', borderRadius: '16px', fontWeight: 700,
+                  fontSize: '0.72rem', textDecoration: 'none',
+                  background: item.bg, color: item.text,
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  letterSpacing: '0.03em',
+                  backdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)' }}>
+                <span style={{ fontSize: '1.5rem', marginBottom: '5px' }}>{item.icon}</span>
                 {item.label}
               </a>
             ))}
           </div>
         </div>
 
-        <div style={{position:"absolute",bottom:"20px",left:"50%",transform:"translateX(-50%)",color:"rgba(255,255,255,0.35)",fontSize:"0.6rem",letterSpacing:"0.3em",textTransform:"uppercase",animation:"bounce 1.5s ease-in-out infinite"}} style={{zIndex:3}}>↓ découvrir</div>
+        <div style={{ position: "absolute", bottom: "20px", left: "50%", transform: "translateX(-50%)", color: "rgba(26,74,46,0.5)", fontSize: "0.6rem", letterSpacing: "0.3em", textTransform: "uppercase", zIndex: 3, animation: "bounce 1.5s ease-in-out infinite" }}>↓ découvrir</div>
 
         <style>{`
           @keyframes floatLeaf {
@@ -187,8 +213,8 @@ export default function Bienvenue() {
       </div>
 
       {/* ══ TEXTE D'ACCUEIL ══ */}
-      <div style={{ background: '#fafcf8' }}>
-        <div style={{padding:'clamp(40px,8vw,64px) clamp(20px,5vw,32px)',textAlign:'center',maxWidth:'640px',margin:'0 auto'}}>
+      <div style={{ background: 'transparent' }}>
+        <div style={{ padding: 'clamp(40px,8vw,64px) clamp(20px,5vw,32px)', textAlign: 'center', maxWidth: '640px', margin: '0 auto' }}>
 
           {/* Ligne déco */}
           <div className="flex items-center justify-center gap-3 mb-6">
@@ -238,19 +264,19 @@ export default function Bienvenue() {
       </div>
 
       {/* ══ NOTRE HISTOIRE ══ */}
-      <Section id="histoire" bg="linear-gradient(135deg,#1a4a2e,#0d2b1a)">
-        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,64px)",maxWidth:"960px",margin:"0 auto"}}>
+      <Section id="histoire" bg="transparent">
+        <div style={{ padding: "clamp(48px,8vw,80px) clamp(16px,5vw,64px)", maxWidth: "960px", margin: "0 auto" }}>
           <SectionTitle emoji="💑" title="Notre Histoire" sub="De la rencontre aux fiançailles" dark />
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,260px),1fr))",gap:"16px",marginBottom:"32px"}}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,260px),1fr))", gap: "16px", marginBottom: "32px" }}>
             {[
-              { year:'2019', icon:'☕', title:'La rencontre', text:"Un regard, un sourire lors d'un anniversaire. Tout a commencé là, simplement, naturellement." },
-              { year:'2024', icon:'🌍', title:'L\'aventure', text:'Citoyens du ciel de passage — Nous sommes des voyageurs, des fous rires, une complicité qui grandit chaque jour. Deux âmes en balade.' },
-              { year:'2025', icon:'💍', title:'Les fiançailles', text:"Nos regards se sont croisés, nos chemins se sont mêlés mais le temps a décidé du moment où nos cœurs se sont trouvés, maintenant enlacés nous avons pris la décision de faire un bout de chemin ensemble." },
-            ].map((s,i)=>(
-              <div key={i} style={{textAlign:"center",padding:"clamp(16px,4vw,24px)",borderRadius:"16px",background:'rgba(255,255,255,0.06)',border:'1px solid rgba(201,168,76,0.25)'}}>
+              { year: '2019', icon: '☕', title: 'La rencontre', text: "Un regard, un sourire lors d'un anniversaire. Tout a commencé là, simplement, naturellement." },
+              { year: '2024', icon: '🌍', title: 'L\'aventure', text: 'Citoyens du ciel de passage — Nous sommes des voyageurs, des fous rires, une complicité qui grandit chaque jour. Deux âmes en balade.' },
+              { year: '2025', icon: '💍', title: 'Les fiançailles', text: "Nos regards se sont croisés, nos chemins se sont mêlés mais le temps a décidé du moment où nos cœurs se sont trouvés, maintenant enlacés nous avons pris la décision de faire un bout de chemin ensemble." },
+            ].map((s, i) => (
+              <div key={i} style={{ textAlign: "center", padding: "clamp(16px,4vw,24px)", borderRadius: "16px", background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(201,168,76,0.25)' }}>
                 {/* Icône décorative */}
-                <div style={{width:'100%',aspectRatio:'16/9',borderRadius:'12px',marginBottom:'16px',display:'flex',alignItems:'center',justifyContent:'center',background:'linear-gradient(135deg,rgba(201,168,76,0.12),rgba(76,175,125,0.12))'}}>
-                  <span style={{fontSize:'3.5rem',opacity:0.6}}>{s.icon}</span>
+                <div style={{ width: '100%', aspectRatio: '16/9', borderRadius: '12px', marginBottom: '16px', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'linear-gradient(135deg,rgba(201,168,76,0.12),rgba(76,175,125,0.12))' }}>
+                  <span style={{ fontSize: '3.5rem', opacity: 0.6 }}>{s.icon}</span>
                 </div>
                 <div className="text-gold text-xs tracking-widest uppercase mb-1">{s.year}</div>
                 <h3 className="text-white italic text-lg playfair mb-2">{s.title}</h3>
@@ -259,9 +285,9 @@ export default function Bienvenue() {
             ))}
           </div>
           <div className="text-center p-8 rounded-2xl"
-               style={{background:'rgba(255,255,255,0.05)',border:'1px solid rgba(201,168,76,0.2)'}}>
+            style={{ background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(201,168,76,0.2)' }}>
             <p className="text-white/80 italic text-xl leading-relaxed playfair max-w-2xl mx-auto">
-              "Chaque amour a sa propre couleur.<br/>Le nôtre est tropical — vif, chaleureux et plein de vie."
+              "Chaque amour a sa propre couleur.<br />Le nôtre est tropical — vif, chaleureux et plein de vie."
             </p>
             <div className="text-gold mt-3 text-xs tracking-widest uppercase">— Katty &amp; Pascal</div>
           </div>
@@ -269,39 +295,39 @@ export default function Bienvenue() {
       </Section>
 
       {/* ══ PROGRAMME ══ */}
-      <Section id="programme" bg="#fafcf8">
-        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,40px)",maxWidth:"720px",margin:"0 auto"}}>
+      <Section id="programme" bg="transparent">
+        <div style={{ padding: "clamp(48px,8vw,80px) clamp(16px,5vw,40px)", maxWidth: "720px", margin: "0 auto" }}>
           <SectionTitle emoji="📅" title="Programme du 30 Juin" sub="Horaires & lieux de la journée" />
           <div className="relative">
             {/* Ligne verticale */}
-            <div style={{position:"absolute",left:"28px",top:0,bottom:0,width:"2px"}}
-                 style={{background:'linear-gradient(180deg,#c9a84c,#4caf7d,#e91e8c,#f39c12,#9b59b6)'}}/>
+            <div style={{ position: "absolute", left: "28px", top: 0, bottom: 0, width: "2px" }}
+              style={{ background: 'linear-gradient(180deg,#c9a84c,#4caf7d,#e91e8c,#f39c12,#9b59b6)' }} />
             <div className="space-y-8">
-              {TIMELINE.map((step,i)=>(
-                <div key={i} style={{display:"flex",gap:"12px",alignItems:"flex-start"}}>
+              {TIMELINE.map((step, i) => (
+                <div key={i} style={{ display: "flex", gap: "12px", alignItems: "flex-start" }}>
                   {/* Icône */}
-                  <div style={{position:"relative",zIndex:10,width:"48px",height:"48px",borderRadius:"50%",display:"flex",alignItems:"center",justifyContent:"center",fontSize:"1.3rem",flexShrink:0,boxShadow:"0 2px 8px rgba(0,0,0,0.15)"}}
-                       style={{background:`${step.color}25`,border:`2px solid ${step.color}`,minWidth:'4rem'}}>
+                  <div style={{ position: "relative", zIndex: 10, width: "48px", height: "48px", borderRadius: "50%", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "1.3rem", flexShrink: 0, boxShadow: "0 2px 8px rgba(0,0,0,0.15)" }}
+                    style={{ background: `${step.color}25`, border: `2px solid ${step.color}`, minWidth: '4rem' }}>
                     {step.icon}
                   </div>
                   {/* Contenu */}
-                  <div style={{flex:1,borderRadius:"16px",padding:"clamp(12px,3vw,20px)",background:"white",boxShadow:"0 2px 12px rgba(0,0,0,0.06)"}}
-                       style={{background:'white',boxShadow:'0 4px 20px rgba(0,0,0,0.06)',border:`1px solid ${step.color}30`}}>
+                  <div style={{ flex: 1, borderRadius: "16px", padding: "clamp(12px,3vw,20px)" }}
+                    style={{ background: 'rgba(13,43,26,0.65)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', boxShadow: '0 4px 20px rgba(0,0,0,0.25)', border: `1px solid ${step.color}40` }}>
                     <div className="flex items-center gap-3 mb-1">
-                      <span className="text-xl font-bold playfair" style={{color:step.color}}>{step.heure}</span>
+                      <span className="text-xl font-bold playfair" style={{ color: step.color }}>{step.heure}</span>
                       <h3 className="text-green-dark italic text-lg playfair">{step.titre}</h3>
                     </div>
                     <p className="text-green-dark/80 text-sm font-medium">{step.lieu}</p>
                     <p className="text-green-dark/50 text-xs mt-1">{step.desc}</p>
                     {step.lieu.includes('Mairie') && (
                       <a href={WEDDING.ceremonieCivile.maps} target="_blank" rel="noreferrer"
-                         className="inline-flex items-center gap-1 mt-2 text-xs text-green-mid hover:text-gold transition-colors">
+                        className="inline-flex items-center gap-1 mt-2 text-xs text-green-mid hover:text-gold transition-colors">
                         📍 Voir sur Google Maps →
                       </a>
                     )}
                     {step.lieu.includes('Jasmine') && (
                       <a href={WEDDING.vinHonneur.maps} target="_blank" rel="noreferrer"
-                         className="inline-flex items-center gap-1 mt-2 text-xs text-green-mid hover:text-gold transition-colors">
+                        className="inline-flex items-center gap-1 mt-2 text-xs text-green-mid hover:text-gold transition-colors">
                         📍 Voir sur Google Maps →
                       </a>
                     )}
@@ -314,18 +340,18 @@ export default function Bienvenue() {
       </Section>
 
       {/* ══ MENU ══ */}
-      <Section id="menu" bg="linear-gradient(135deg,#1a4a2e,#0d2b1a)">
-        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,48px)",maxWidth:"840px",margin:"0 auto"}}>
+      <Section id="menu" bg="transparent">
+        <div style={{ padding: "clamp(48px,8vw,80px) clamp(16px,5vw,48px)", maxWidth: "840px", margin: "0 auto" }}>
           <SectionTitle emoji="🍽️" title="Menu Balade Tropicale" sub="Vin d'honneur — Salle Jasmine — 30 Juin 2026" dark />
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,300px),1fr))",gap:"12px"}}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,300px),1fr))", gap: "12px" }}>
             {/* Cocktail */}
-            <div className="rounded-2xl p-6" style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(201,168,76,0.3)'}}>
+            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(201,168,76,0.3)' }}>
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">🥂</span>
                 <h3 className="text-gold-light italic text-xl playfair">Cocktail d'accueil</h3>
               </div>
               <ul className="space-y-2">
-                {MENU.cocktail.map((m,i)=>(
+                {MENU.cocktail.map((m, i) => (
                   <li key={i} className="text-white/80 text-sm flex items-center gap-2">
                     <span className="text-gold text-xs">✦</span>{m}
                   </li>
@@ -334,13 +360,13 @@ export default function Bienvenue() {
             </div>
 
             {/* Buffet froid */}
-            <div className="rounded-2xl p-6" style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(76,175,125,0.3)'}}>
+            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(76,175,125,0.3)' }}>
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">🥗</span>
                 <h3 className="text-green-light italic text-xl playfair">Buffet Froid</h3>
               </div>
               <ul className="space-y-2">
-                {MENU.froide.map((m,i)=>(
+                {MENU.froide.map((m, i) => (
                   <li key={i} className="text-white/80 text-sm flex items-center gap-2">
                     <span className="text-green-light text-xs">✦</span>{m}
                   </li>
@@ -349,13 +375,13 @@ export default function Bienvenue() {
             </div>
 
             {/* Buffet chaud */}
-            <div className="rounded-2xl p-6" style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(233,30,140,0.3)'}}>
+            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(233,30,140,0.3)' }}>
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">🍲</span>
                 <h3 className="text-trop-pink italic text-xl playfair">Buffet Chaud</h3>
               </div>
               <ul className="space-y-2">
-                {MENU.chaude.map((m,i)=>(
+                {MENU.chaude.map((m, i) => (
                   <li key={i} className="text-white/80 text-sm flex items-center gap-2">
                     <span className="text-trop-pink text-xs">✦</span>{m}
                   </li>
@@ -364,13 +390,13 @@ export default function Bienvenue() {
             </div>
 
             {/* Boissons */}
-            <div className="rounded-2xl p-6" style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(243,156,18,0.3)'}}>
+            <div className="rounded-2xl p-6" style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(243,156,18,0.3)' }}>
               <div className="flex items-center gap-3 mb-4">
                 <span className="text-2xl">🥤</span>
                 <h3 className="text-trop-yellow italic text-xl playfair">Boissons Soft</h3>
               </div>
               <ul className="space-y-2">
-                {MENU.boissons.map((m,i)=>(
+                {MENU.boissons.map((m, i) => (
                   <li key={i} className="text-white/80 text-sm flex items-center gap-2">
                     <span className="text-trop-yellow text-xs">✦</span>{m}
                   </li>
@@ -385,43 +411,43 @@ export default function Bienvenue() {
       </Section>
 
       {/* ══ PLAN D'ACCÈS ══ */}
-      <Section id="acces" bg="linear-gradient(135deg,#1a4a2e,#0d2b1a)">
-        <div style={{padding:"clamp(48px,8vw,80px) clamp(16px,5vw,64px)",maxWidth:"960px",margin:"0 auto"}}>
+      <Section id="acces" bg="transparent">
+        <div style={{ padding: "clamp(48px,8vw,80px) clamp(16px,5vw,64px)", maxWidth: "960px", margin: "0 auto" }}>
           <SectionTitle emoji="🗺️" title="Plan d'Accès" sub="Salle Jasmine · 8 rue des Gaillards · Garges-lès-Gonesse" dark />
 
-          <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,400px),1fr))",gap:"20px"}}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,400px),1fr))", gap: "20px" }}>
 
             {/* Carte / Photo salle */}
             <div>
-              <div className="rounded-2xl overflow-hidden mb-4" style={{border:'1px solid rgba(201,168,76,0.3)'}}>
+              <div className="rounded-2xl overflow-hidden mb-4" style={{ border: '1px solid rgba(201,168,76,0.3)' }}>
                 {/* Google Maps iframe — méthode sans clé API (place search) */}
                 <iframe
                   src="https://maps.google.com/maps?q=8+rue+des+Gaillards+95140+Garges-les-Gonesse&output=embed&z=16"
                   width="100%" height="280"
-                  style={{border:0, display:'block'}}
+                  style={{ border: 0, display: 'block' }}
                   allowFullScreen loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                   title="Salle Jasmine — 8 rue des Gaillards, Garges-lès-Gonesse"
                 />
               </div>
               <a href="https://maps.google.com/?q=8+rue+des+Gaillards+95140+Garges-les-Gonesse"
-                 target="_blank" rel="noreferrer"
-                 style={{width:"100%",display:"flex",alignItems:"center",justifyContent:"center",gap:"8px",padding:"14px",borderRadius:"14px",background:"linear-gradient(135deg,#c9a84c,#f0d080)",color:"#1a4a2e",fontWeight:700,fontSize:"0.72rem",letterSpacing:"0.2em",textTransform:"uppercase",textDecoration:"none",marginTop:"4px"}}>
+                target="_blank" rel="noreferrer"
+                style={{ width: "100%", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", padding: "14px", borderRadius: "14px", background: "linear-gradient(135deg,#c9a84c,#f0d080)", color: "#1a4a2e", fontWeight: 700, fontSize: "0.72rem", letterSpacing: "0.2em", textTransform: "uppercase", textDecoration: "none", marginTop: "4px" }}>
                 📍 Ouvrir dans Google Maps
               </a>
             </div>
 
             {/* Infos transport */}
-            <div style={{display:"flex",flexDirection:"column",gap:"10px"}}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
               <h3 className="text-gold-light italic text-xl playfair mb-4">Comment venir ?</h3>
               {[
-                { icon:'🚗', title:'En voiture',      desc:"A1 direction Roissy, sortie Garges-lès-Gonesse. Parking gratuit sur place (200 places)." },
-                { icon:'🚇', title:'RER D',            desc:"Station Garges-Sarcelles. Puis 10 min à pied ou taxi depuis la gare." },
-                { icon:'🚌', title:'Bus',              desc:"Ligne 250 arrêt Gaillards. Ligne 269 arrêt Mairie de Garges." },
-                { icon:'🚕', title:'Taxi / VTC',       desc:"G7, Uber disponibles dans toute la région. Comptez 30 min depuis Paris." },
-                { icon:'✈️', title:'Depuis CDG',       desc:"15 minutes en voiture depuis l'aéroport Charles de Gaulle." },
-              ].map((t,i)=>(
-                <div key={i} style={{display:"flex",gap:"14px",padding:"14px 16px",borderRadius:"14px",background:"rgba(255,255,255,0.05)",border:"1px solid rgba(255,255,255,0.08)"}}>
+                { icon: '🚗', title: 'En voiture', desc: "A1 direction Roissy, sortie Garges-lès-Gonesse. Parking gratuit sur place (200 places)." },
+                { icon: '🚇', title: 'RER D', desc: "Station Garges-Sarcelles. Puis 10 min à pied ou taxi depuis la gare." },
+                { icon: '🚌', title: 'Bus', desc: "Ligne 250 arrêt Gaillards. Ligne 269 arrêt Mairie de Garges." },
+                { icon: '🚕', title: 'Taxi / VTC', desc: "G7, Uber disponibles dans toute la région. Comptez 30 min depuis Paris." },
+                { icon: '✈️', title: 'Depuis CDG', desc: "15 minutes en voiture depuis l'aéroport Charles de Gaulle." },
+              ].map((t, i) => (
+                <div key={i} style={{ display: "flex", gap: "14px", padding: "14px 16px", borderRadius: "14px", background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}>
                   <span className="text-2xl flex-shrink-0">{t.icon}</span>
                   <div>
                     <div className="text-white font-medium text-sm">{t.title}</div>
@@ -433,14 +459,14 @@ export default function Bienvenue() {
           </div>
 
           {/* 2ème lieu : Mairie */}
-          <div style={{marginTop:"20px",padding:"clamp(16px,4vw,24px)",borderRadius:"16px",background:"rgba(201,168,76,0.08)",border:"1px solid rgba(201,168,76,0.25)"}}>
+          <div style={{ marginTop: "20px", padding: "clamp(16px,4vw,24px)", borderRadius: "16px", background: "rgba(201,168,76,0.08)", border: "1px solid rgba(201,168,76,0.25)" }}>
             <div className="flex items-start gap-4">
               <span className="text-3xl">⚖️</span>
               <div>
-                <h4 className="text-gold-light italic text-lg playfair">Cérémonie Civile — 11h30</h4>
+                <h4 className="text-gold-light italic text-lg playfair">Cérémonie Civile — 14h00</h4>
                 <p className="text-white/80 text-sm mt-1">{WEDDING.ceremonieCivile.lieu} — {WEDDING.ceremonieCivile.adresse}</p>
                 <a href={WEDDING.ceremonieCivile.maps} target="_blank" rel="noreferrer"
-                   className="inline-flex items-center gap-2 mt-2 text-xs tracking-widest uppercase text-gold hover:text-gold-light transition-colors">
+                  className="inline-flex items-center gap-2 mt-2 text-xs tracking-widest uppercase text-gold hover:text-gold-light transition-colors">
                   📍 Voir sur Maps →
                 </a>
               </div>
@@ -450,11 +476,11 @@ export default function Bienvenue() {
           {/* Hôtels */}
           <div className="mt-8">
             <h3 className="text-gold-light italic text-xl playfair mb-4">🏨 Hôtels à proximité</h3>
-            <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(min(100%,280px),1fr))",gap:"10px"}}>
-              {HOTELS.map((h,i)=>(
+            <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fit,minmax(min(100%,280px),1fr))", gap: "10px" }}>
+              {HOTELS.map((h, i) => (
                 <a key={i} href={h.maps} target="_blank" rel="noreferrer"
-                   className="flex items-center justify-between p-4 rounded-xl transition-all hover:-translate-y-0.5 group"
-                   style={{background:'rgba(255,255,255,0.06)',border:'1px solid rgba(255,255,255,0.1)'}}>
+                  className="flex items-center justify-between p-4 rounded-xl transition-all hover:-translate-y-0.5 group"
+                  style={{ background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.1)' }}>
                   <div>
                     <div className="text-white text-sm group-hover:text-gold-light transition-colors">{h.name}</div>
                     <div className="text-yellow-400 text-xs mt-0.5">{h.stars}</div>
@@ -471,7 +497,7 @@ export default function Bienvenue() {
       </Section>
 
       {/* ══ PLAN DE TABLES ══ */}
-      <section id="tables" style={{ background: 'linear-gradient(160deg,#0d2b1a 0%,#1a4a2e 50%,#0d2b1a 100%)' }}>
+      <section id="tables" style={{ background: 'transparent' }}>
         <div style={{ maxWidth: '960px', margin: '0 auto', padding: 'clamp(40px,8vw,80px) clamp(16px,4vw,24px)' }}>
 
           {/* Titre */}
@@ -507,19 +533,28 @@ export default function Bienvenue() {
 
       {/* ══ FOOTER ══ */}
       <footer style={{
-        padding:'clamp(40px,6vw,56px) 20px',
-        textAlign:'center',
-        background:'#0d2b1a',
-        borderTop:'1px solid rgba(201,168,76,0.2)',
+        padding: 'clamp(40px,6vw,56px) 20px',
+        textAlign: 'center',
+        background: '#0d2b1a',
+        borderTop: '1px solid rgba(201,168,76,0.2)',
       }}>
-        <h3 style={{fontFamily:'"Playfair Display",serif', fontStyle:'italic', fontSize:'1.6rem', color:'#f0d080', margin:'0 0 8px', textAlign:'center'}}>
+        <h3 style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '1.6rem', color: '#f0d080', margin: '0 0 8px', textAlign: 'center' }}>
           Katty &amp; Pascal
         </h3>
-        <p style={{color:'rgba(255,255,255,0.4)', fontSize:'0.62rem', letterSpacing:'0.3em', textTransform:'uppercase', margin:'0 0 16px', textAlign:'center'}}>
+        <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.62rem', letterSpacing: '0.3em', textTransform: 'uppercase', margin: '0 0 16px', textAlign: 'center' }}>
           Balade Tropicale · 30 Juin 2026 · Salle Jasmine · Garges-lès-Gonesse
         </p>
-        <div style={{color:'rgba(201,168,76,0.3)', letterSpacing:'0.8em', marginBottom:'12px', textAlign:'center'}}>✿ ✦ ✿ ✦ ✿</div>
-        <p style={{color:'rgba(255,255,255,0.2)', fontSize:'0.72rem', margin:0, textAlign:'center'}}>Avec tout notre amour 🌺</p>
+        <div style={{ color: 'rgba(201,168,76,0.3)', letterSpacing: '0.8em', marginBottom: '24px', textAlign: 'center' }}>✿ ✦ ✿ ✦ ✿</div>
+
+        {/* Compteur — J-x avant le mariage */}
+        <div style={{ marginBottom: '28px' }}>
+          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '14px' }}>
+            ⏳ Compte à rebours — 30 Juin 2026
+          </p>
+          <Countdown dateISO={WEDDING.dateISO} />
+        </div>
+
+        <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.72rem', margin: 0, textAlign: 'center' }}>Avec tout notre amour 🌺</p>
       </footer>
     </div>
   )
@@ -536,17 +571,17 @@ function LegendeTables() {
     fetch('/api/public-tables')
       .then(r => r.ok ? r.json() : [])
       .then(data => Array.isArray(data) ? setGuests(data) : [])
-      .catch(() => {})
+      .catch(() => { })
   }, [])
 
   const TABLE_COLORS = {
-    1:'#e74c3c', 2:'#e91e8c', 3:'#c0392b', 4:'#9b59b6', 5:'#f39c12',
-    6:'#f1c40f', 7:'#e74c3c', 8:'#27ae60', 9:'#16a085', 10:'#2ecc71',
-    11:'#c9a84c', 12:'#1abc9c', 13:'#e91e8c', 14:'#e67e22',
+    1: '#e74c3c', 2: '#e91e8c', 3: '#c0392b', 4: '#9b59b6', 5: '#f39c12',
+    6: '#f1c40f', 7: '#e74c3c', 8: '#27ae60', 9: '#16a085', 10: '#2ecc71',
+    11: '#c9a84c', 12: '#1abc9c', 13: '#e91e8c', 14: '#e67e22',
   }
 
   const totalCapacity = TABLES.reduce((s, t) => s + t.capacity, 0)
-  const totalPlaced   = guests.filter(g => g.tableId).length
+  const totalPlaced = guests.filter(g => g.tableId).length
 
   return (
     <div style={{ marginTop: '40px' }}>
@@ -567,17 +602,17 @@ function LegendeTables() {
             width: totalCapacity ? `${Math.round(totalPlaced / totalCapacity * 100)}%` : '0%',
             background: 'linear-gradient(90deg,#4caf7d,#c9a84c)',
             transition: 'width 0.5s',
-          }}/>
+          }} />
         </div>
       </div>
 
       {/* Grille 14 tables */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(130px,1fr))', gap: '10px' }}>
         {TABLES.map(t => {
-          const count  = guests.filter(g => g.tableId === t.id).length
-          const pct    = Math.round(count / t.capacity * 100)
+          const count = guests.filter(g => g.tableId === t.id).length
+          const pct = Math.round(count / t.capacity * 100)
           const isFull = count >= t.capacity
-          const col    = TABLE_COLORS[t.id] || '#c9a84c'
+          const col = TABLE_COLORS[t.id] || '#c9a84c'
 
           return (
             <div key={t.id} style={{
@@ -595,7 +630,7 @@ function LegendeTables() {
               onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = 'none' }}
             >
               {/* Bande couleur en haut */}
-              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: col, opacity: 0.7, borderRadius: '14px 14px 0 0' }}/>
+              <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: '3px', background: col, opacity: 0.7, borderRadius: '14px 14px 0 0' }} />
 
               {/* Badge COMPLET */}
               {isFull && (
@@ -626,7 +661,7 @@ function LegendeTables() {
                   background: isFull ? `linear-gradient(90deg,${col},${col}cc)` : col,
                   transition: 'width 0.5s',
                   opacity: 0.85,
-                }}/>
+                }} />
               </div>
 
               {/* Chaises mini */}
@@ -637,7 +672,7 @@ function LegendeTables() {
                     background: i < count ? col : 'rgba(255,255,255,0.1)',
                     border: i < count ? `1px solid ${col}` : '1px solid rgba(255,255,255,0.15)',
                     transition: 'background 0.3s',
-                  }}/>
+                  }} />
                 ))}
               </div>
             </div>
@@ -649,48 +684,48 @@ function LegendeTables() {
 }
 
 function SallePlan() {
-  const [hovered,  setHovered]  = useState(null)
+  const [hovered, setHovered] = useState(null)
   const [selected, setSelected] = useState(null)
-  const [guests,   setGuests]   = useState([])
+  const [guests, setGuests] = useState([])
 
   useEffect(() => {
     fetch('/api/public-tables')
       .then(r => r.ok ? r.json() : [])
       .then(data => Array.isArray(data) ? setGuests(data) : [])
-      .catch(() => {})
+      .catch(() => { })
   }, [])
 
   const guestsAt = (tableId) => guests.filter(g => g.tableId === tableId)
-  const selTable  = selected ? TABLES.find(t => t.id === selected) : null
+  const selTable = selected ? TABLES.find(t => t.id === selected) : null
   const selGuests = selected ? guestsAt(selected) : []
 
   const COLORS = {
-    1:'#e74c3c', 2:'#e91e8c', 3:'#e74c3c', 4:'#9b59b6', 5:'#f39c12',
-    6:'#f1c40f', 7:'#e74c3c', 8:'#27ae60', 9:'#16a085', 10:'#2ecc71',
-    11:'#f39c12', 12:'#27ae60', 13:'#e91e8c', 14:'#f0d080'
+    1: '#e74c3c', 2: '#e91e8c', 3: '#e74c3c', 4: '#9b59b6', 5: '#f39c12',
+    6: '#f1c40f', 7: '#e74c3c', 8: '#27ae60', 9: '#16a085', 10: '#2ecc71',
+    11: '#f39c12', 12: '#27ae60', 13: '#e91e8c', 14: '#f0d080'
   }
 
   // Positions SVG des 14 tables dans une salle 800×560
   // Piste de danse centrale ~200×160 centrée à (400,280)
   const TABLE_POS = [
     // Haut (rangée 1) — T1 à T5
-    { id:1,  x:100, y:80  },
-    { id:2,  x:230, y:80  },
-    { id:3,  x:400, y:65  },
-    { id:4,  x:570, y:80  },
-    { id:5,  x:700, y:80  },
+    { id: 1, x: 100, y: 80 },
+    { id: 2, x: 230, y: 80 },
+    { id: 3, x: 400, y: 65 },
+    { id: 4, x: 570, y: 80 },
+    { id: 5, x: 700, y: 80 },
     // Milieu gauche — T6, T7
-    { id:6,  x:90,  y:220 },
-    { id:7,  x:90,  y:340 },
+    { id: 6, x: 90, y: 220 },
+    { id: 7, x: 90, y: 340 },
     // Milieu droit — T8, T9
-    { id:8,  x:710, y:220 },
-    { id:9,  x:710, y:340 },
+    { id: 8, x: 710, y: 220 },
+    { id: 9, x: 710, y: 340 },
     // Bas (rangée 3) — T10 à T13
-    { id:10, x:100, y:470 },
-    { id:11, x:230, y:480 },
-    { id:12, x:400, y:490 },
-    { id:13, x:570, y:480 },
-    { id:14, x:700, y:470 },
+    { id: 10, x: 100, y: 470 },
+    { id: 11, x: 230, y: 480 },
+    { id: 12, x: 400, y: 490 },
+    { id: 13, x: 570, y: 480 },
+    { id: 14, x: 700, y: 470 },
   ]
 
   return (
@@ -701,64 +736,65 @@ function SallePlan() {
         <div style={{
           position: 'absolute', top: '-8px', left: '50%', transform: 'translateX(-50%)',
           background: 'linear-gradient(160deg,#1a4a2e,#0d2b1a)',
-          border: `2px solid ${COLORS[selected]||'#c9a84c'}`,
+          border: `2px solid ${COLORS[selected] || '#c9a84c'}`,
           borderRadius: '16px', padding: '16px 22px', zIndex: 20,
           minWidth: '260px', maxWidth: '340px',
           boxShadow: '0 12px 40px rgba(0,0,0,0.6)',
         }}>
           {/* Header popup */}
-          <div style={{ display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:'12px' }}>
-            <div style={{ display:'flex', alignItems:'center', gap:'8px' }}>
-              <span style={{ fontSize:'1.5rem' }}>{selTable.flower}</span>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+              <span style={{ fontSize: '1.5rem' }}>{selTable.flower}</span>
               <div>
-                <div style={{ fontFamily:'"Playfair Display",serif', fontStyle:'italic', color:'#f0d080', fontSize:'1rem' }}>
+                <div style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', color: '#f0d080', fontSize: '1rem' }}>
                   Table {selTable.name}
                 </div>
-                <div style={{ color:'rgba(255,255,255,0.35)', fontSize:'0.58rem', letterSpacing:'0.2em' }}>
+                <div style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.58rem', letterSpacing: '0.2em' }}>
                   {selGuests.length} / {selTable.capacity} places
                 </div>
               </div>
             </div>
             <button
               onClick={() => setSelected(null)}
-              style={{ background:'rgba(255,255,255,0.1)', border:'none', borderRadius:'50%', width:'24px', height:'24px', color:'rgba(255,255,255,0.6)', cursor:'pointer', fontSize:'0.85rem', display:'flex', alignItems:'center', justifyContent:'center' }}>
+              style={{ background: 'rgba(255,255,255,0.1)', border: 'none', borderRadius: '50%', width: '24px', height: '24px', color: 'rgba(255,255,255,0.6)', cursor: 'pointer', fontSize: '0.85rem', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
               ✕
             </button>
           </div>
           {/* Barre progression */}
-          <div style={{ height:'3px', background:'rgba(255,255,255,0.08)', borderRadius:'2px', marginBottom:'12px' }}>
-            <div style={{ height:'100%', borderRadius:'2px', transition:'width 0.4s',
-              width: `${Math.round(selGuests.length/selTable.capacity*100)}%`,
-              background: `linear-gradient(90deg,${COLORS[selected]||'#c9a84c'},${COLORS[selected]||'#c9a84c'}aa)`
-            }}/>
+          <div style={{ height: '3px', background: 'rgba(255,255,255,0.08)', borderRadius: '2px', marginBottom: '12px' }}>
+            <div style={{
+              height: '100%', borderRadius: '2px', transition: 'width 0.4s',
+              width: `${Math.round(selGuests.length / selTable.capacity * 100)}%`,
+              background: `linear-gradient(90deg,${COLORS[selected] || '#c9a84c'},${COLORS[selected] || '#c9a84c'}aa)`
+            }} />
           </div>
           {/* Liste invités */}
           {selGuests.length === 0 ? (
-            <div style={{ color:'rgba(255,255,255,0.3)', fontSize:'0.78rem', fontStyle:'italic', textAlign:'center', padding:'8px 0' }}>
+            <div style={{ color: 'rgba(255,255,255,0.3)', fontSize: '0.78rem', fontStyle: 'italic', textAlign: 'center', padding: '8px 0' }}>
               Aucun invité assigné pour l'instant
             </div>
           ) : (
-            <div style={{ display:'flex', flexDirection:'column', gap:'4px', maxHeight:'200px', overflowY:'auto' }}>
-              {selGuests.map((g,i) => (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '4px', maxHeight: '200px', overflowY: 'auto' }}>
+              {selGuests.map((g, i) => (
                 <div key={g.id} style={{
-                  display:'flex', alignItems:'center', gap:'8px',
-                  padding:'5px 8px', borderRadius:'8px',
-                  background:'rgba(255,255,255,0.05)',
-                  border:'1px solid rgba(255,255,255,0.07)',
+                  display: 'flex', alignItems: 'center', gap: '8px',
+                  padding: '5px 8px', borderRadius: '8px',
+                  background: 'rgba(255,255,255,0.05)',
+                  border: '1px solid rgba(255,255,255,0.07)',
                 }}>
-                  <span style={{ fontSize:'0.85rem' }}>
-                    {g.group==='mariee'?'👰':g.group==='marie'?'🤵':g.group==='famille'?'👨‍👩‍👧':g.group==='amis'?'👫':g.group==='collegue'?'💼':'🌺'}
+                  <span style={{ fontSize: '0.85rem' }}>
+                    {g.group === 'mariee' ? '👰' : g.group === 'marie' ? '🤵' : g.group === 'famille' ? '👨‍👩‍👧' : g.group === 'amis' ? '👫' : g.group === 'collegue' ? '💼' : '🌺'}
                   </span>
-                  <span style={{ color:'rgba(255,255,255,0.85)', fontSize:'0.8rem', flex:1 }}>{g.name}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '0.8rem', flex: 1 }}>{g.name}</span>
                   {g.present && (
-                    <span style={{ fontSize:'0.6rem', color:'#4caf7d', background:'rgba(76,175,125,0.15)', border:'1px solid rgba(76,175,125,0.3)', borderRadius:'10px', padding:'1px 6px' }}>✓ Présent</span>
+                    <span style={{ fontSize: '0.6rem', color: '#4caf7d', background: 'rgba(76,175,125,0.15)', border: '1px solid rgba(76,175,125,0.3)', borderRadius: '10px', padding: '1px 6px' }}>✓ Présent</span>
                   )}
                 </div>
               ))}
             </div>
           )}
           {/* Flèche bas */}
-          <div style={{ textAlign:'center', marginTop:'10px', color:`${COLORS[selected]||'#c9a84c'}`, fontSize:'0.6rem', letterSpacing:'0.2em', opacity:0.6 }}>
+          <div style={{ textAlign: 'center', marginTop: '10px', color: `${COLORS[selected] || '#c9a84c'}`, fontSize: '0.6rem', letterSpacing: '0.2em', opacity: 0.6 }}>
             ▼
           </div>
         </div>
@@ -769,16 +805,16 @@ function SallePlan() {
         const hovT = TABLES.find(t => t.id === hovered)
         return hovT ? (
           <div style={{
-            position:'absolute', top:'-42px', left:'50%', transform:'translateX(-50%)',
-            background:'rgba(13,43,26,0.95)', border:'1px solid #c9a84c',
-            borderRadius:'10px', padding:'6px 16px', zIndex:10,
-            pointerEvents:'none', whiteSpace:'nowrap',
-            boxShadow:'0 4px 20px rgba(0,0,0,0.4)'
+            position: 'absolute', top: '-42px', left: '50%', transform: 'translateX(-50%)',
+            background: 'rgba(0,0,0,0.80)', border: '1px solid rgba(255,255,255,0.3)',
+            borderRadius: '10px', padding: '6px 16px', zIndex: 10,
+            pointerEvents: 'none', whiteSpace: 'nowrap',
+            boxShadow: '0 4px 20px rgba(0,0,0,0.4)'
           }}>
-            <span style={{ color:'#f0d080', fontFamily:'"Playfair Display",serif', fontStyle:'italic', fontSize:'0.9rem' }}>
+            <span style={{ color: '#f0d080', fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '0.9rem' }}>
               {hovT.flower} Table {hovT.name}
             </span>
-            <span style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.68rem', marginLeft:'8px' }}>
+            <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.68rem', marginLeft: '8px' }}>
               · {guestsAt(hovT.id).length}/{hovT.capacity} invités · Cliquer pour voir
             </span>
           </div>
@@ -792,53 +828,53 @@ function SallePlan() {
         {/* Fond salle */}
         <defs>
           <radialGradient id="hallBg" cx="50%" cy="50%" r="70%">
-            <stop offset="0%" stopColor="#1e5c35"/>
-            <stop offset="100%" stopColor="#0a1f12"/>
+            <stop offset="0%" stopColor="#1e5c35" />
+            <stop offset="100%" stopColor="#0a1f12" />
           </radialGradient>
           <radialGradient id="danceGlow" cx="50%" cy="50%" r="50%">
-            <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.18"/>
-            <stop offset="100%" stopColor="#c9a84c" stopOpacity="0"/>
+            <stop offset="0%" stopColor="#c9a84c" stopOpacity="0.18" />
+            <stop offset="100%" stopColor="#c9a84c" stopOpacity="0" />
           </radialGradient>
           <filter id="glow">
-            <feGaussianBlur stdDeviation="3" result="blur"/>
-            <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+            <feGaussianBlur stdDeviation="3" result="blur" />
+            <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
           </filter>
           <pattern id="parquet" patternUnits="userSpaceOnUse" width="40" height="40" patternTransform="rotate(45)">
-            <rect width="40" height="40" fill="#c9a84c" opacity="0.04"/>
-            <rect width="20" height="20" fill="#c9a84c" opacity="0.04"/>
+            <rect width="40" height="40" fill="#c9a84c" opacity="0.04" />
+            <rect width="20" height="20" fill="#c9a84c" opacity="0.04" />
           </pattern>
         </defs>
 
         {/* Salle */}
-        <rect x="10" y="10" width="780" height="540" rx="18" fill="url(#hallBg)" stroke="rgba(201,168,76,0.3)" strokeWidth="2"/>
+        <rect x="10" y="10" width="780" height="540" rx="18" fill="url(#hallBg)" stroke="rgba(201,168,76,0.3)" strokeWidth="2" />
 
         {/* Murs déco */}
-        <rect x="10" y="10" width="780" height="540" rx="18" fill="url(#parquet)"/>
+        <rect x="10" y="10" width="780" height="540" rx="18" fill="url(#parquet)" />
 
         {/* Entrée */}
-        <rect x="340" y="8" width="120" height="18" rx="4" fill="#0a1f12" stroke="rgba(201,168,76,0.5)" strokeWidth="1.5"/>
+        <rect x="340" y="8" width="120" height="18" rx="4" fill="#0a1f12" stroke="rgba(201,168,76,0.5)" strokeWidth="1.5" />
         <text x="400" y="21" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="9" fontFamily="Josefin Sans,sans-serif" letterSpacing="3">ENTRÉE</text>
 
         {/* Scène DJ */}
-        <rect x="290" y="532" width="220" height="20" rx="6" fill="#0a1f12" stroke="rgba(201,168,76,0.5)" strokeWidth="1.5"/>
+        <rect x="290" y="532" width="220" height="20" rx="6" fill="#0a1f12" stroke="rgba(201,168,76,0.5)" strokeWidth="1.5" />
         <text x="400" y="546" textAnchor="middle" fill="rgba(255,255,255,0.5)" fontSize="9" fontFamily="Josefin Sans,sans-serif" letterSpacing="3">🎤 DJ / SCÈNE</text>
 
         {/* ═══ PISTE DE DANSE CENTRALE ═══ */}
-        <rect x="240" y="190" width="320" height="180" rx="16" fill="url(#danceGlow)"/>
+        <rect x="240" y="190" width="320" height="180" rx="16" fill="url(#danceGlow)" />
         <rect x="240" y="190" width="320" height="180" rx="16"
-              fill="none" stroke="#c9a84c" strokeWidth="2" strokeDasharray="8 4" opacity="0.6"/>
+          fill="none" stroke="#c9a84c" strokeWidth="2" strokeDasharray="8 4" opacity="0.6" />
         {/* Carrelage piste */}
-        {[0,1,2,3].map(col => [0,1,2].map(row => (
+        {[0, 1, 2, 3].map(col => [0, 1, 2].map(row => (
           <rect key={`${col}-${row}`}
-            x={248 + col*78} y={198 + row*58} width="72" height="52" rx="4"
-            fill="rgba(201,168,76,0.06)" stroke="rgba(201,168,76,0.12)" strokeWidth="1"/>
+            x={248 + col * 78} y={198 + row * 58} width="72" height="52" rx="4"
+            fill="rgba(201,168,76,0.06)" stroke="rgba(201,168,76,0.12)" strokeWidth="1" />
         )))}
         {/* Notes de musique */}
         <text x="370" y="268" textAnchor="middle" fill="rgba(201,168,76,0.5)" fontSize="28">♪</text>
         <text x="410" y="285" textAnchor="middle" fill="rgba(201,168,76,0.35)" fontSize="20">♫</text>
         <text x="430" y="260" textAnchor="middle" fill="rgba(201,168,76,0.3)" fontSize="16">♩</text>
         <text x="400" y="310" textAnchor="middle" fill="rgba(255,255,255,0.3)" fontSize="9"
-              fontFamily="Josefin Sans,sans-serif" letterSpacing="4">PISTE DE DANSE</text>
+          fontFamily="Josefin Sans,sans-serif" letterSpacing="4">PISTE DE DANSE</text>
 
         {/* ═══ TABLES ═══ */}
         {TABLE_POS.map(pos => {
@@ -850,59 +886,59 @@ function SallePlan() {
 
           return (
             <g key={pos.id}
-               onMouseEnter={() => setHovered(pos.id)}
-               onMouseLeave={() => setHovered(null)}
-               onClick={() => setSelected(selected === pos.id ? null : pos.id)}
-               style={{ cursor:'pointer', transition:'transform 0.15s', transform: (isHov || selected===pos.id) ? `translate(${pos.x}px,${pos.y}px) scale(1.1) translate(-${pos.x}px,-${pos.y}px)` : 'none' }}
+              onMouseEnter={() => setHovered(pos.id)}
+              onMouseLeave={() => setHovered(null)}
+              onClick={() => setSelected(selected === pos.id ? null : pos.id)}
+              style={{ cursor: 'pointer', transition: 'transform 0.15s', transform: (isHov || selected === pos.id) ? `translate(${pos.x}px,${pos.y}px) scale(1.1) translate(-${pos.x}px,-${pos.y}px)` : 'none' }}
             >
               {/* Ombre */}
-              <circle cx={pos.x} cy={pos.y+4} r={r} fill="rgba(0,0,0,0.3)" filter="url(#glow)"/>
+              <circle cx={pos.x} cy={pos.y + 4} r={r} fill="rgba(0,0,0,0.3)" filter="url(#glow)" />
               {/* Nappe — mise en valeur si sélectionnée */}
-              {selected === pos.id && <circle cx={pos.x} cy={pos.y} r={r+8} fill="none" stroke={col} strokeWidth="2" strokeDasharray="5 3" opacity="0.8"/>}
-              <circle cx={pos.x} cy={pos.y} r={r} fill={selected===pos.id ? `${col}40` : `${col}22`} stroke={col} strokeWidth={selected===pos.id ? 4 : isHov ? 3 : 1.5} opacity={1}/>
+              {selected === pos.id && <circle cx={pos.x} cy={pos.y} r={r + 8} fill="none" stroke={col} strokeWidth="2" strokeDasharray="5 3" opacity="0.8" />}
+              <circle cx={pos.x} cy={pos.y} r={r} fill={selected === pos.id ? `${col}40` : `${col}22`} stroke={col} strokeWidth={selected === pos.id ? 4 : isHov ? 3 : 1.5} opacity={1} />
               {/* Cercle intérieur */}
-              <circle cx={pos.x} cy={pos.y} r={r-10} fill={`${col}18`} stroke={`${col}`} strokeWidth="0.8" opacity="0.5"/>
+              <circle cx={pos.x} cy={pos.y} r={r - 10} fill={`${col}18`} stroke={`${col}`} strokeWidth="0.8" opacity="0.5" />
               {/* Chaises autour — 8 par table */}
-              {[0,45,90,135,180,225,270,315].map((angle, i) => {
+              {[0, 45, 90, 135, 180, 225, 270, 315].map((angle, i) => {
                 const rad = (angle * Math.PI) / 180
-                const cx2 = pos.x + (r+10) * Math.cos(rad)
-                const cy2 = pos.y + (r+10) * Math.sin(rad)
-                return <circle key={i} cx={cx2} cy={cy2} r="5" fill={`${col}60`} stroke={col} strokeWidth="1"/>
+                const cx2 = pos.x + (r + 10) * Math.cos(rad)
+                const cy2 = pos.y + (r + 10) * Math.sin(rad)
+                return <circle key={i} cx={cx2} cy={cy2} r="5" fill={`${col}60`} stroke={col} strokeWidth="1" />
               })}
               {/* Emoji fleur */}
-              <text x={pos.x} y={pos.y-8} textAnchor="middle" fontSize="16" dominantBaseline="middle">{t.flower}</text>
+              <text x={pos.x} y={pos.y - 8} textAnchor="middle" fontSize="16" dominantBaseline="middle">{t.flower}</text>
               {/* Nom — étiquettes optimisées pour le SVG */}
               {(() => {
                 // Étiquettes fixes optimisées pour chaque table (max ~10 px de large)
                 const LABELS = {
-                  1:  ['Hibiscus',    null],
-                  2:  ['Frangipa-',   'nier'],
-                  3:  ['Balisier',    null],
-                  4:  ['Bougan-',     'villée'],
-                  5:  ['Lantana',     null],
-                  6:  ['Alamanda',    null],
-                  7:  ['Anthurium',   null],
-                  8:  ['Heliconias',  null],
-                  9:  ['Oiseau du',   'Paradis'],
-                  10: ['Cactus',      null],
-                  11: ["Cœur",        "d'Amour"],
-                  12: ['Palmier &',   'Bambou'],
-                  13: ['Orchidée',    null],
-                  14: ['Pivoine',     'Tropicale'],
+                  1: ['Hibiscus', null],
+                  2: ['Frangipa-', 'nier'],
+                  3: ['Balisier', null],
+                  4: ['Bougan-', 'villée'],
+                  5: ['Lantana', null],
+                  6: ['Alamanda', null],
+                  7: ['Anthurium', null],
+                  8: ['Heliconias', null],
+                  9: ['Oiseau du', 'Paradis'],
+                  10: ['Cactus', null],
+                  11: ["Cœur", "d'Amour"],
+                  12: ['Palmier &', 'Bambou'],
+                  13: ['Orchidée', null],
+                  14: ['Pivoine', 'Tropicale'],
                 }
                 const [l1, l2] = LABELS[t.id] || [t.name, null]
                 if (!l2) {
                   return (
-                    <text x={pos.x} y={pos.y+13} textAnchor="middle" fill="white" fontSize="8"
-                          fontFamily="Josefin Sans,sans-serif" letterSpacing="0.3" opacity="0.92">
+                    <text x={pos.x} y={pos.y + 13} textAnchor="middle" fill="white" fontSize="8"
+                      fontFamily="Josefin Sans,sans-serif" letterSpacing="0.3" opacity="0.92">
                       {l1}
                     </text>
                   )
                 }
                 return (
                   <text textAnchor="middle" fill="white" fontSize="7.5"
-                        fontFamily="Josefin Sans,sans-serif" letterSpacing="0.2" opacity="0.92">
-                    <tspan x={pos.x} y={pos.y+7}>{l1}</tspan>
+                    fontFamily="Josefin Sans,sans-serif" letterSpacing="0.2" opacity="0.92">
+                    <tspan x={pos.x} y={pos.y + 7}>{l1}</tspan>
                     <tspan x={pos.x} dy="11">{l2}</tspan>
                   </text>
                 )
@@ -918,9 +954,9 @@ function SallePlan() {
         <text x="740" y="525" fontSize="22" opacity="0.3">🌻</text>
 
         {/* Légende capacité */}
-        <rect x="22" y="490" width="130" height="30" rx="6" fill="rgba(0,0,0,0.3)"/>
-        <circle cx="38" cy="505" r="6" fill="rgba(201,168,76,0.3)" stroke="#c9a84c" strokeWidth="1"/>
-        <circle cx="38" cy="505" r="3" fill="rgba(201,168,76,0.5)"/>
+        <rect x="22" y="490" width="130" height="30" rx="6" fill="rgba(0,0,0,0.3)" />
+        <circle cx="38" cy="505" r="6" fill="rgba(201,168,76,0.3)" stroke="#c9a84c" strokeWidth="1" />
+        <circle cx="38" cy="505" r="3" fill="rgba(201,168,76,0.5)" />
         <text x="50" y="509" fill="rgba(255,255,255,0.4)" fontSize="8" fontFamily="Josefin Sans,sans-serif" letterSpacing="1">Table ronde · 8 pl. max</text>
       </svg>
     </div>
@@ -931,12 +967,12 @@ function SallePlan() {
 // LIVRE D'OR — Section complète avec formulaire
 // ══════════════════════════════════════════════════
 function LivreOr() {
-  const [nom,      setNom]      = useState('')
-  const [msg,      setMsg]      = useState('')
-  const [sending,  setSending]  = useState(false)
-  const [sent,     setSent]     = useState(false)
-  const [preview,  setPreview]  = useState(false)
-  const [errors,   setErrors]   = useState({})
+  const [nom, setNom] = useState('')
+  const [msg, setMsg] = useState('')
+  const [sending, setSending] = useState(false)
+  const [sent, setSent] = useState(false)
+  const [preview, setPreview] = useState(false)
+  const [errors, setErrors] = useState({})
   const [messages, setMessages] = useState([])
   const [loadingMsgs, setLoadingMsgs] = useState(true)
   const [apiError, setApiError] = useState(null)
@@ -988,7 +1024,7 @@ function LivreOr() {
       setMessages(prev => [data, ...prev])
       setSent(true)
       setPreview(false)
-    } catch(e) {
+    } catch (e) {
       setErrors({ submit: e.message })
       setPreview(false)
     } finally { setSending(false) }
@@ -999,7 +1035,7 @@ function LivreOr() {
   }
 
   return (
-    <section id="livredor" style={{ background: '#fafcf8' }}>
+    <section id="livredor" style={{ background: 'transparent' }}>
       <div style={{ maxWidth: '760px', margin: '0 auto', padding: '80px 24px' }}>
 
         {/* Titre */}
@@ -1011,15 +1047,15 @@ function LivreOr() {
           <p style={{ fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '16px' }}>
             Laissez-nous un message d'amour
           </p>
-          <div className="max-w-lg mx-auto" style={{ color: '#2d5a3d', fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '0.95rem', lineHeight: 1.7, padding: '20px', background: 'linear-gradient(135deg,#f0f9f4,#fff9ed)', borderRadius: '16px', border: '1px solid rgba(201,168,76,0.2)' }}>
+          <div className="max-w-lg mx-auto" style={{ color: 'rgba(255,255,255,0.9)', fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '0.95rem', lineHeight: 1.7, padding: '20px', background: 'rgba(13,43,26,0.55)', backdropFilter: 'blur(16px)', WebkitBackdropFilter: 'blur(16px)', borderRadius: '16px', border: '1px solid rgba(201,168,76,0.3)' }}>
             "Nous vous invitons à nous transmettre tout votre amour et votre bonne humeur en signant notre livre d'or,
             alors n'hésitez pas à nous laisser un message ! Mille fois merci de nous mettre du baume au cœur."
-            <div style={{ marginTop: '8px', color: '#c9a84c', fontWeight: 700 }}>— Pascal &amp; Katty 💕</div>
+            <div style={{ marginTop: '8px', color: 'var(--gold-light)', fontWeight: 700 }}>— Pascal &amp; Katty 💕</div>
           </div>
         </div>
 
         {/* Formulaire */}
-        <div style={{ background: 'white', borderRadius: '20px', padding: '32px', marginBottom: '40px', boxShadow: '0 8px 30px rgba(0,0,0,0.08)', border: '1px solid rgba(201,168,76,0.2)' }}>
+        <div style={{ background: 'rgba(255,255,255,0.92)', backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)', borderRadius: '20px', padding: '32px', marginBottom: '40px', boxShadow: '0 8px 40px rgba(0,0,0,0.15)', border: '1px solid rgba(201,168,76,0.25)' }}>
           {sent ? (
             /* ── Confirmation ── */
             <div style={{ textAlign: 'center', padding: '28px 0' }}>
@@ -1028,7 +1064,7 @@ function LivreOr() {
                 Merci pour votre message !
               </h3>
               <p style={{ color: '#6b7280', fontSize: '0.85rem', lineHeight: 1.65, marginBottom: '24px' }}>
-                Votre message a été enregistré dans notre livre d'or pour toujours. 🌺<br/>
+                Votre message a été enregistré dans notre livre d'or pour toujours. 🌺<br />
                 Katty &amp; Pascal vous remercient du fond du cœur.
               </p>
               <div style={{ display: 'flex', gap: '12px', justifyContent: 'center', flexWrap: 'wrap' }}>
@@ -1056,7 +1092,7 @@ function LivreOr() {
                 </label>
                 <input
                   value={nom}
-                  onChange={e => { setNom(e.target.value); setErrors(p => ({...p, nom: null})) }}
+                  onChange={e => { setNom(e.target.value); setErrors(p => ({ ...p, nom: null })) }}
                   placeholder="Marie Dupont"
                   autoComplete="off"
                   style={{ width: '100%', border: `2px solid ${errors.nom ? '#e74c3c' : '#e5e7eb'}`, borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', boxSizing: 'border-box' }}
@@ -1076,7 +1112,7 @@ function LivreOr() {
                 </label>
                 <textarea
                   value={msg}
-                  onChange={e => { setMsg(e.target.value); setErrors(p => ({...p, msg: null})) }}
+                  onChange={e => { setMsg(e.target.value); setErrors(p => ({ ...p, msg: null })) }}
                   rows={4}
                   placeholder="Félicitations à Pascal et Katty ! Que votre amour soit aussi chaud que le soleil des Antilles…"
                   style={{ width: '100%', border: `2px solid ${errors.msg ? '#e74c3c' : '#e5e7eb'}`, borderRadius: '12px', padding: '12px 16px', fontSize: '0.9rem', color: '#1a4a2e', outline: 'none', resize: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
@@ -1086,9 +1122,9 @@ function LivreOr() {
                 {errors.msg
                   ? <p style={{ color: '#e74c3c', fontSize: '0.7rem', marginTop: '3px' }}>⚠️ {errors.msg}</p>
                   : <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: '3px' }}>
-                      <p style={{ color: '#9ca3af', fontSize: '0.65rem' }}>Minimum 3 caractères · Relisez avant d'envoyer</p>
-                      <p style={{ color: msg.length > 10 ? '#4caf7d' : '#9ca3af', fontSize: '0.65rem' }}>{msg.length} car.</p>
-                    </div>
+                    <p style={{ color: '#9ca3af', fontSize: '0.65rem' }}>Minimum 3 caractères · Relisez avant d'envoyer</p>
+                    <p style={{ color: msg.length > 10 ? '#4caf7d' : '#9ca3af', fontSize: '0.65rem' }}>{msg.length} car.</p>
+                  </div>
                 }
               </div>
 
@@ -1114,7 +1150,7 @@ function LivreOr() {
                     if (data.error) throw new Error(data.error)
                     setMessages(prev => [data, ...prev])
                     setSent(true)
-                  } catch(err) {
+                  } catch (err) {
                     setErrors({ submit: err.message })
                   } finally { setSending(false) }
                 }}
@@ -1144,7 +1180,7 @@ function LivreOr() {
                     Soyez le premier à signer notre livre d'or ! 🌺
                   </p>
                 ) : messages.map(m => (
-                  <div key={m.id} style={{ background: 'linear-gradient(135deg,#f0f9f4,#fafcf8)', borderRadius: '16px', padding: '18px 22px', border: '1px solid rgba(76,175,125,0.2)', position: 'relative', overflow: 'hidden' }}>
+                  <div key={m.id} style={{ background: 'rgba(255,255,255,0.88)', backdropFilter: 'blur(12px)', WebkitBackdropFilter: 'blur(12px)', borderRadius: '16px', padding: '18px 22px', border: '1px solid rgba(76,175,125,0.25)', position: 'relative', overflow: 'hidden' }}>
                     <div style={{ position: 'absolute', top: '10px', right: '14px', fontSize: '1.3rem', opacity: 0.12 }}>🌺</div>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '10px' }}>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
@@ -1154,7 +1190,7 @@ function LivreOr() {
                         <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a4a2e' }}>{m.auteur}</span>
                       </div>
                       <span style={{ fontSize: '0.68rem', color: '#9ca3af', flexShrink: 0, marginLeft: '8px' }}>
-                        {new Date(m.created_at || m.date).toLocaleDateString('fr-FR', { day:'numeric', month:'long', year:'numeric' })}
+                        {new Date(m.created_at || m.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}
                       </span>
                     </div>
                     <p style={{ color: '#374151', fontSize: '0.88rem', lineHeight: 1.7, fontStyle: 'italic', margin: 0 }}>"{m.message}"</p>
