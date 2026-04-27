@@ -28,8 +28,28 @@ export async function GET() {
 export async function POST(req) {
   try {
     const b = await req.json()
-    if (!b.name?.trim()) return NextResponse.json({ error: 'Le nom est requis.' }, { status: 400 })
 
+    // ── Validation nom obligatoire ──────────────────────
+    if (!b.name?.trim())
+      return NextResponse.json({ error: 'Le nom est requis.' }, { status: 400 })
+
+    if (b.name.trim().length < 2)
+      return NextResponse.json({ error: 'Le nom doit contenir au moins 2 caractères.' }, { status: 400 })
+
+    // ── Vérification doublon (insensible casse & espaces) ──
+    const nomNormalise = b.name.trim().toLowerCase()
+    const { data: existing } = await supabase
+      .from('guests')
+      .select('id, name')
+      .ilike('name', b.name.trim())
+
+    if (existing && existing.length > 0) {
+      return NextResponse.json({
+        error: `⚠️ L'invité "${existing[0].name}" existe déjà dans la base de données.`
+      }, { status: 409 })
+    }
+
+    // ── Insertion ───────────────────────────────────────
     const newId = `G${Date.now().toString().slice(-6)}`
     const { data, error } = await supabase.from('guests').insert([{
       id:           newId,
@@ -46,7 +66,15 @@ export async function POST(req) {
       diet_notes:   b.dietNotes   || null,
     }]).select().single()
 
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+    if (error) {
+      // Doublon détecté par contrainte Supabase
+      if (error.code === '23505')
+        return NextResponse.json({
+          error: `⚠️ Cet invité existe déjà dans la base de données.`
+        }, { status: 409 })
+      return NextResponse.json({ error: error.message }, { status: 500 })
+    }
+
     return NextResponse.json(toGuest(data), { status: 201 })
   } catch (e) {
     return NextResponse.json({ error: e.message }, { status: 500 })
