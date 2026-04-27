@@ -2,14 +2,14 @@
 import { useState, useEffect } from 'react'
 
 const TABLES = {
-  1:'Hibiscus',  2:'Frangipanier', 3:'Balisier',      4:'Bouganvillée',
-  5:'Lantana',   6:'Alamanda',     7:'Anthurium',      8:'Heliconias',
-  9:'Plumeria',  10:'Cactus',     11:"Cœur d'Amour",
-  12:'Palmier',  13:'Orchidée',   14:'Bambou',
+  1:'Hibiscus',          2:'Frangipanier',    3:'Balisier',         4:'Bouganvillée',
+  5:'Lantana',           6:'Alamanda',        7:'Anthurium',        8:'Heliconias',
+  9:'Oiseau du Paradis', 10:'Cactus',        11:"Cœur d'Amour",
+  12:'Alpinia Rose',     13:'Orchidée',       14:'Pivoine Tropicale', 15:'Rose de Porcelaine',
 }
 const TABLE_ICONS = {
   1:'🌺', 2:'🌸', 3:'🌷', 4:'💜', 5:'🌼', 6:'🌻', 7:'❤️',
-  8:'🦜', 9:'🌴', 10:'🌵', 11:'💛', 12:'🌴', 13:'🌸', 14:'🎋',
+  8:'🦜', 9:'🐦', 10:'🌵', 11:'💛', 12:'🌸', 13:'🌸', 14:'🌷', 15:'🌹',
 }
 
 const PAGE_PASSWORD = 'balade2026'
@@ -402,11 +402,11 @@ export default function ConfirmationPage() {
                     Programme du 30 Juin 2026
                   </p>
                   {[
-                    {h:'14h00',e:'⚖️',t:'Eclosion des promesses', l:'Mairie de Grigny',c:'#c9a84c'},
-                    {h:'17h30',e:'💍',t:'Bénédiction nuptiale', l:'Salle Jasmine',   c:'#e91e8c'},
-                    {h:'19h00',e:'🥂',t:"Salutation des mariés",    l:'Salle Jasmine',   c:'#22C55E'},
-                    {h:'19h30',e:'🍽️',t:'Dîner',   l:'Salle Jasmine',   c:'#F97316'},
-                    {h:'21h00',e:'🎶',t:'Envolée du bal',  l:'Salle Jasmine',   c:'#9b59b6'},
+                    {h:'14h00',e:'⚖️',t:'Cérémonie Civile', l:'Mairie de Grigny',c:'#c9a84c'},
+                    {h:'17h30',e:'💍',t:'Cérémonie Laïque', l:'Salle Jasmine',   c:'#e91e8c'},
+                    {h:'19h00',e:'🥂',t:"Vin d'Honneur",    l:'Salle Jasmine',   c:'#22C55E'},
+                    {h:'19h30',e:'🍽️',t:'Dîner de Gala',   l:'Salle Jasmine',   c:'#F97316'},
+                    {h:'21h00',e:'🎶',t:'Soirée Dansante',  l:'Salle Jasmine',   c:'#9b59b6'},
                   ].map((ev,i) => (
                     <div key={i} className={`flex items-center gap-2 py-2
                                             ${i<4?'border-b border-white/8':''}`}>
