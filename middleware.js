@@ -1,18 +1,25 @@
-// middleware.js — racine du projet
-// ─────────────────────────────────────────────────
-// Protège toutes les routes /admin/*
-// Redirige vers /admin/login si non authentifié
-// ─────────────────────────────────────────────────
+// middleware.js
+// ═══════════════════════════════════════════════════════════
+// Architecture sécurité :
+//
+//  /confirmation  → PUBLIC — entrée obligatoire invités
+//  /bienvenue     → PROTÉGÉ — cookie "bienvenue_ok" requis
+//                   OU cookie "admin_session" (bypass admin)
+//  /admin/*       → PROTÉGÉ — cookie "admin_session" requis
+//  /api/*         → PROTÉGÉ — cookie "admin_session" requis
+//                   (sauf routes publiques)
+// ═══════════════════════════════════════════════════════════
 
 import { NextResponse } from 'next/server'
 
+const SESSION_SECRET = process.env.SESSION_SECRET || 'kp-wedding-secret-token-2026'
+const BIENVENUE_TOKEN = process.env.BIENVENUE_TOKEN || 'balade2026'
+
 export function middleware(request) {
   const { pathname } = request.nextUrl
-  const SESSION_SECRET = process.env.SESSION_SECRET || 'kp-wedding-secret-token-2026'
 
-  // Routes publiques — toujours accessibles
+  // ── 1. Routes toujours publiques ──────────────────────────
   if (
-    pathname.startsWith('/bienvenue') ||
     pathname.startsWith('/confirmation') ||
     pathname.startsWith('/admin/login') ||
     pathname.startsWith('/api/auth') ||
@@ -21,6 +28,7 @@ export function middleware(request) {
     pathname.startsWith('/api/livredor') ||
     pathname.startsWith('/api/confirmation') ||
     pathname.startsWith('/api/confirm') ||
+    pathname.startsWith('/api/bienvenue-access') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
     pathname === '/'
@@ -28,18 +36,35 @@ export function middleware(request) {
     return NextResponse.next()
   }
 
-  // Protection des routes /admin et /api (sauf /api/auth)
+  const adminSession = request.cookies.get('admin_session')
+  const isAdmin = adminSession?.value === SESSION_SECRET
+
+  // ── 2. Protection /bienvenue ──────────────────────────────
+  //    Accessible si : admin OU cookie bienvenue_ok valide
+  if (pathname.startsWith('/bienvenue')) {
+    if (isAdmin) return NextResponse.next()
+
+    const bienvenueOk = request.cookies.get('bienvenue_ok')
+    if (bienvenueOk?.value === BIENVENUE_TOKEN) return NextResponse.next()
+
+    // Non autorisé → redirection vers /confirmation
+    const url = new URL('/confirmation', request.url)
+    url.searchParams.set('redirect', 'bienvenue')
+    return NextResponse.redirect(url)
+  }
+
+  // ── 3. Protection /admin et /api ─────────────────────────
   const isAdminRoute = pathname.startsWith('/admin')
-  const isApiRoute   = pathname.startsWith('/api') && 
+  const isApiRoute = pathname.startsWith('/api') &&
     !pathname.startsWith('/api/auth') &&
     !pathname.startsWith('/api/public-tables') &&
-    !pathname.startsWith('/api/rsvp')
+    !pathname.startsWith('/api/rsvp') &&
+    !pathname.startsWith('/api/livredor') &&
+    !pathname.startsWith('/api/confirmation') &&
+    !pathname.startsWith('/api/confirm')
 
   if (isAdminRoute || isApiRoute) {
-    const session = request.cookies.get('admin_session')
-
-    if (!session || session.value !== SESSION_SECRET) {
-      // Redirection vers la page de login
+    if (!isAdmin) {
       const loginUrl = new URL('/admin/login', request.url)
       loginUrl.searchParams.set('redirect', pathname)
       return NextResponse.redirect(loginUrl)
@@ -51,6 +76,7 @@ export function middleware(request) {
 
 export const config = {
   matcher: [
+    '/bienvenue/:path*',
     '/admin/:path*',
     '/api/:path*',
     '/confirmation/:path*',
