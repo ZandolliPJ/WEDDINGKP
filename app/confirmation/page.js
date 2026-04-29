@@ -401,11 +401,11 @@ export default function ConfirmationPage() {
                     Programme du 30 Juin 2026
                   </p>
                   {[
-                    { h: '14h00', e: '⚖️', t: 'Cérémonie Civile', l: 'Mairie de Grigny', c: '#c9a84c' },
-                    { h: '17h30', e: '💍', t: 'Cérémonie Laïque', l: 'Salle Jasmine', c: '#e91e8c' },
-                    { h: '19h00', e: '🥂', t: "Vin d'Honneur", l: 'Salle Jasmine', c: '#22C55E' },
-                    { h: '19h30', e: '🍽️', t: 'Dîner de Gala', l: 'Salle Jasmine', c: '#F97316' },
-                    { h: '21h00', e: '🎶', t: 'Soirée Dansante', l: 'Salle Jasmine', c: '#9b59b6' },
+                    { h: '14h00', e: '⚖️', t: 'Echange des serments : La cérémonie civile gravera notre union dans la sérénité', l: 'Mairie de Grigny', c: '#c9a84c' },
+                    { h: '17h30', e: '💍', t: 'Bénédiction nuptiale : Telle une fleur tropicale elle s ouvrira au crépuscule', l: 'Salle Jasmine', c: '#e91e8c' },
+                    { h: '19h00', e: '🥂', t: 'Vin d honneur : Les salutations s enchaînent dans la douceur tropicale tandis que les rires composent le récit de notre joie partagée', l: 'Salle Jasmine', c: '#22C55E' },
+                    { h: '19h30', e: '🍽️', t: 'Evasion créole : Préparez vos papilles pour un voyage ensolleilé. le buffet des mariés lève l ancre ! ', l: 'Salle Jasmine', c: '#F97316' },
+                    { h: '21h00', e: '🎶', t: 'Envolée du bal avec les mariés: le dîner nous a régalés, maintenant place à la chaleur des îles, tous sur la piste pour faire montée le mercure', l: 'Salle Jasmine', c: '#9b59b6' },
                   ].map((ev, i) => (
                     <div key={i} className={`flex items-center gap-2 py-2
                                             ${i < 4 ? 'border-b border-white/8' : ''}`}>
