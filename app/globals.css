@@ -3,8 +3,8 @@
    Palette : Vert #22C55E · Jaune #EAB308 · Orange #F97316 · Rouge #EF4444
    ═══════════════════════════════════════════════════════════════════ */
 
+@import url('https://fonts.googleapis.com/...');
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&family=Cormorant+Garamond:ital,wght@0,300;1,400&family=Josefin+Sans:wght@200;300;400;600;700&display=swap');
 
 /* ── Variables CSS — source unique de vérité ── */
 :root {
