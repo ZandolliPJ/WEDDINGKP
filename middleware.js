@@ -29,6 +29,7 @@ export function middleware(request) {
     pathname.startsWith('/api/confirmation') ||
     pathname.startsWith('/api/confirm') ||
     pathname.startsWith('/api/bienvenue-access') ||
+    pathname.startsWith('/api/test-email') ||
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
     pathname === '/'

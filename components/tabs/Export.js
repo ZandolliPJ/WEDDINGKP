@@ -10,12 +10,12 @@ export default function Export({ guests }) {
   const [loading, setLoading] = useState('')
 
   // ── Helpers ───────────────────────────────────────
-  const confirmed  = guests.filter(g => g.status === 'confirmed' || g.present)
-  const declined   = guests.filter(g => g.status === 'declined')
-  const pending    = guests.filter(g => g.status === 'pending' && !g.present)
-  const present    = guests.filter(g => g.present)
-  const guestsAt   = (tid) => guests.filter(g => g.tableId && parseInt(g.tableId) === parseInt(tid))
-  const tableOf    = (g)   => TABLES.find(t => t.id === g.tableId)
+  const confirmed = guests.filter(g => g.status === 'confirmed' || g.present)
+  const declined = guests.filter(g => g.status === 'declined')
+  const pending = guests.filter(g => g.status === 'pending' && !g.present)
+  const present = guests.filter(g => g.present)
+  const guestsAt = (tid) => guests.filter(g => g.tableId && parseInt(g.tableId) === parseInt(tid))
+  const tableOf = (g) => TABLES.find(t => t.id === g.tableId)
 
   // ── Export CSV Google Sheets ──────────────────────
   function exportCSV() {
@@ -26,14 +26,14 @@ export default function Export({ guests }) {
       'Groupe', 'Table', 'Statut RSVP', 'Présent le jour J',
       'Heure arrivée', 'Régime alimentaire'
     ]
-    const rows = guests.map(g => {
+    const rows = confirmed.map(g => {
       const tbl = tableOf(g)
       return [
         g.id,
         g.name,
         g.email || '',
-        g.phone  || '',
-        GROUP_COLORS[g.group||'autre']?.label || 'Autre',
+        g.phone || '',
+        GROUP_COLORS[g.group || 'autre']?.label || 'Autre',
         tbl ? `${tbl.name}` : 'Non placé',
         g.status === 'confirmed' ? 'Confirmé' : g.status === 'declined' ? 'Décliné' : 'En attente',
         g.present ? 'OUI ✓' : 'NON',
@@ -55,18 +55,18 @@ export default function Export({ guests }) {
     TABLES.forEach(t => {
       const tg = guestsAt(t.id)
       rows.push([`${t.flower} ${t.name}`, `${tg.length} / ${t.capacity} places`, '', '', '', '', '', '', '', ''])
-      tg.forEach(g => rows.push(['', g.name, g.email||'', '', GROUP_COLORS[g.group||'autre']?.label||'', '', g.status, g.present?'OUI':'NON', g.arrivalTime||'', g.diet||'standard']))
+      tg.forEach(g => rows.push(['', g.name, g.email || '', '', GROUP_COLORS[g.group || 'autre']?.label || '', '', g.status, g.present ? 'OUI' : 'NON', g.arrivalTime || '', g.diet || 'standard']))
     })
 
     const csv = [headers, ...rows]
-      .map(r => r.map(v => `"${String(v).replace(/"/g,'""')}"`).join(','))
+      .map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(','))
       .join('\n')
 
     const blob = new Blob([BOM + csv], { type: 'text/csv;charset=utf-8' })
-    const url  = URL.createObjectURL(blob)
-    const a    = document.createElement('a')
+    const url = URL.createObjectURL(blob)
+    const a = document.createElement('a')
     a.href = url
-    a.download = `invites-katty-pascal-${new Date().toISOString().slice(0,10)}.csv`
+    a.download = `invites-katty-pascal-${new Date().toISOString().slice(0, 10)}.csv`
     document.body.appendChild(a); a.click()
     document.body.removeChild(a); URL.revokeObjectURL(url)
     setLoading('')
@@ -78,8 +78,8 @@ export default function Export({ guests }) {
     const win = window.open('', '_blank', 'width=900,height=700')
     if (!win) { setLoading(''); return }
 
-    const today = new Date().toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'})
-    const now   = new Date().toLocaleTimeString('fr-FR',{hour:'2-digit',minute:'2-digit'})
+    const today = new Date().toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })
+    const now = new Date().toLocaleTimeString('fr-FR', { hour: '2-digit', minute: '2-digit' })
 
     let bodyHTML = ''
 
@@ -87,32 +87,32 @@ export default function Export({ guests }) {
     // PDF COORDINATEUR
     // ════════════════════════════════
     if (type === 'coordinateur') {
-      const rows = guests.map((g,i) => {
+      const rows = guests.map((g, i) => {
         const tbl = tableOf(g)
-        const gc  = GROUP_COLORS[g.group||'autre'] || GROUP_COLORS.autre
-        const statusColor = g.status==='confirmed'?'#27ae60':g.status==='declined'?'#e74c3c':'#f39c12'
-        return `<tr style="background:${i%2===0?'#f9fffe':'white'}">
-          <td>${i+1}</td>
+        const gc = GROUP_COLORS[g.group || 'autre'] || GROUP_COLORS.autre
+        const statusColor = g.status === 'confirmed' ? '#27ae60' : g.status === 'declined' ? '#e74c3c' : '#f39c12'
+        return `<tr style="background:${i % 2 === 0 ? '#f9fffe' : 'white'}">
+          <td>${i + 1}</td>
           <td><strong>${g.name}</strong><br><span style="color:#888;font-size:10px">${g.id}</span></td>
-          <td><span style="background:${gc.bg||'#eee'};color:${gc.text||'#333'};padding:2px 6px;border-radius:10px;font-size:10px">${gc.icon||''} ${gc.label||''}</span></td>
+          <td><span style="background:${gc.bg || '#eee'};color:${gc.text || '#333'};padding:2px 6px;border-radius:10px;font-size:10px">${gc.icon || ''} ${gc.label || ''}</span></td>
           <td>${tbl ? `${tbl.flower} <strong>${tbl.name}</strong>` : '<em style="color:#ccc">Non placé</em>'}</td>
-          <td style="color:${statusColor};font-weight:600">${g.status==='confirmed'?'✓ Confirmé':g.status==='declined'?'✗ Décliné':'⏳ Attente'}</td>
-          <td style="color:${g.present?'#27ae60':'#ccc'};font-weight:600">${g.present?`✓ ${g.arrivalTime||''}`:'-'}</td>
-          <td style="font-size:10px">${g.diet||'standard'}</td>
+          <td style="color:${statusColor};font-weight:600">${g.status === 'confirmed' ? '✓ Confirmé' : g.status === 'declined' ? '✗ Décliné' : '⏳ Attente'}</td>
+          <td style="color:${g.present ? '#27ae60' : '#ccc'};font-weight:600">${g.present ? `✓ ${g.arrivalTime || ''}` : '-'}</td>
+          <td style="font-size:10px">${g.diet || 'standard'}</td>
         </tr>`
       }).join('')
 
       const tableRows = TABLES.map(t => {
         const tg = guestsAt(t.id)
-        const pct = Math.round(tg.length/t.capacity*100)
-        const names = tg.map(g=>`<span style="display:inline-block;margin:1px 3px;padding:1px 5px;background:#e8f5e9;border-radius:8px;font-size:10px">${g.name}${g.present?' ✓':''}</span>`).join('')
+        const pct = Math.round(tg.length / t.capacity * 100)
+        const names = tg.map(g => `<span style="display:inline-block;margin:1px 3px;padding:1px 5px;background:#e8f5e9;border-radius:8px;font-size:10px">${g.name}${g.present ? ' ✓' : ''}</span>`).join('')
         return `<tr>
           <td>${t.flower} <strong>${t.name}</strong></td>
           <td style="text-align:center">
-            <span style="font-weight:700;color:${tg.length>=t.capacity?'#e74c3c':'#27ae60'}">${tg.length}</span>
+            <span style="font-weight:700;color:${tg.length >= t.capacity ? '#e74c3c' : '#27ae60'}">${tg.length}</span>
             <span style="color:#888"> / ${t.capacity}</span>
             <div style="margin-top:3px;height:6px;background:#eee;border-radius:3px;overflow:hidden">
-              <div style="height:100%;width:${pct}%;background:${tg.length>=t.capacity?'#e74c3c':'#27ae60'};border-radius:3px"></div>
+              <div style="height:100%;width:${pct}%;background:${tg.length >= t.capacity ? '#e74c3c' : '#27ae60'};border-radius:3px"></div>
             </div>
           </td>
           <td style="font-size:11px">${names || '<em style="color:#ccc">Vide</em>'}</td>
@@ -196,24 +196,24 @@ export default function Export({ guests }) {
     else if (type === 'traiteur') {
       // Régimes globaux
       const diets = {}
-      confirmed.forEach(g => { const d = g.diet||'standard'; diets[d]=(diets[d]||0)+1 })
-      const dietRows = Object.entries(diets).sort(([,a],[,b])=>b-a).map(([d,n])=>{
-        const icons = {standard:'🍽️',vegetarien:'🥗',vegan:'🌱',halal:'🌙',casher:'✡️',allergie:'⚠️'}
+      confirmed.forEach(g => { const d = g.diet || 'standard'; diets[d] = (diets[d] || 0) + 1 })
+      const dietRows = Object.entries(diets).sort(([, a], [, b]) => b - a).map(([d, n]) => {
+        const icons = { standard: '🍽️', vegetarien: '🥗', vegan: '🌱', halal: '🌙', casher: '✡️', allergie: '⚠️' }
         return `<tr>
-          <td>${icons[d]||'🍽️'} ${d.charAt(0).toUpperCase()+d.slice(1)}</td>
+          <td>${icons[d] || '🍽️'} ${d.charAt(0).toUpperCase() + d.slice(1)}</td>
           <td style="text-align:center;font-size:20px;font-weight:700;color:#1a4a2e">${n}</td>
-          <td style="color:#666">couvert${n>1?'s':''}</td>
+          <td style="color:#666">couvert${n > 1 ? 's' : ''}</td>
         </tr>`
       }).join('')
 
       // Par table
       const tableRows = TABLES.map(t => {
-        const tg = guestsAt(t.id).filter(g=>g.status==='confirmed'||g.present)
-        if (tg.length===0) return ''
+        const tg = guestsAt(t.id).filter(g => g.status === 'confirmed' || g.present)
+        if (tg.length === 0) return ''
         const tDiets = {}
-        tg.forEach(g=>{ const d=g.diet||'standard'; tDiets[d]=(tDiets[d]||0)+1 })
-        const dietSummary = Object.entries(tDiets).map(([d,n])=>`${d} (${n})`).join(' · ')
-        const names = tg.map(g=>`<div style="padding:2px 0;border-bottom:1px solid #f0f0f0">${g.name} — <em style="color:#666">${g.diet||'standard'}</em></div>`).join('')
+        tg.forEach(g => { const d = g.diet || 'standard'; tDiets[d] = (tDiets[d] || 0) + 1 })
+        const dietSummary = Object.entries(tDiets).map(([d, n]) => `${d} (${n})`).join(' · ')
+        const names = tg.map(g => `<div style="padding:2px 0;border-bottom:1px solid #f0f0f0">${g.name} — <em style="color:#666">${g.diet || 'standard'}</em></div>`).join('')
         return `<tr>
           <td>${t.flower} <strong>${t.name}</strong></td>
           <td style="text-align:center;font-weight:700;color:#1a4a2e">${tg.length}</td>
@@ -256,10 +256,10 @@ export default function Export({ guests }) {
 
           <div style="margin-top:24px;padding:12px 16px;background:#fff9ed;border:1px solid #c9a84c;border-radius:8px;font-size:11px;color:#7d4e00">
             <strong>⚠️ Allergies à noter :</strong>
-            ${guests.filter(g=>g.diet==='allergie').length===0
-              ? 'Aucune allergie déclarée.'
-              : guests.filter(g=>g.diet==='allergie').map(g=>`${g.name}${g.dietNotes?` (${g.dietNotes})`:''}`).join(', ')
-            }
+            ${guests.filter(g => g.diet === 'allergie').length === 0
+          ? 'Aucune allergie déclarée.'
+          : guests.filter(g => g.diet === 'allergie').map(g => `${g.name}${g.dietNotes ? ` (${g.dietNotes})` : ''}`).join(', ')
+        }
           </div>
 
           <div class="footer">Imprimé le ${today} à ${now} · Katty &amp; Pascal · Balade Tropicale 2026</div>
@@ -328,7 +328,7 @@ export default function Export({ guests }) {
   ]
 
   return (
-    <div className="p-6 md:p-10 fade-in" style={{fontFamily:'"Josefin Sans",sans-serif'}}>
+    <div className="p-6 md:p-10 fade-in" style={{ fontFamily: '"Josefin Sans",sans-serif' }}>
       <h2 className="text-3xl text-gold-light italic playfair mb-1">Exports & Documents</h2>
       <p className="text-green-light text-xs tracking-widest uppercase mb-8">
         PDF Coordinateur · PDF Traiteur · Google Sheets
@@ -337,13 +337,13 @@ export default function Export({ guests }) {
       {/* Stats rapides */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
         {[
-          { n:guests.length,      l:'Invités total',    c:'#c9a84c' },
-          { n:confirmed.length,   l:'Confirmés',        c:'#27ae60' },
-          { n:present.length,     l:'Présents jour J',  c:'#4caf7d' },
-          { n:declined.length,    l:'Déclinés',         c:'#e74c3c' },
-        ].map(s=>(
-          <div key={s.l} className="rounded-xl p-4 text-center" style={{background:'linear-gradient(135deg,#1a4a2e,#0d2b1a)',border:'1px solid rgba(201,168,76,0.2)'}}>
-            <div className="text-3xl font-bold playfair" style={{color:s.c}}>{s.n}</div>
+          { n: guests.length, l: 'Invités total', c: '#c9a84c' },
+          { n: confirmed.length, l: 'Confirmés', c: '#27ae60' },
+          { n: present.length, l: 'Présents jour J', c: '#4caf7d' },
+          { n: declined.length, l: 'Déclinés', c: '#e74c3c' },
+        ].map(s => (
+          <div key={s.l} className="rounded-xl p-4 text-center" style={{ background: 'linear-gradient(135deg,#1a4a2e,#0d2b1a)', border: '1px solid rgba(201,168,76,0.2)' }}>
+            <div className="text-3xl font-bold playfair" style={{ color: s.c }}>{s.n}</div>
             <div className="text-white/40 text-xs uppercase tracking-wider mt-1">{s.l}</div>
           </div>
         ))}
@@ -353,23 +353,23 @@ export default function Export({ guests }) {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
         {EXPORTS.map(e => (
           <div key={e.id} className="rounded-2xl overflow-hidden shadow-lg"
-               style={{background:'linear-gradient(160deg,#1a4a2e,#0d2b1a)',border:'1px solid rgba(201,168,76,0.2)'}}>
+            style={{ background: 'linear-gradient(160deg,#1a4a2e,#0d2b1a)', border: '1px solid rgba(201,168,76,0.2)' }}>
             <div className="p-5">
-              <div style={{fontSize:'2.5rem',marginBottom:'10px'}}>{e.icon}</div>
+              <div style={{ fontSize: '2.5rem', marginBottom: '10px' }}>{e.icon}</div>
               <h3 className="text-gold-light italic text-lg playfair mb-2">{e.title}</h3>
               <p className="text-white/50 text-xs leading-relaxed mb-5">{e.desc}</p>
               <button
                 onClick={e.action}
                 disabled={loading === e.id}
                 style={{
-                  width:'100%', padding:'12px', borderRadius:'10px', border:'none',
-                  background: loading===e.id ? 'rgba(201,168,76,0.3)' : `linear-gradient(135deg,${e.color},${e.color}cc)`,
-                  color:'white', fontFamily:'"Josefin Sans",sans-serif',
-                  fontSize:'0.72rem', fontWeight:700, letterSpacing:'0.2em',
-                  textTransform:'uppercase', cursor: loading===e.id ? 'not-allowed':'pointer',
-                  transition:'all 0.2s',
+                  width: '100%', padding: '12px', borderRadius: '10px', border: 'none',
+                  background: loading === e.id ? 'rgba(201,168,76,0.3)' : `linear-gradient(135deg,${e.color},${e.color}cc)`,
+                  color: 'white', fontFamily: '"Josefin Sans",sans-serif',
+                  fontSize: '0.72rem', fontWeight: 700, letterSpacing: '0.2em',
+                  textTransform: 'uppercase', cursor: loading === e.id ? 'not-allowed' : 'pointer',
+                  transition: 'all 0.2s',
                 }}>
-                {loading===e.id ? '⏳ Génération…' : '⬇️ Télécharger'}
+                {loading === e.id ? '⏳ Génération…' : '⬇️ Télécharger'}
               </button>
             </div>
           </div>
@@ -377,13 +377,13 @@ export default function Export({ guests }) {
       </div>
 
       {/* Guide Google Sheets */}
-      <div className="rounded-xl p-5" style={{background:'rgba(21,101,192,0.1)',border:'1px solid rgba(21,101,192,0.3)'}}>
+      <div className="rounded-xl p-5" style={{ background: 'rgba(21,101,192,0.1)', border: '1px solid rgba(21,101,192,0.3)' }}>
         <p className="text-gold text-xs tracking-widest uppercase mb-3 font-bold">💡 Comment importer dans Google Sheets</p>
-        <ol className="space-y-2" style={{color:'rgba(255,255,255,0.6)',fontSize:'0.82rem',paddingLeft:'16px'}}>
-          <li>1️⃣  Cliquez <strong style={{color:'#fff'}}>"Export Google Sheets"</strong> ci-dessus → un fichier <code style={{color:'#74c69d'}}>.csv</code> se télécharge</li>
-          <li>2️⃣  Allez sur <strong style={{color:'#fff'}}>sheets.google.com</strong> → créez une nouvelle feuille</li>
-          <li>3️⃣  Menu <strong style={{color:'#fff'}}>Fichier → Importer</strong> → choisissez votre fichier CSV</li>
-          <li>4️⃣  Séparateur : <strong style={{color:'#fff'}}>Virgule</strong> → cliquez <strong style={{color:'#fff'}}>"Importer les données"</strong></li>
+        <ol className="space-y-2" style={{ color: 'rgba(255,255,255,0.6)', fontSize: '0.82rem', paddingLeft: '16px' }}>
+          <li>1️⃣  Cliquez <strong style={{ color: '#fff' }}>"Export Google Sheets"</strong> ci-dessus → un fichier <code style={{ color: '#74c69d' }}>.csv</code> se télécharge</li>
+          <li>2️⃣  Allez sur <strong style={{ color: '#fff' }}>sheets.google.com</strong> → créez une nouvelle feuille</li>
+          <li>3️⃣  Menu <strong style={{ color: '#fff' }}>Fichier → Importer</strong> → choisissez votre fichier CSV</li>
+          <li>4️⃣  Séparateur : <strong style={{ color: '#fff' }}>Virgule</strong> → cliquez <strong style={{ color: '#fff' }}>"Importer les données"</strong></li>
           <li>5️⃣  ✅ Votre liste est prête avec présents / absents, tables et régimes !</li>
         </ol>
       </div>
@@ -397,9 +397,9 @@ export default function Export({ guests }) {
             if (tg.length === 0) return null
             return (
               <div key={t.id} className="rounded-xl overflow-hidden"
-                   style={{background:'rgba(255,255,255,0.04)',border:'1px solid rgba(255,255,255,0.08)'}}>
+                style={{ background: 'rgba(255,255,255,0.04)', border: '1px solid rgba(255,255,255,0.08)' }}>
                 <div className="flex items-center justify-between px-4 py-2.5"
-                     style={{background:'rgba(0,0,0,0.2)',borderBottom:'1px solid rgba(255,255,255,0.06)'}}>
+                  style={{ background: 'rgba(0,0,0,0.2)', borderBottom: '1px solid rgba(255,255,255,0.06)' }}>
                   <span className="text-gold-light text-sm italic playfair">{t.flower} {t.name}</span>
                   <span className="text-white/40 text-xs">{tg.length}/{t.capacity} places</span>
                 </div>
@@ -408,12 +408,12 @@ export default function Export({ guests }) {
                     <div key={g.id} className="flex justify-between items-center py-1.5 border-b border-white/5 last:border-0">
                       <span className="text-white/80 text-xs">{g.name}</span>
                       <div className="flex items-center gap-2">
-                        <span className="text-white/30 text-xs">{g.diet||'standard'}</span>
+                        <span className="text-white/30 text-xs">{g.diet || 'standard'}</span>
                         {g.present
                           ? <span className="text-green-light text-xs">✓ {g.arrivalTime}</span>
-                          : <span className={`text-xs ${g.status==='confirmed'?'text-gold':'text-white/30'}`}>
-                              {g.status==='confirmed'?'Confirmé':'En attente'}
-                            </span>
+                          : <span className={`text-xs ${g.status === 'confirmed' ? 'text-gold' : 'text-white/30'}`}>
+                            {g.status === 'confirmed' ? 'Confirmé' : 'En attente'}
+                          </span>
                         }
                       </div>
                     </div>

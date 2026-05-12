@@ -143,7 +143,8 @@ export default function ConfirmationPage() {
 
   return (
     <div className="min-h-svh flex flex-col items-center justify-center
-                    p-4 md:p-8">
+                    p-4 md:p-8"
+    >
 
       {/* Carte principale — glassmorphism */}
       <div className="glass-card fade-up w-full max-w-lg p-8 md:p-12"
