@@ -64,7 +64,7 @@ const NAV_LINKS = [
   { id: 'tables', label: 'Tables' },
   { id: 'livredor', label: 'Livre d\'or' },
 ]
-const NAV_CONFIRM = { href: '/confirmation', label: '✅ Confirmation' }
+
 
 export default function Bienvenue() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -87,26 +87,7 @@ export default function Bienvenue() {
             </a>
           ))}
           {/* Bouton Confirmation — lien externe accentué */}
-          <a href={NAV_CONFIRM.href}
-            style={{
-              marginLeft: '6px',
-              padding: '6px 14px',
-              borderRadius: '20px',
-              fontSize: '0.62rem',
-              fontWeight: 700,
-              letterSpacing: '0.18em',
-              textTransform: 'uppercase',
-              background: 'linear-gradient(135deg,#F97316,#EAB308)',
-              color: 'white',
-              textDecoration: 'none',
-              boxShadow: '0 3px 12px rgba(249,115,22,0.4)',
-              transition: 'all 0.2s',
-              whiteSpace: 'nowrap',
-            }}
-            onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-1px)'; e.currentTarget.style.boxShadow = '0 6px 18px rgba(249,115,22,0.5)' }}
-            onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = '0 3px 12px rgba(249,115,22,0.4)' }}>
-            {NAV_CONFIRM.label}
-          </a>
+
         </div>
         <div className="flex gap-2 items-center">
 
@@ -124,17 +105,7 @@ export default function Bienvenue() {
                 className="text-white/80 text-lg tracking-widest uppercase">{n.label}</a>
             ))}
             {/* Confirmation — lien externe dans le menu mobile */}
-            <a href={NAV_CONFIRM.href} onClick={() => setMenuOpen(false)}
-              style={{
-                padding: '12px 28px', borderRadius: '14px',
-                background: 'linear-gradient(135deg,#F97316,#EAB308)',
-                color: 'white', textDecoration: 'none',
-                fontSize: '0.85rem', fontWeight: 700,
-                letterSpacing: '0.18em', textTransform: 'uppercase',
-                marginTop: '8px', boxShadow: '0 4px 16px rgba(249,115,22,0.4)',
-              }}>
-              ✅ Confirmation
-            </a>
+
           </div>
         </div>
       )}
@@ -179,26 +150,27 @@ export default function Bienvenue() {
 
           {/* ── Cartes de navigation tropicales — 2 rangées × 3 ── */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', width: '100%', maxWidth: '480px', margin: '40px auto 0' }}>
-            {[
+            {
+              [
 
-            ].map(item => (
-              <a key={item.href} href={item.href}
-                style={{
-                  display: 'flex', flexDirection: 'column', alignItems: 'center',
-                  padding: '14px 8px', borderRadius: '16px', fontWeight: 700,
-                  fontSize: '0.72rem', textDecoration: 'none',
-                  background: item.bg, color: item.text,
-                  boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
-                  transition: 'transform 0.2s, box-shadow 0.2s',
-                  letterSpacing: '0.03em',
-                  backdropFilter: 'blur(8px)',
-                }}
-                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)' }}
-                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)' }}>
-                <span style={{ fontSize: '1.5rem', marginBottom: '5px' }}>{item.icon}</span>
-                {item.label}
-              </a>
-            ))}
+              ].map(item => (
+                <a key={item.href} href={item.href}
+                  style={{
+                    display: 'flex', flexDirection: 'column', alignItems: 'center',
+                    padding: '14px 8px', borderRadius: '16px', fontWeight: 700,
+                    fontSize: '0.72rem', textDecoration: 'none',
+                    background: item.bg, color: item.text,
+                    boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
+                    transition: 'transform 0.2s, box-shadow 0.2s',
+                    letterSpacing: '0.03em',
+                    backdropFilter: 'blur(8px)',
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)' }}>
+                  <span style={{ fontSize: '1.5rem', marginBottom: '5px' }}>{item.icon}</span>
+                  {item.label}
+                </a>
+              ))}
           </div>
         </div>
 
@@ -224,35 +196,35 @@ export default function Bienvenue() {
           </div>
 
           {/* Surtitre */}
-          <p style={{ color: '#2d7a4f', fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: '12px', fontFamily: '"Josefin Sans", sans-serif' }}>
+          <p style={{ color: '#ffffff', fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: '12px', fontFamily: '"Josefin Sans", sans-serif' }}>
             Chers amis, chère famille
           </p>
 
           {/* Titre principal */}
-          <h2 style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 'clamp(1.5rem, 5vw, 2rem)', color: '#1a4a2e', marginBottom: '20px', lineHeight: 1.35 }}>
+          <h2 style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 'clamp(1.5rem, 5vw, 2rem)', color: '#ffffff', marginBottom: '20px', lineHeight: 1.35 }}>
             Bienvenue dans notre parenthèse tropicale !
           </h2>
 
           {/* Corps du texte */}
-          <div style={{ color: '#2d5a3d', fontSize: 'clamp(0.88rem,2.5vw,0.95rem)', lineHeight: 1.8, fontFamily: '"Josefin Sans", sans-serif', fontWeight: 300 }}>
+          <div style={{ color: '#ffffff', fontSize: 'clamp(0.88rem,2.5vw,0.95rem)', lineHeight: 1.8, fontFamily: '"Josefin Sans", sans-serif', fontWeight: 300 }}>
             <p style={{ marginBottom: '16px' }}>
               Nous sommes impatients de vous retrouver pour célébrer notre union sous le signe de l'évasion et de la douceur.
             </p>
             <p style={{ marginBottom: '16px' }}>
               Ce site est votre carnet de voyage pour notre grand jour&nbsp;: vous y trouverez l'itinéraire de notre{' '}
-              <em style={{ fontStyle: 'italic', color: '#1a4a2e', fontWeight: 400 }}>"balade tropicale"</em>,
+              <em style={{ fontStyle: 'italic', color: '#f5e4b0', fontWeight: 400 }}>"balade tropicale"</em>,
               les escales prévues et toutes les infos pratiques.
             </p>
             <p>
               Préparez vos plus belles tenues légères, nous avons hâte de nous dire{' '}
-              <strong style={{ color: '#1a4a2e', fontWeight: 600 }}>"Oui"</strong> sous le soleil avec vous&nbsp;!
+              <strong style={{ color: '#f5e4b0', fontWeight: 600 }}>"Oui"</strong> sous le soleil avec vous&nbsp;!
             </p>
           </div>
 
           {/* Séparateur + signature */}
           <div style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-            <span style={{ color: '#c9a84c', letterSpacing: '0.6em', fontSize: '0.85rem', opacity: 0.7 }}>✿ ✦ ✿</span>
-            <p style={{ color: '#2d5a3d', fontSize: '0.85rem', fontStyle: 'italic', fontFamily: '"Playfair Display", serif', marginTop: '8px' }}>
+            <span style={{ color: '#e8c97a', letterSpacing: '0.6em', fontSize: '0.85rem', opacity: 0.7 }}>✿ ✦ ✿</span>
+            <p style={{ color: '#e8c97a', fontSize: '0.85rem', fontStyle: 'italic', fontFamily: '"Playfair Display", serif', marginTop: '8px' }}>
               Avec tout notre amour,
             </p>
             <p style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: '1.5rem', color: '#c9a84c', fontWeight: 700 }}>
@@ -507,7 +479,7 @@ export default function Bienvenue() {
               Plan de Tables
             </h2>
             <p style={{ fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '16px' }}>
-              14 Tables · Fleurs des Antilles · Piste de danse au centre
+              15 Tables · Fleurs des Antilles · Piste de danse au centre
             </p>
             <div style={{ color: '#c9a84c', letterSpacing: '0.6em', opacity: 0.6 }}>✿ ✦ ✿</div>
           </div>
@@ -548,13 +520,13 @@ export default function Bienvenue() {
 
         {/* Compteur — J-x avant le mariage */}
         <div style={{ marginBottom: '28px' }}>
-          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <p style={{ color: '#ffffff', fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '14px' }}>
             ⏳ Compte à rebours — 30 Juin 2026
           </p>
           <Countdown dateISO={WEDDING.dateISO} />
         </div>
 
-        <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.72rem', margin: 0, textAlign: 'center' }}>Avec tout notre amour 🌺</p>
+        <p style={{ color: '#ffffff', fontSize: '0.72rem', margin: 0, textAlign: 'center' }}>Avec tout notre amour 🌺</p>
       </footer>
     </div>
   )
@@ -577,7 +549,7 @@ function LegendeTables() {
   const TABLE_COLORS = {
     1: '#e74c3c', 2: '#e91e8c', 3: '#c0392b', 4: '#9b59b6', 5: '#f39c12',
     6: '#f1c40f', 7: '#e74c3c', 8: '#27ae60', 9: '#16a085', 10: '#2ecc71',
-    11: '#c9a84c', 12: '#1abc9c', 13: '#e91e8c', 14: '#e67e22',
+    11: '#c9a84c', 12: '#1abc9c', 13: '#e91e8c', 14: '#e67e22', 15: '#f48fb1',
   }
 
   const totalCapacity = TABLES.reduce((s, t) => s + t.capacity, 0)
@@ -609,7 +581,8 @@ function LegendeTables() {
       {/* Grille 14 tables */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(130px,1fr))', gap: '10px' }}>
         {TABLES.map(t => {
-          const count = guests.filter(g => g.tableId === t.id).length
+
+          const count = guests.filter(g => parseInt(g.tableId) === t.id).length
           const pct = Math.round(count / t.capacity * 100)
           const isFull = count >= t.capacity
           const col = TABLE_COLORS[t.id] || '#c9a84c'
@@ -695,17 +668,17 @@ function SallePlan() {
       .catch(() => { })
   }, [])
 
-  const guestsAt = (tableId) => guests.filter(g => g.tableId === tableId)
+  const guestsAt = (tableId) => guests.filter(g => parseInt(g.tableId) === parseInt(tableId))
   const selTable = selected ? TABLES.find(t => t.id === selected) : null
   const selGuests = selected ? guestsAt(selected) : []
 
   const COLORS = {
     1: '#e74c3c', 2: '#e91e8c', 3: '#e74c3c', 4: '#9b59b6', 5: '#f39c12',
     6: '#f1c40f', 7: '#e74c3c', 8: '#27ae60', 9: '#16a085', 10: '#2ecc71',
-    11: '#f39c12', 12: '#27ae60', 13: '#e91e8c', 14: '#f0d080'
+    11: '#f39c12', 12: '#27ae60', 13: '#e91e8c', 14: '#f0d080', 15: '#f48fb1'
   }
 
-  // Positions SVG des 14 tables dans une salle 800×560
+  // Positions SVG des 15 tables dans une salle 800×560
   // Piste de danse centrale ~200×160 centrée à (400,280)
   const TABLE_POS = [
     // Haut (rangée 1) — T1 à T5
@@ -720,12 +693,13 @@ function SallePlan() {
     // Milieu droit — T8, T9
     { id: 8, x: 710, y: 220 },
     { id: 9, x: 710, y: 340 },
-    // Bas (rangée 3) — T10 à T13
-    { id: 10, x: 100, y: 470 },
-    { id: 11, x: 230, y: 480 },
-    { id: 12, x: 400, y: 490 },
-    { id: 13, x: 570, y: 480 },
-    { id: 14, x: 700, y: 470 },
+    // Bas (rangée 3) — T10 à T15
+    { id: 10, x: 80, y: 470 },
+    { id: 11, x: 210, y: 480 },
+    { id: 12, x: 340, y: 490 },
+    { id: 13, x: 460, y: 490 },
+    { id: 14, x: 590, y: 480 },
+    { id: 15, x: 720, y: 470 },
   ]
 
   return (
@@ -815,7 +789,7 @@ function SallePlan() {
               {hovT.flower} Table {hovT.name}
             </span>
             <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.68rem', marginLeft: '8px' }}>
-              · {guestsAt(hovT.id).length}/{hovT.capacity} invités · Cliquer pour voir
+              · {guests.filter(g => parseInt(g.tableId) === hovT.id).length}/{hovT.capacity} invités · Cliquer pour voir
             </span>
           </div>
         ) : null
@@ -925,6 +899,7 @@ function SallePlan() {
                   12: ['Palmier &', 'Bambou'],
                   13: ['Orchidée', null],
                   14: ['Pivoine', 'Tropicale'],
+                  15: ['Rose de', 'Porcelaine'],
                 }
                 const [l1, l2] = LABELS[t.id] || [t.name, null]
                 if (!l2) {

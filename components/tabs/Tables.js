@@ -11,7 +11,7 @@ const MAX = 8
 const COL = {
   1:'#e74c3c',2:'#e91e8c',3:'#c0392b',4:'#9b59b6',5:'#f39c12',
   6:'#f1c40f',7:'#e74c3c',8:'#27ae60',9:'#16a085',10:'#2ecc71',
-  11:'#c9a84c',12:'#1abc9c',13:'#e91e8c',14:'#e67e22',
+  11:'#c9a84c',12:'#1abc9c',13:'#e91e8c',14:'#e67e22',15:'#f48fb1',
 }
 
 const SVG_POS = [
@@ -19,8 +19,8 @@ const SVG_POS = [
   {id:4,x:450,y:78},{id:5,x:570,y:78},
   {id:6,x:68,y:218},{id:7,x:68,y:328},
   {id:8,x:592,y:218},{id:9,x:592,y:328},
-  {id:10,x:90,y:458},{id:11,x:210,y:468},{id:12,x:330,y:473},
-  {id:13,x:450,y:468},{id:14,x:570,y:458},
+  {id:10,x:90,y:458},{id:11,x:195,y:468},{id:12,x:300,y:473},
+  {id:13,x:405,y:473},{id:14,x:510,y:468},{id:15,x:615,y:458},
 ]
 
 const gAt = (guests, tid) =>
@@ -310,9 +310,30 @@ export default function Tables({ guests, onGuestsChange }) {
                   )
                 })}
                 {/* Fleur */}
-                <text x={pos.x} y={pos.y-5} textAnchor="middle" fontSize="15" dominantBaseline="middle">{tbl?.flower}</text>
+                <text x={pos.x} y={pos.y-8} textAnchor="middle" fontSize="14" dominantBaseline="middle">{tbl?.flower}</text>
+                {/* Nom table */}
+                {(() => {
+                  const LABELS = {
+                    1:['Hibiscus',null], 2:['Frangipa-','nier'], 3:['Balisier',null],
+                    4:['Bougan-','villée'], 5:['Lantana',null], 6:['Alamanda',null],
+                    7:['Anthurium',null], 8:['Heliconias',null], 9:['Oiseau du','Paradis'],
+                    10:['Cactus',null], 11:["Cœur","d'Amour"], 12:['Alpinia','Rose'],
+                    13:['Orchidée',null], 14:['Pivoine','Trop.'], 15:['Rose de','Porcel.'],
+                  }
+                  const [l1,l2] = LABELS[tbl?.id]||[tbl?.name,null]
+                  return l2 ? (
+                    <text textAnchor="middle" fill="rgba(255,255,255,0.85)" fontSize="6.5"
+                          fontFamily="Josefin Sans,sans-serif">
+                      <tspan x={pos.x} y={pos.y+4}>{l1}</tspan>
+                      <tspan x={pos.x} dy="9">{l2}</tspan>
+                    </text>
+                  ) : (
+                    <text x={pos.x} y={pos.y+6} textAnchor="middle" fill="rgba(255,255,255,0.85)"
+                          fontSize="6.5" fontFamily="Josefin Sans,sans-serif">{l1}</text>
+                  )
+                })()}
                 {/* Compteur */}
-                <text x={pos.x} y={pos.y+12} textAnchor="middle" fill="white" fontSize="8.5"
+                <text x={pos.x} y={pos.y+22} textAnchor="middle" fill="white" fontSize="8"
                       fontFamily="Josefin Sans,sans-serif" fontWeight={isFull?'700':'400'}>
                   {count}/{MAX}
                 </text>

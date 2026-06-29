@@ -402,7 +402,7 @@ export default function ConfirmationPage() {
                     Programme du 30 Juin 2026
                   </p>
                   {[
-                    { h: '14h00', e: '⚖️', t: 'Echange des serments : La cérémonie civile gravera notre union dans la sérénité', l: 'Mairie de Grigny', c: '#c9a84c' },
+                    { h: '14h00', e: '⚖️', t: 'Echange des serments : La cérémonie civile gravera notre union dans la sérénité', l: 'La Ferme Neuve', c: '#c9a84c' },
                     { h: '17h30', e: '💍', t: 'Bénédiction nuptiale : Telle une fleur tropicale elle s ouvrira au crépuscule', l: 'Salle Jasmine', c: '#e91e8c' },
                     { h: '19h00', e: '🥂', t: 'Vin d honneur : Les salutations s enchaînent dans la douceur tropicale tandis que les rires composent le récit de notre joie partagée', l: 'Salle Jasmine', c: '#22C55E' },
                     { h: '19h30', e: '🍽️', t: 'Evasion créole : Préparez vos papilles pour un voyage ensolleilé. le buffet des mariés lève l ancre ! ', l: 'Salle Jasmine', c: '#F97316' },
