@@ -46,7 +46,7 @@ function Countdown({ dateISO }) {
           backdropFilter: "blur(12px)",
           boxShadow: "0 4px 16px rgba(0,0,0,0.08)",
         }}>
-          <div style={{ color: "#1a4a2e", fontSize: "clamp(1.4rem,4vw,1.8rem)", fontWeight: 700, fontFamily: '"Playfair Display",serif', lineHeight: 1 }}>{String(x.v).padStart(2, '0')}</div>
+          <div style={{ color: "#ffffff", fontSize: "clamp(1.4rem,4vw,1.8rem)", fontWeight: 700, fontFamily: '"Playfair Display",serif', lineHeight: 1 }}>{String(x.v).padStart(2, '0')}</div>
           <div style={{ color: "#c9a84c", fontSize: "0.58rem", letterSpacing: "0.25em", textTransform: "uppercase", marginTop: "4px", fontWeight: 600 }}>{x.l}</div>
         </div>
       ))}
@@ -64,7 +64,6 @@ const NAV_LINKS = [
   { id: 'tables', label: 'Tables' },
   { id: 'livredor', label: 'Livre d\'or' },
 ]
-
 
 export default function Bienvenue() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -86,8 +85,6 @@ export default function Bienvenue() {
               {n.label}
             </a>
           ))}
-          {/* Bouton Confirmation — lien externe accentué */}
-
         </div>
         <div className="flex gap-2 items-center">
 
@@ -104,8 +101,6 @@ export default function Bienvenue() {
               <a key={n.id} href={`#${n.id}`} onClick={() => setMenuOpen(false)}
                 className="text-white/80 text-lg tracking-widest uppercase">{n.label}</a>
             ))}
-            {/* Confirmation — lien externe dans le menu mobile */}
-
           </div>
         </div>
       )}
@@ -130,11 +125,11 @@ export default function Bienvenue() {
           backgroundAttachment: "scroll",
         }} />
 
-        {/* Overlay central opaque — masque tout texte résiduel de l'image */}
+        {/* Overlay central léger — laisse voir les fleurs */}
         <div style={{
           position: "absolute",
           top: "22%", bottom: "18%", left: 0, right: 0,
-          background: 'rgba(251,252,247,0.10)',
+          background: 'rgba(251,252,247,0.05)',
         }} />
 
         {/* Overlay global très léger pour homogénéité */}
@@ -150,27 +145,26 @@ export default function Bienvenue() {
 
           {/* ── Cartes de navigation tropicales — 2 rangées × 3 ── */}
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: '10px', width: '100%', maxWidth: '480px', margin: '40px auto 0' }}>
-            {
-              [
-
-              ].map(item => (
-                <a key={item.href} href={item.href}
-                  style={{
-                    display: 'flex', flexDirection: 'column', alignItems: 'center',
-                    padding: '14px 8px', borderRadius: '16px', fontWeight: 700,
-                    fontSize: '0.72rem', textDecoration: 'none',
-                    background: item.bg, color: item.text,
-                    boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
-                    transition: 'transform 0.2s, box-shadow 0.2s',
-                    letterSpacing: '0.03em',
-                    backdropFilter: 'blur(8px)',
-                  }}
-                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)' }}
-                  onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)' }}>
-                  <span style={{ fontSize: '1.5rem', marginBottom: '5px' }}>{item.icon}</span>
-                  {item.label}
-                </a>
-              ))}
+            {[
+              ,
+            ].map(item => (
+              <a key={item.href} href={item.href}
+                style={{
+                  display: 'flex', flexDirection: 'column', alignItems: 'center',
+                  padding: '14px 8px', borderRadius: '16px', fontWeight: 700,
+                  fontSize: '0.72rem', textDecoration: 'none',
+                  background: item.bg, color: item.text,
+                  boxShadow: '0 4px 15px rgba(0,0,0,0.15)',
+                  transition: 'transform 0.2s, box-shadow 0.2s',
+                  letterSpacing: '0.03em',
+                  backdropFilter: 'blur(8px)',
+                }}
+                onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-3px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.25)' }}
+                onMouseLeave={e => { e.currentTarget.style.transform = 'translateY(0)'; e.currentTarget.style.boxShadow = '0 4px 15px rgba(0,0,0,0.15)' }}>
+                <span style={{ fontSize: '1.5rem', marginBottom: '5px' }}>{item.icon}</span>
+                {item.label}
+              </a>
+            ))}
           </div>
         </div>
 
@@ -196,38 +190,38 @@ export default function Bienvenue() {
           </div>
 
           {/* Surtitre */}
-          <p style={{ color: '#ffffff', fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: '12px', fontFamily: '"Josefin Sans", sans-serif' }}>
+          <p style={{ color: '#ffffff', fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', marginBottom: '12px', fontFamily: '"Josefin Sans", sans-serif', fontWeight: 600, textShadow: '0 1px 4px rgba(0,0,0,0.4)' }}>
             Chers amis, chère famille
           </p>
 
           {/* Titre principal */}
-          <h2 style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 'clamp(1.5rem, 5vw, 2rem)', color: '#ffffff', marginBottom: '20px', lineHeight: 1.35 }}>
+          <h2 style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: 'clamp(1.5rem, 5vw, 2rem)', color: '#ffffff', marginBottom: '20px', lineHeight: 1.35, textShadow: '0 2px 8px rgba(0,0,0,0.4)', fontWeight: 700 }}>
             Bienvenue dans notre parenthèse tropicale !
           </h2>
 
           {/* Corps du texte */}
-          <div style={{ color: '#ffffff', fontSize: 'clamp(0.88rem,2.5vw,0.95rem)', lineHeight: 1.8, fontFamily: '"Josefin Sans", sans-serif', fontWeight: 300 }}>
+          <div style={{ color: '#ffffff', fontSize: 'clamp(0.88rem,2.5vw,0.95rem)', lineHeight: 1.8, fontFamily: '"Josefin Sans", sans-serif', fontWeight: 400, textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
             <p style={{ marginBottom: '16px' }}>
               Nous sommes impatients de vous retrouver pour célébrer notre union sous le signe de l'évasion et de la douceur.
             </p>
             <p style={{ marginBottom: '16px' }}>
               Ce site est votre carnet de voyage pour notre grand jour&nbsp;: vous y trouverez l'itinéraire de notre{' '}
-              <em style={{ fontStyle: 'italic', color: '#f5e4b0', fontWeight: 400 }}>"balade tropicale"</em>,
+              <em style={{ fontStyle: 'italic', color: '#f5e4b0', fontWeight: 600 }}>"balade tropicale"</em>,
               les escales prévues et toutes les infos pratiques.
             </p>
             <p>
               Préparez vos plus belles tenues légères, nous avons hâte de nous dire{' '}
-              <strong style={{ color: '#f5e4b0', fontWeight: 600 }}>"Oui"</strong> sous le soleil avec vous&nbsp;!
+              <strong style={{ color: '#f5e4b0', fontWeight: 700 }}>"Oui"</strong> sous le soleil avec vous&nbsp;!
             </p>
           </div>
 
           {/* Séparateur + signature */}
           <div style={{ marginTop: '32px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '6px' }}>
-            <span style={{ color: '#e8c97a', letterSpacing: '0.6em', fontSize: '0.85rem', opacity: 0.7 }}>✿ ✦ ✿</span>
-            <p style={{ color: '#e8c97a', fontSize: '0.85rem', fontStyle: 'italic', fontFamily: '"Playfair Display", serif', marginTop: '8px' }}>
+            <span style={{ color: '#e8c97a', letterSpacing: '0.6em', fontSize: '0.85rem', opacity: 0.9 }}>✿ ✦ ✿</span>
+            <p style={{ color: '#ffffff', fontSize: '0.85rem', fontStyle: 'italic', fontFamily: '"Playfair Display", serif', marginTop: '8px', textShadow: '0 1px 3px rgba(0,0,0,0.3)' }}>
               Avec tout notre amour,
             </p>
-            <p style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: '1.5rem', color: '#c9a84c', fontWeight: 700 }}>
+            <p style={{ fontFamily: '"Playfair Display", serif', fontStyle: 'italic', fontSize: '1.5rem', color: '#e8c97a', fontWeight: 700, textShadow: '0 2px 6px rgba(0,0,0,0.3)' }}>
               Katty &amp; Pascal
             </p>
           </div>
@@ -291,7 +285,7 @@ export default function Bienvenue() {
                     </div>
                     <p className="text-green-dark/80 text-sm font-medium">{step.lieu}</p>
                     <p className="text-green-dark/50 text-xs mt-1">{step.desc}</p>
-                    {step.lieu.includes('Mairie') && (
+                    {step.lieu.includes('Ferme Neuve') && (
                       <a href={WEDDING.ceremonieCivile.maps} target="_blank" rel="noreferrer"
                         className="inline-flex items-center gap-1 mt-2 text-xs text-green-mid hover:text-gold transition-colors">
                         📍 Voir sur Google Maps →
@@ -520,13 +514,13 @@ export default function Bienvenue() {
 
         {/* Compteur — J-x avant le mariage */}
         <div style={{ marginBottom: '28px' }}>
-          <p style={{ color: '#ffffff', fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '14px' }}>
+          <p style={{ color: 'rgba(255,255,255,0.45)', fontSize: '0.6rem', letterSpacing: '0.3em', textTransform: 'uppercase', marginBottom: '14px' }}>
             ⏳ Compte à rebours — 30 Juin 2026
           </p>
           <Countdown dateISO={WEDDING.dateISO} />
         </div>
 
-        <p style={{ color: '#ffffff', fontSize: '0.72rem', margin: 0, textAlign: 'center' }}>Avec tout notre amour 🌺</p>
+        <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.72rem', margin: 0, textAlign: 'center' }}>Avec tout notre amour 🌺</p>
       </footer>
     </div>
   )
@@ -553,7 +547,7 @@ function LegendeTables() {
   }
 
   const totalCapacity = TABLES.reduce((s, t) => s + t.capacity, 0)
-  const totalPlaced = guests.filter(g => g.tableId).length
+  const totalPlaced = guests.filter(g => g.tableId !== null && g.tableId !== undefined).length
 
   return (
     <div style={{ marginTop: '40px' }}>
@@ -581,7 +575,6 @@ function LegendeTables() {
       {/* Grille 14 tables */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(130px,1fr))', gap: '10px' }}>
         {TABLES.map(t => {
-
           const count = guests.filter(g => parseInt(g.tableId) === t.id).length
           const pct = Math.round(count / t.capacity * 100)
           const isFull = count >= t.capacity
@@ -682,17 +675,17 @@ function SallePlan() {
   // Piste de danse centrale ~200×160 centrée à (400,280)
   const TABLE_POS = [
     // Haut (rangée 1) — T1 à T5
-    { id: 1, x: 100, y: 80 },
-    { id: 2, x: 230, y: 80 },
+    { id: 1, x: 80, y: 80 },
+    { id: 2, x: 210, y: 80 },
     { id: 3, x: 400, y: 65 },
-    { id: 4, x: 570, y: 80 },
-    { id: 5, x: 700, y: 80 },
+    { id: 4, x: 590, y: 80 },
+    { id: 5, x: 720, y: 80 },
     // Milieu gauche — T6, T7
-    { id: 6, x: 90, y: 220 },
-    { id: 7, x: 90, y: 340 },
+    { id: 6, x: 70, y: 220 },
+    { id: 7, x: 70, y: 340 },
     // Milieu droit — T8, T9
-    { id: 8, x: 710, y: 220 },
-    { id: 9, x: 710, y: 340 },
+    { id: 8, x: 730, y: 220 },
+    { id: 9, x: 730, y: 340 },
     // Bas (rangée 3) — T10 à T15
     { id: 10, x: 80, y: 470 },
     { id: 11, x: 210, y: 480 },
@@ -789,7 +782,7 @@ function SallePlan() {
               {hovT.flower} Table {hovT.name}
             </span>
             <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.68rem', marginLeft: '8px' }}>
-              · {guests.filter(g => parseInt(g.tableId) === hovT.id).length}/{hovT.capacity} invités · Cliquer pour voir
+              · {guestsAt(hovT.id).length}/{hovT.capacity} invités · Cliquer pour voir
             </span>
           </div>
         ) : null
@@ -899,7 +892,6 @@ function SallePlan() {
                   12: ['Palmier &', 'Bambou'],
                   13: ['Orchidée', null],
                   14: ['Pivoine', 'Tropicale'],
-                  15: ['Rose de', 'Porcelaine'],
                 }
                 const [l1, l2] = LABELS[t.id] || [t.name, null]
                 if (!l2) {
@@ -1016,7 +1008,7 @@ function LivreOr() {
         {/* Titre */}
         <div style={{ textAlign: 'center', marginBottom: '48px' }}>
           <div style={{ fontSize: '2.5rem', marginBottom: '12px' }}>📖</div>
-          <h2 style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: 'clamp(1.8rem,4vw,2.6rem)', color: '#1a4a2e', marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: 'clamp(1.8rem,4vw,2.6rem)', color: '#ffffff', marginBottom: '8px', textShadow: '0 2px 8px rgba(0,0,0,0.3)' }}>
             Livre d'or
           </h2>
           <p style={{ fontSize: '0.65rem', letterSpacing: '0.35em', textTransform: 'uppercase', color: '#4caf7d', marginBottom: '16px' }}>
@@ -1162,7 +1154,7 @@ function LivreOr() {
                         <div style={{ width: '32px', height: '32px', borderRadius: '50%', background: 'linear-gradient(135deg,#1a4a2e,#2d7a4f)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '0.9rem', fontWeight: 700, flexShrink: 0 }}>
                           {m.auteur?.[0]?.toUpperCase() || '🌺'}
                         </div>
-                        <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#1a4a2e' }}>{m.auteur}</span>
+                        <span style={{ fontWeight: 700, fontSize: '0.88rem', color: '#ffffff' }}>{m.auteur}</span>
                       </div>
                       <span style={{ fontSize: '0.68rem', color: '#9ca3af', flexShrink: 0, marginLeft: '8px' }}>
                         {new Date(m.created_at || m.date).toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' })}

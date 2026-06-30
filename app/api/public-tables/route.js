@@ -11,10 +11,10 @@ export async function GET() {
   if (error) return NextResponse.json([], { status: 200 })
 
   const safe = (data || []).map(g => ({
-    id: g.id,
-    name: g.name,
+    id:      g.id,
+    name:    g.name,
     tableId: g.table_id ? parseInt(g.table_id) : null,
-    group: g.group,
+    group:   g.group,
     present: g.present,
   }))
 

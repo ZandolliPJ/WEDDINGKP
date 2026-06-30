@@ -61,7 +61,7 @@ export default function Invitations({ guests, onGuestsChange }) {
   // ── Message WhatsApp ─────────────────────────────────
   function whatsappMsg(guest) {
     const tbl = TABLES.find(t => t.id === guest.tableId)
-    const confirmUrl = `${SITE_URL}/confirmation`
+    const siteUrl = `${SITE_URL}/bienvenue`
     const msg = [
       `🌺 *Katty & Pascal vous invitent !*`,
       ``,
@@ -69,14 +69,11 @@ export default function Invitations({ guests, onGuestsChange }) {
       ``,
       `C'est avec grande joie que nous vous convions à notre mariage le *30 Juin 2026* 💍`,
       ``,
-      `✅ *Confirmez votre présence ici :*`,
-      `👉 ${confirmUrl}`,
-      ``,
       `📅 *Programme de la journée :*`,
       ``,
       `⚖️ Cérémonie Civile — *14h00*`,
-      `   Mairie de Grigny`,
-      `   19 Rte de Corbeil, 91350 Grigny`,
+      `   Ferme Neuve`,
+      `   1 rue Henri Rol-Tanguy, 91000 Grigny`,
       ``,
       `💒 Cérémonie Laïque — *17h30*`,
       `   Salle Jasmine`,
@@ -87,9 +84,9 @@ export default function Invitations({ guests, onGuestsChange }) {
       ``,
       tbl ? `🌸 *Votre table :* ${tbl.flower} ${tbl.name}` : ``,
       tbl ? `` : ``,
-      `👉 *Programme complet :* ${SITE_URL}/bienvenue`,
+      `👉 *Toutes les infos ici :* ${siteUrl}`,
       ``,
-      `_Merci de confirmer votre présence avant le 01.05.2026_ 🌺`,
+      `À très vite ! 🌺`,
       ``,
       `— Katty & Pascal`,
     ].filter(l => l !== undefined).join('\n')
@@ -446,7 +443,7 @@ function FairePartCard() {
           <p style={{ fontSize: '0.52rem', color: '#1a4a2e', opacity: 0.65, margin: 0, letterSpacing: '0.1em', textTransform: 'uppercase' }}>Vous invitent à leur grand jour</p>
           <p style={{ fontSize: '0.55rem', color: '#2d7a4f', fontWeight: 600, margin: 0, letterSpacing: '0.06em' }}>Salle Jasmine · Garges-lès-Gonesse</p>
           <div style={{ background: 'white', padding: '6px', borderRadius: '8px', boxShadow: '0 3px 12px rgba(0,0,0,0.1)', border: '1px solid rgba(201,168,76,0.2)' }}>
-            <QRCodeDisplay text="https://baladetropicale.fr/confirmation" size={58} />
+            <QRCodeDisplay text="https://baladetropicale.fr/bienvenue" size={58} />
           </div>
           <p style={{ fontSize: '0.45rem', color: '#2d7a4f', opacity: 0.55, margin: 0, letterSpacing: '0.12em', textTransform: 'uppercase' }}>Confirmez avant le 01.05.2026</p>
         </div>

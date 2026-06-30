@@ -10,7 +10,6 @@ import Guests           from '../../../components/tabs/Guests'
 import Invitations      from '../../../components/tabs/Invitations'
 import Export           from '../../../components/tabs/Export'
 import Budget          from '../../../components/tabs/Budget'
-import RsvpAdmin        from '../../../components/tabs/RsvpAdmin'
 import Checkin          from '../../../components/tabs/Checkin'
 import LoadingSpinner   from '../../../components/LoadingSpinner'
 
@@ -59,7 +58,6 @@ export default function AdminDashboard() {
       case 'guests':      return <Guests      guests={guests} onGuestsChange={setGuests}/>
       case 'invitations': return <Invitations guests={guests}/>
       case 'export':      return <Export      guests={guests}/>
-      case 'rsvp':        return <RsvpAdmin/>
       case 'checkin':     return <Checkin     guests={guests} onGuestsChange={setGuests}/>
       default:            return <Dashboard   guests={guests}/>
     }

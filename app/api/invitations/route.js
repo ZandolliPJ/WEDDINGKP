@@ -40,14 +40,14 @@ function buildEmailHTML(guest, tableInfo) {
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
           <span style="font-size:1.4rem;">⚖️</span>
           <div>
-            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Civile — 14h00</p>
-            <p style="color:#666;margin:2px 0 0;font-size:12px;">Mairie de Grigny · 19 Rte de Corbeil, 91350 Grigny</p>
+            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Civile — 11h30</p>
+            <p style="color:#666;margin:2px 0 0;font-size:12px;">Ferme Neuve · 1 rue Henri Rol-Tanguy, 91000 Grigny</p>
           </div>
         </div>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:12px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
           <span style="font-size:1.4rem;">💍</span>
           <div>
-            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Laïque — 17h30</p>
+            <p style="font-weight:bold;color:#1a4a2e;margin:0;font-size:13px;">Cérémonie Laïque — 16h00</p>
             <p style="color:#666;margin:2px 0 0;font-size:12px;">Salle Jasmine · 8 rue des Gaillards, 95140 Garges-lès-Gonesse</p>
           </div>
         </div>

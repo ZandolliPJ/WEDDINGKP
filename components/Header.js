@@ -70,8 +70,8 @@ export default function Header({ onLogout }) {
           fontFamily: 'var(--font-body)',
           fontWeight: 600,
         }} className="md:flex"
-          onMouseEnter={e => e.currentTarget.style.background = 'rgba(201,168,76,0.2)'}
-          onMouseLeave={e => e.currentTarget.style.background = 'rgba(201,168,76,0.08)'}>
+        onMouseEnter={e => e.currentTarget.style.background='rgba(201,168,76,0.2)'}
+        onMouseLeave={e => e.currentTarget.style.background='rgba(201,168,76,0.08)'}>
           🌺 Page invités
         </a>
 
@@ -93,8 +93,8 @@ export default function Header({ onLogout }) {
             fontFamily: 'var(--font-body)',
             fontWeight: 600,
           }}
-            onMouseEnter={e => { e.currentTarget.style.borderColor = 'rgba(239,68,68,0.5)'; e.currentTarget.style.color = '#EF4444' }}
-            onMouseLeave={e => { e.currentTarget.style.borderColor = 'rgba(255,255,255,0.15)'; e.currentTarget.style.color = 'rgba(255,255,255,0.45)' }}>
+          onMouseEnter={e => { e.currentTarget.style.borderColor='rgba(239,68,68,0.5)'; e.currentTarget.style.color='#EF4444' }}
+          onMouseLeave={e => { e.currentTarget.style.borderColor='rgba(255,255,255,0.15)'; e.currentTarget.style.color='rgba(255,255,255,0.45)' }}>
             🚪 <span>Déconnexion</span>
           </button>
         )}
