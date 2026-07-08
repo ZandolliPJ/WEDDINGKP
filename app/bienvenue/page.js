@@ -53,7 +53,15 @@ function Countdown({ dateISO }) {
     </div>
   )
 }
+const CLOUD = 'kmilvqsi'
+const IMG = (file, w = 800, h = 600) =>
+  `https://res.cloudinary.com/${CLOUD}/image/upload/w_${w},h_${h},c_fill,q_auto,f_auto/${file}`
 
+const PHOTOS = [
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783509772/WhatsApp_Image_2026-07-02_at_23.05.56_wqv8w8.jpg', caption: 'Balade Tropicale' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510169/WhatsApp_Image_2026-07-02_at_23.01.39_uuomum.jpg', caption: 'Katty & Pascal' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510182/WhatsApp_Image_2026-07-02_at_22.59.41_pu3v7q.jpg', caption: 'Notre mariage' },
+]
 /* ── NAV ── */
 const NAV_LINKS = [
   { id: 'accueil', label: 'Accueil' },
@@ -62,6 +70,7 @@ const NAV_LINKS = [
   { id: 'menu', label: 'Menu' },
   { id: 'acces', label: 'Accès' },
   { id: 'tables', label: 'Tables' },
+  { id: 'photos', label: 'Photos' },
   { id: 'livredor', label: 'Livre d\'or' },
 ]
 
@@ -493,8 +502,50 @@ export default function Bienvenue() {
           </p>
         </div>
       </section>
+      {/* ══ GALERIE PHOTOS ══ */}
+      <section id="photos" style={{ background: 'transparent' }}>
+        <div style={{
+          maxWidth: '960px', margin: '0 auto',
+          padding: 'clamp(48px,8vw,80px) clamp(16px,5vw,48px)'
+        }}>
+          <SectionTitle emoji="📸" title="Notre Galerie"
+            sub="30 Juin 2026 — Balade Tropicale" dark />
+          <div style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fill,minmax(280px,1fr))',
+            gap: '16px'
+          }}>
+            {PHOTOS.map((p, i) => (
+              <div key={i} style={{
+                borderRadius: '16px', overflow: 'hidden',
+                border: '1px solid rgba(201,168,76,0.3)',
+                boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
+                transition: 'transform 0.3s', cursor: 'pointer'
+              }}
+                onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'}
+                onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+                <img src={p.url} alt={p.caption}
+                  style={{
+                    width: '100%', height: '260px',
+                    objectFit: 'cover', display: 'block'
+                  }}
+                  loading="lazy" />
+                <div style={{
+                  padding: '10px 14px',
+                  background: 'rgba(0,0,0,0.6)', color: '#e8c97a',
+                  fontSize: '0.72rem', letterSpacing: '0.15em',
+                  textTransform: 'uppercase'
+                }}>
+                  {p.caption}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
       {/* ══ LIVRE D'OR ══ */}
+
       <LivreOr />
 
       {/* ══ FOOTER ══ */}
