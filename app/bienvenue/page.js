@@ -58,9 +58,11 @@ const IMG = (file, w = 800, h = 600) =>
   `https://res.cloudinary.com/${CLOUD}/image/upload/w_${w},h_${h},c_fill,q_auto,f_auto/${file}`
 
 const PHOTOS = [
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783509772/WhatsApp_Image_2026-07-02_at_23.05.56_wqv8w8.jpg', caption: 'Balade Tropicale' },
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510169/WhatsApp_Image_2026-07-02_at_23.01.39_uuomum.jpg', caption: 'Katty & Pascal' },
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510182/WhatsApp_Image_2026-07-02_at_22.59.41_pu3v7q.jpg', caption: 'Notre mariage' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783509772/WhatsApp_Image_2026-07-02_at_23.05.56_wqv8w8.jpg', caption: 'Balade Tropicale', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510169/WhatsApp_Image_2026-07-02_at_23.01.39_uuomum.jpg', caption: 'Katty & Pascal', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510182/WhatsApp_Image_2026-07-02_at_22.59.41_pu3v7q.jpg', caption: 'Notre mariage', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783681286/WhatsApp_Image_2026-07-10_at_07.35.21_1_xfvy9l.jpg', caption: 'Soirée Tropicale', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783682896/WhatsApp_Image_2026-07-10_at_07.35.21_p82pu2.jpg', caption: 'Balade Tropicale', height: '380px' },
 ]
 /* ── NAV ── */
 const NAV_LINKS = [
@@ -76,7 +78,7 @@ const NAV_LINKS = [
 
 export default function Bienvenue() {
   const [menuOpen, setMenuOpen] = useState(false)
-
+  const [lightbox, setLightbox] = useState(null)
 
 
 
@@ -520,14 +522,21 @@ export default function Bienvenue() {
                 borderRadius: '16px', overflow: 'hidden',
                 border: '1px solid rgba(201,168,76,0.3)',
                 boxShadow: '0 8px 24px rgba(0,0,0,0.3)',
-                transition: 'transform 0.3s', cursor: 'pointer'
+                transition: 'transform 0.3s', cursor: 'pointer',
+                /* Correct: Added border and ensured container sets the overflow */
+                display: 'flex', flexDirection: 'column'
               }}
                 onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-6px)'}
-                onMouseLeave={e => e.currentTarget.style.transform = 'none'}>
+                onMouseLeave={e => e.currentTarget.style.transform = 'none'}
+                onClick={() => setLightbox(p)}>
                 <img src={p.url} alt={p.caption}
                   style={{
-                    width: '100%', height: '260px',
-                    objectFit: 'cover', display: 'block'
+                    width: '100%',
+                    /* Key Change: REMOVED fixed height */
+                    height: 'auto',
+                    objectFit: 'cover', display: 'block',
+                    /* Crucial for aspect ratio, adjust as needed */
+                    aspectRatio: '1 / 1'
                   }}
                   loading="lazy" />
                 <div style={{
@@ -547,7 +556,41 @@ export default function Bienvenue() {
       {/* ══ LIVRE D'OR ══ */}
 
       <LivreOr />
-
+      {lightbox && (
+        <div onClick={() => setLightbox(null)}
+          style={{
+            position: 'fixed', inset: 0, zIndex: 999,
+            background: 'rgba(0,0,0,0.92)',
+            display: 'flex', alignItems: 'center',
+            justifyContent: 'center', padding: '20px',
+            cursor: 'zoom-out',
+          }}>
+          <button onClick={() => setLightbox(null)}
+            style={{
+              position: 'absolute', top: '20px', right: '24px',
+              background: 'rgba(255,255,255,0.15)',
+              border: '1px solid rgba(255,255,255,0.3)',
+              borderRadius: '50%', width: '44px', height: '44px',
+              color: 'white', fontSize: '1.3rem',
+              cursor: 'pointer', display: 'flex',
+              alignItems: 'center', justifyContent: 'center',
+            }}>✕</button>
+          <img src={lightbox.url}
+            alt={lightbox.caption}
+            style={{
+              maxWidth: '90vw', maxHeight: '90vh',
+              objectFit: 'contain', borderRadius: '12px',
+              boxShadow: '0 24px 80px rgba(0,0,0,0.8)',
+            }} />
+          <div style={{
+            position: 'absolute', bottom: '24px',
+            color: '#e8c97a', fontSize: '0.85rem',
+            letterSpacing: '0.2em', textTransform: 'uppercase',
+          }}>
+            {lightbox.caption}
+          </div>
+        </div>
+      )}
       {/* ══ FOOTER ══ */}
       <footer style={{
         padding: 'clamp(40px,6vw,56px) 20px',

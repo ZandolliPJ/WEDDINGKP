@@ -30,6 +30,7 @@ export function proxy(request) {
     return NextResponse.next()
   }
 
+
   const adminSession = request.cookies.get('admin_session')
   const orgSession = request.cookies.get('org_session')
   const isAdmin = adminSession?.value === SESSION_SECRET
