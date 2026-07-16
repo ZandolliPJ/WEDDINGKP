@@ -8,6 +8,7 @@ const NAV = [
   { id:'tables',      e:'🌸', l:'Tables'        },
   { id:'guests',      e:'👥', l:'Invités'       },
   { id:'invitations', e:'✉️', l:'Faire-Part'    },
+  { id:'photos',      e:'📸', l:'Photos'        },
   { id:'checkin',     e:'✅', l:'Check-in'      },
   { id:'export',      e:'📄', l:'Exports PDF'   },
 ]

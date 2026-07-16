@@ -57,6 +57,7 @@ export default function AdminDashboard() {
       case 'tables':      return <Tables      guests={guests} onGuestsChange={setGuests}/>
       case 'guests':      return <Guests      guests={guests} onGuestsChange={setGuests}/>
       case 'invitations': return <Invitations guests={guests}/>
+      case 'photos':      return <div style={{padding:'20px'}}><a href="/admin/photos" style={{display:'inline-flex',alignItems:'center',gap:'10px',padding:'14px 24px',borderRadius:'12px',background:'linear-gradient(135deg,#c9a84c,#f0d080)',color:'#1a4a2e',fontWeight:700,textDecoration:'none',fontSize:'0.85rem'}}>📸 Ouvrir le Gestionnaire Photos →</a></div>
       case 'export':      return <Export      guests={guests}/>
       case 'checkin':     return <Checkin     guests={guests} onGuestsChange={setGuests}/>
       default:            return <Dashboard   guests={guests}/>

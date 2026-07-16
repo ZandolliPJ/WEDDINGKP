@@ -63,6 +63,11 @@ const PHOTOS = [
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510182/WhatsApp_Image_2026-07-02_at_22.59.41_pu3v7q.jpg', caption: 'Notre mariage', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783681286/WhatsApp_Image_2026-07-10_at_07.35.21_1_xfvy9l.jpg', caption: 'Soirée Tropicale', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783682896/WhatsApp_Image_2026-07-10_at_07.35.21_p82pu2.jpg', caption: 'Balade Tropicale', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/IMG_20260630_190345_rzeavn.jpg', caption: 'Attente de la mariée', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/IMG_20260701_123945_gqz8b1.jpg', caption: 'Témoins des mariés', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8770_rthxol.jpg', caption: 'Sortir de la mairie', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8707_vfg2lp.jpg', caption: 'Signature Katty JUDITH', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8714_qfot0h.jpg', caption: 'Signature Pascal JUDITH', height: '380px' },
 ]
 /* ── NAV ── */
 const NAV_LINKS = [

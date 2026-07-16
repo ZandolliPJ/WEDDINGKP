@@ -26,6 +26,7 @@ export function proxy(request) {
     pathname.startsWith('/_next') ||
     pathname.startsWith('/favicon') ||
     pathname === '/'
+
   ) {
     return NextResponse.next()
   }
@@ -57,6 +58,8 @@ export function proxy(request) {
 
   if (isApiProtected) {
     if (pathname.startsWith('/api/guests') && (isAdmin || isOrg)) return NextResponse.next()
+    if (pathname.startsWith('/api/photos') && (isAdmin || isOrg)) return NextResponse.next()
+    if (pathname.startsWith('/api/folders') && (isAdmin || isOrg)) return NextResponse.next()
     if (!isAdmin) return NextResponse.redirect(new URL('/admin/login', request.url))
   }
 
