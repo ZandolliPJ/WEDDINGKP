@@ -58,17 +58,20 @@ const IMG = (file, w = 800, h = 600) =>
   `https://res.cloudinary.com/${CLOUD}/image/upload/w_${w},h_${h},c_fill,q_auto,f_auto/${file}`
 
 const PHOTOS = [
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783509772/WhatsApp_Image_2026-07-02_at_23.05.56_wqv8w8.jpg', caption: 'Balade Tropicale', height: '380px' },
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510169/WhatsApp_Image_2026-07-02_at_23.01.39_uuomum.jpg', caption: 'Katty & Pascal', height: '380px' },
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783510182/WhatsApp_Image_2026-07-02_at_22.59.41_pu3v7q.jpg', caption: 'Notre mariage', height: '380px' },
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783681286/WhatsApp_Image_2026-07-10_at_07.35.21_1_xfvy9l.jpg', caption: 'Soirée Tropicale', height: '380px' },
-  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/v1783682896/WhatsApp_Image_2026-07-10_at_07.35.21_p82pu2.jpg', caption: 'Balade Tropicale', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_1200,q_auto,f_auto/v1783509772/WhatsApp_Image_2026-07-02_at_23.05.56_wqv8w8.jpg', caption: 'Balade Tropicale', height: '260px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_1200,q_auto,f_auto/v1783510169/WhatsApp_Image_2026-07-02_at_23.01.39_uuomum.jpg', caption: 'Katty & Pascal', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_1200,q_auto,f_auto/v1783510182/WhatsApp_Image_2026-07-02_at_22.59.41_pu3v7q.jpg', caption: 'Notre mariage', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_1200,q_auto,f_auto/v1783681286/WhatsApp_Image_2026-07-10_at_07.35.21_1_xfvy9l.jpg', caption: 'Soirée Tropicale', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_1200,q_auto,f_auto/v1783682896/WhatsApp_Image_2026-07-10_at_07.35.21_p82pu2.jpg', caption: 'Balade Tropicale', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/IMG_20260630_190345_rzeavn.jpg', caption: 'Attente de la mariée', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/IMG_20260701_123945_gqz8b1.jpg', caption: 'Témoins des mariés', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8770_rthxol.jpg', caption: 'Sortir de la mairie', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8707_vfg2lp.jpg', caption: 'Signature Katty JUDITH', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8714_qfot0h.jpg', caption: 'Signature Pascal JUDITH', height: '380px' },
 ]
+
+
+
 /* ── NAV ── */
 const NAV_LINKS = [
   { id: 'accueil', label: 'Accueil' },
@@ -78,6 +81,7 @@ const NAV_LINKS = [
   { id: 'acces', label: 'Accès' },
   { id: 'tables', label: 'Tables' },
   { id: 'photos', label: 'Photos' },
+  { id: 'videos', label: 'Vidéos' },
   { id: 'livredor', label: 'Livre d\'or' },
 ]
 
@@ -551,6 +555,32 @@ export default function Bienvenue() {
                   textTransform: 'uppercase'
                 }}>
                   {p.caption}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ══ GALERIE VIDÉOS ══ */}
+      <section id="videos" style={{ scrollMarginTop: '80px', background: 'transparent' }}>
+        <div style={{ maxWidth: '960px', margin: '0 auto', padding: 'clamp(48px,8vw,80px) clamp(16px,5vw,48px)' }}>
+          <SectionTitle emoji="🎬" title="Nos Vidéos" sub="Les moments en mouvement" dark />
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(300px,1fr))', gap: '20px' }}>
+            {[
+              { url: 'https://res.cloudinary.com/kmilvqsi/video/upload/v1784280523/WhatsApp_Video_2026-07-13_at_21.32.33_beue1t.mp4', caption: 'Balade Tropicale' },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/v1784286411/VID_20260630_222754_gmtb3p.mp4', caption: 'Vivre Amour',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_3/v1784286411/VID_20260630_222754_gmtb3p.jpg'
+              },
+            ].map((v, i) => (
+              <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(201,168,76,0.3)' }}>
+                <video controls preload="metadata" poster={v.poster} style={{ width: '100%', display: 'block' }}>
+                  <source src={v.url.replace('.mp4', '.webm')} type="video/webm" />
+                  <source src={v.url} type="video/mp4" />
+                </video>
+                <div style={{ padding: '10px 14px', background: 'rgba(0,0,0,0.6)', color: '#e8c97a', fontSize: '0.72rem', letterSpacing: '0.15em', textTransform: 'uppercase' }}>
+                  {v.caption}
                 </div>
               </div>
             ))}

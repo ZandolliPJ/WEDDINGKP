@@ -3,41 +3,41 @@ import { useState, useEffect, useCallback, useRef } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 // ── Constantes ────────────────────────────────────────────
-const CLOUD  = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'kmilvqsi'
-const VIEWS  = ['grid', 'list']
-const SORTS  = [
-  { v:'created_at', l:'Date' }, { v:'name', l:'Nom' },
-  { v:'size', l:'Taille' }, { v:'format', l:'Format' },
+const CLOUD = process.env.NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME || 'kmilvqsi'
+const VIEWS = ['grid', 'list']
+const SORTS = [
+  { v: 'created_at', l: 'Date' }, { v: 'name', l: 'Nom' },
+  { v: 'size', l: 'Taille' }, { v: 'format', l: 'Format' },
 ]
-const FORMATS = ['jpg','jpeg','png','webp','avif','gif']
+const FORMATS = ['jpg', 'jpeg', 'png', 'webp', 'avif', 'gif']
 const ROLES = {
-  admin:        { upload:true,  update:true,  delete:true  },
-  organisateur: { upload:true,  update:true,  delete:false },
-  lecteur:      { upload:false, update:false, delete:false },
+  admin: { upload: true, update: true, delete: true },
+  organisateur: { upload: true, update: true, delete: false },
+  lecteur: { upload: false, update: false, delete: false },
 }
 
-function imgUrl(pid, w=400, h=300) {
+function imgUrl(pid, w = 400, h = 300) {
   return `https://res.cloudinary.com/${CLOUD}/image/upload/w_${w},h_${h},c_fill,q_auto,f_auto/${pid}`
 }
 
 // ── Composant Upload ──────────────────────────────────────
 function UploadZone({ folder, onUploaded }) {
-  const [files,    setFiles]    = useState([])
+  const [files, setFiles] = useState([])
   const [progress, setProgress] = useState({})
-  const [uploading,setUploading]= useState(false)
+  const [uploading, setUploading] = useState(false)
 
-  const compress = async (file, maxW=1920) => {
+  const compress = async (file, maxW = 1920) => {
     return new Promise(res => {
       const img = new Image()
       const url = URL.createObjectURL(file)
       img.onload = () => {
         const scale = Math.min(1, maxW / img.width)
-        const w = Math.round(img.width  * scale)
+        const w = Math.round(img.width * scale)
         const h = Math.round(img.height * scale)
         const canvas = document.createElement('canvas')
         canvas.width = w; canvas.height = h
         canvas.getContext('2d').drawImage(img, 0, 0, w, h)
-        canvas.toBlob(blob => res(new File([blob], file.name, {type:'image/jpeg'})),
+        canvas.toBlob(blob => res(new File([blob], file.name, { type: 'image/jpeg' })),
           'image/jpeg', 0.85)
         URL.revokeObjectURL(url)
       }
@@ -52,7 +52,7 @@ function UploadZone({ folder, onUploaded }) {
 
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop, accept: { 'image/*': FORMATS.map(f => `.${f}`) },
-    multiple: true, maxSize: 20 * 1024 * 1024,
+    multiple: true, maxSize: 100 * 1024 * 1024,
   })
 
   const uploadAll = async () => {
@@ -76,10 +76,10 @@ function UploadZone({ folder, onUploaded }) {
         // Upload Cloudinary
         const fd = new FormData()
         fd.append('file', compressed)
-        fd.append('api_key',   sig.api_key)
+        fd.append('api_key', sig.api_key)
         fd.append('timestamp', sig.timestamp)
         fd.append('signature', sig.signature)
-        fd.append('folder',    sig.folder)
+        fd.append('folder', sig.folder)
 
         const upRes = await fetch(
           `https://api.cloudinary.com/v1_1/${CLOUD}/image/upload`,
@@ -102,7 +102,7 @@ function UploadZone({ folder, onUploaded }) {
         })
         setProgress(p => ({ ...p, [file.name]: 100 }))
         uploaded.push(data)
-      } catch(e) {
+      } catch (e) {
         setProgress(p => ({ ...p, [file.name]: -1 }))
       }
     }
@@ -174,26 +174,26 @@ function UploadZone({ folder, onUploaded }) {
 
 // ── Page principale ───────────────────────────────────────
 export default function PhotosPage() {
-  const [photos,   setPhotos]   = useState([])
-  const [folders,  setFolders]  = useState([])
-  const [loading,  setLoading]  = useState(true)
-  const [view,     setView]     = useState('grid')
-  const [search,   setSearch]   = useState('')
-  const [sort,     setSort]     = useState('created_at')
-  const [sortDir,  setSortDir]  = useState('desc')
-  const [folder,   setFolder]   = useState(null)
-  const [tag,      setTag]      = useState(null)
-  const [trash,    setTrash]    = useState(false)
-  const [favOnly,  setFavOnly]  = useState(false)
+  const [photos, setPhotos] = useState([])
+  const [folders, setFolders] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [view, setView] = useState('grid')
+  const [search, setSearch] = useState('')
+  const [sort, setSort] = useState('created_at')
+  const [sortDir, setSortDir] = useState('desc')
+  const [folder, setFolder] = useState(null)
+  const [tag, setTag] = useState(null)
+  const [trash, setTrash] = useState(false)
+  const [favOnly, setFavOnly] = useState(false)
   const [lightbox, setLightbox] = useState(null)
   const [selected, setSelected] = useState(new Set())
-  const [editing,  setEditing]  = useState(null)
-  const [showUp,   setShowUp]   = useState(false)
-  const [newFolder,setNewFolder]= useState('')
-  const [toast,    setToast]    = useState(null)
-  const [tab,      setTab]      = useState('galerie')
+  const [editing, setEditing] = useState(null)
+  const [showUp, setShowUp] = useState(false)
+  const [newFolder, setNewFolder] = useState('')
+  const [toast, setToast] = useState(null)
+  const [tab, setTab] = useState('galerie')
 
-  const showToast = (msg, type='ok') => {
+  const showToast = (msg, type = 'ok') => {
     setToast({ msg, type })
     setTimeout(() => setToast(null), 3000)
   }
@@ -204,7 +204,7 @@ export default function PhotosPage() {
       sort, order: sortDir, trash: trash.toString(),
       favorites: favOnly.toString(),
       ...(folder && { folder }),
-      ...(tag    && { tag }),
+      ...(tag && { tag }),
       ...(search && { q: search }),
     })
     const [ph, fo] = await Promise.all([
@@ -274,68 +274,68 @@ export default function PhotosPage() {
 
   // Stats
   const totalSize = photos.reduce((s, p) => s + (p.size || 0), 0)
-  const fmtSize = n => n > 1024*1024 ? `${(n/1024/1024).toFixed(1)} MB` : `${Math.round(n/1024)} KB`
+  const fmtSize = n => n > 1024 * 1024 ? `${(n / 1024 / 1024).toFixed(1)} MB` : `${Math.round(n / 1024)} KB`
 
   const S = { // Styles communs
-    card:   { background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.10)', borderRadius:'12px', padding:'12px' },
-    btn:    { padding:'7px 14px', borderRadius:'8px', border:'1px solid rgba(255,255,255,0.2)', background:'rgba(255,255,255,0.07)', color:'rgba(255,255,255,0.75)', fontSize:'0.72rem', cursor:'pointer', fontFamily:'inherit' },
-    btnAct: { padding:'7px 14px', borderRadius:'8px', border:'1px solid rgba(201,168,76,0.6)', background:'rgba(201,168,76,0.18)', color:'#e8c97a', fontSize:'0.72rem', cursor:'pointer', fontFamily:'inherit' },
+    card: { background: 'rgba(255,255,255,0.06)', border: '1px solid rgba(255,255,255,0.10)', borderRadius: '12px', padding: '12px' },
+    btn: { padding: '7px 14px', borderRadius: '8px', border: '1px solid rgba(255,255,255,0.2)', background: 'rgba(255,255,255,0.07)', color: 'rgba(255,255,255,0.75)', fontSize: '0.72rem', cursor: 'pointer', fontFamily: 'inherit' },
+    btnAct: { padding: '7px 14px', borderRadius: '8px', border: '1px solid rgba(201,168,76,0.6)', background: 'rgba(201,168,76,0.18)', color: '#e8c97a', fontSize: '0.72rem', cursor: 'pointer', fontFamily: 'inherit' },
   }
 
   return (
-    <div style={{ minHeight:'100vh', backgroundColor:'#1a4a2e', backgroundImage:'var(--bg-mesh)', backgroundAttachment:'fixed', fontFamily:'"Josefin Sans",sans-serif' }}>
+    <div style={{ minHeight: '100vh', backgroundColor: '#1a4a2e', backgroundImage: 'var(--bg-mesh)', backgroundAttachment: 'fixed', fontFamily: '"Josefin Sans",sans-serif' }}>
 
       {/* ── Header ── */}
-      <div style={{ background:'rgba(0,0,0,0.4)', backdropFilter:'blur(16px)', borderBottom:'1px solid rgba(201,168,76,0.3)', padding:'14px 24px', display:'flex', alignItems:'center', justifyContent:'space-between', position:'sticky', top:0, zIndex:50 }}>
-        <div style={{ display:'flex', alignItems:'center', gap:'16px' }}>
-          <a href="/admin/dashboard" style={{ color:'rgba(255,255,255,0.5)', textDecoration:'none', fontSize:'0.75rem' }}>← Admin</a>
-          <div style={{ fontFamily:'"Playfair Display",serif', fontStyle:'italic', fontSize:'1.3rem', color:'#e8c97a' }}>📸 Gestionnaire Photos</div>
+      <div style={{ background: 'rgba(0,0,0,0.4)', backdropFilter: 'blur(16px)', borderBottom: '1px solid rgba(201,168,76,0.3)', padding: '14px 24px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', position: 'sticky', top: 0, zIndex: 50 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          <a href="/admin/dashboard" style={{ color: 'rgba(255,255,255,0.5)', textDecoration: 'none', fontSize: '0.75rem' }}>← Admin</a>
+          <div style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', fontSize: '1.3rem', color: '#e8c97a' }}>📸 Gestionnaire Photos</div>
         </div>
-        <div style={{ display:'flex', gap:'8px', alignItems:'center' }}>
-          <button onClick={() => setShowUp(s => !s)} style={{ padding:'8px 16px', borderRadius:'10px', border:'none', background:'linear-gradient(135deg,#c9a84c,#f0d080)', color:'#1a4a2e', fontSize:'0.72rem', fontWeight:700, cursor:'pointer', letterSpacing:'0.1em', textTransform:'uppercase' }}>
+        <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <button onClick={() => setShowUp(s => !s)} style={{ padding: '8px 16px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg,#c9a84c,#f0d080)', color: '#1a4a2e', fontSize: '0.72rem', fontWeight: 700, cursor: 'pointer', letterSpacing: '0.1em', textTransform: 'uppercase' }}>
             📤 Uploader
           </button>
-          <button onClick={() => fetch('/api/auth',{method:'DELETE'}).then(()=>window.location.href='/admin/login')}
+          <button onClick={() => fetch('/api/auth', { method: 'DELETE' }).then(() => window.location.href = '/admin/login')}
             style={{ ...S.btn }}>Déconnexion</button>
         </div>
       </div>
 
       {/* ── Toast ── */}
       {toast && (
-        <div style={{ position:'fixed', bottom:'24px', right:'24px', zIndex:200, padding:'12px 20px', borderRadius:'12px', background: toast.type==='err' ? 'rgba(239,68,68,0.92)' : 'rgba(34,197,94,0.92)', color:'white', fontSize:'0.82rem', fontWeight:600, boxShadow:'0 8px 24px rgba(0,0,0,0.3)' }}>
+        <div style={{ position: 'fixed', bottom: '24px', right: '24px', zIndex: 200, padding: '12px 20px', borderRadius: '12px', background: toast.type === 'err' ? 'rgba(239,68,68,0.92)' : 'rgba(34,197,94,0.92)', color: 'white', fontSize: '0.82rem', fontWeight: 600, boxShadow: '0 8px 24px rgba(0,0,0,0.3)' }}>
           {toast.msg}
         </div>
       )}
 
-      <div style={{ maxWidth:'1200px', margin:'0 auto', padding:'24px 16px', display:'grid', gridTemplateColumns:'220px 1fr', gap:'20px' }}>
+      <div style={{ maxWidth: '1200px', margin: '0 auto', padding: '24px 16px', display: 'grid', gridTemplateColumns: '220px 1fr', gap: '20px' }}>
 
         {/* ── Sidebar ── */}
-        <div style={{ display:'flex', flexDirection:'column', gap:'12px' }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
           {/* Stats */}
           <div style={{ ...S.card }}>
-            <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.6rem', letterSpacing:'0.2em', textTransform:'uppercase', marginBottom:'10px' }}>Stockage</div>
+            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '10px' }}>Stockage</div>
             {[
-              { l:'Photos', v: photos.length },
-              { l:'Taille', v: fmtSize(totalSize) },
-              { l:'Favoris', v: photos.filter(p=>p.favorite).length },
-              { l:'Corbeille', v: '—' },
+              { l: 'Photos', v: photos.length },
+              { l: 'Taille', v: fmtSize(totalSize) },
+              { l: 'Favoris', v: photos.filter(p => p.favorite).length },
+              { l: 'Corbeille', v: '—' },
             ].map(s => (
-              <div key={s.l} style={{ display:'flex', justifyContent:'space-between', marginBottom:'6px' }}>
-                <span style={{ color:'rgba(255,255,255,0.5)', fontSize:'0.75rem' }}>{s.l}</span>
-                <span style={{ color:'#e8c97a', fontSize:'0.75rem', fontWeight:600 }}>{s.v}</span>
+              <div key={s.l} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '6px' }}>
+                <span style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.75rem' }}>{s.l}</span>
+                <span style={{ color: '#e8c97a', fontSize: '0.75rem', fontWeight: 600 }}>{s.v}</span>
               </div>
             ))}
           </div>
 
           {/* Navigation */}
           <div style={{ ...S.card }}>
-            <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.6rem', letterSpacing:'0.2em', textTransform:'uppercase', marginBottom:'10px' }}>Navigation</div>
+            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '10px' }}>Navigation</div>
             {[
-              { id:'galerie',  icon:'🖼️', label:'Galerie' },
-              { id:'favoris',  icon:'⭐', label:'Favoris' },
-              { id:'corbeille',icon:'🗑️', label:'Corbeille' },
-              { id:'audit',    icon:'📋', label:'Historique' },
+              { id: 'galerie', icon: '🖼️', label: 'Galerie' },
+              { id: 'favoris', icon: '⭐', label: 'Favoris' },
+              { id: 'corbeille', icon: '🗑️', label: 'Corbeille' },
+              { id: 'audit', icon: '📋', label: 'Historique' },
             ].map(item => (
               <button key={item.id} onClick={() => {
                 setTab(item.id)
@@ -343,7 +343,7 @@ export default function PhotosPage() {
                 setFavOnly(item.id === 'favoris')
                 setFolder(null); setTag(null)
               }}
-                style={{ width:'100%', textAlign:'left', padding:'8px 10px', borderRadius:'8px', border:'none', background: tab===item.id ? 'rgba(201,168,76,0.18)' : 'transparent', color: tab===item.id ? '#e8c97a' : 'rgba(255,255,255,0.6)', fontSize:'0.78rem', cursor:'pointer', marginBottom:'2px', fontFamily:'inherit' }}>
+                style={{ width: '100%', textAlign: 'left', padding: '8px 10px', borderRadius: '8px', border: 'none', background: tab === item.id ? 'rgba(201,168,76,0.18)' : 'transparent', color: tab === item.id ? '#e8c97a' : 'rgba(255,255,255,0.6)', fontSize: '0.78rem', cursor: 'pointer', marginBottom: '2px', fontFamily: 'inherit' }}>
                 {item.icon} {item.label}
               </button>
             ))}
@@ -351,35 +351,35 @@ export default function PhotosPage() {
 
           {/* Dossiers */}
           <div style={{ ...S.card }}>
-            <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.6rem', letterSpacing:'0.2em', textTransform:'uppercase', marginBottom:'10px' }}>Dossiers</div>
+            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '10px' }}>Dossiers</div>
             <button onClick={() => setFolder(null)}
-              style={{ width:'100%', textAlign:'left', padding:'7px 10px', borderRadius:'8px', border:'none', background: !folder ? 'rgba(201,168,76,0.15)' : 'transparent', color: !folder ? '#e8c97a' : 'rgba(255,255,255,0.55)', fontSize:'0.75rem', cursor:'pointer', marginBottom:'4px', fontFamily:'inherit' }}>
+              style={{ width: '100%', textAlign: 'left', padding: '7px 10px', borderRadius: '8px', border: 'none', background: !folder ? 'rgba(201,168,76,0.15)' : 'transparent', color: !folder ? '#e8c97a' : 'rgba(255,255,255,0.55)', fontSize: '0.75rem', cursor: 'pointer', marginBottom: '4px', fontFamily: 'inherit' }}>
               📂 Tous les dossiers
             </button>
             {folders.map(f => (
               <button key={f.id} onClick={() => setFolder(f.id)}
-                style={{ width:'100%', textAlign:'left', padding:'7px 10px', borderRadius:'8px', border:'none', background: folder===f.id ? 'rgba(201,168,76,0.15)' : 'transparent', color: folder===f.id ? '#e8c97a' : 'rgba(255,255,255,0.55)', fontSize:'0.75rem', cursor:'pointer', marginBottom:'2px', fontFamily:'inherit' }}>
+                style={{ width: '100%', textAlign: 'left', padding: '7px 10px', borderRadius: '8px', border: 'none', background: folder === f.id ? 'rgba(201,168,76,0.15)' : 'transparent', color: folder === f.id ? '#e8c97a' : 'rgba(255,255,255,0.55)', fontSize: '0.75rem', cursor: 'pointer', marginBottom: '2px', fontFamily: 'inherit' }}>
                 📁 {f.name}
               </button>
             ))}
-            <div style={{ display:'flex', gap:'6px', marginTop:'8px' }}>
-              <input value={newFolder} onChange={e=>setNewFolder(e.target.value)}
-                onKeyDown={e=>e.key==='Enter'&&createFolder()}
+            <div style={{ display: 'flex', gap: '6px', marginTop: '8px' }}>
+              <input value={newFolder} onChange={e => setNewFolder(e.target.value)}
+                onKeyDown={e => e.key === 'Enter' && createFolder()}
                 placeholder="Nouveau dossier..."
-                style={{ flex:1, padding:'6px 8px', borderRadius:'7px', border:'1px solid rgba(255,255,255,0.15)', background:'rgba(255,255,255,0.07)', color:'white', fontSize:'0.7rem', outline:'none', fontFamily:'inherit' }} />
+                style={{ flex: 1, padding: '6px 8px', borderRadius: '7px', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.07)', color: 'white', fontSize: '0.7rem', outline: 'none', fontFamily: 'inherit' }} />
               <button onClick={createFolder}
-                style={{ padding:'6px 10px', borderRadius:'7px', border:'none', background:'rgba(201,168,76,0.25)', color:'#e8c97a', cursor:'pointer', fontSize:'0.85rem' }}>+</button>
+                style={{ padding: '6px 10px', borderRadius: '7px', border: 'none', background: 'rgba(201,168,76,0.25)', color: '#e8c97a', cursor: 'pointer', fontSize: '0.85rem' }}>+</button>
             </div>
           </div>
 
           {/* Tags */}
           {allTags.length > 0 && (
             <div style={{ ...S.card }}>
-              <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.6rem', letterSpacing:'0.2em', textTransform:'uppercase', marginBottom:'10px' }}>Tags</div>
-              <div style={{ display:'flex', flexWrap:'wrap', gap:'6px' }}>
+              <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.6rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '10px' }}>Tags</div>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
                 {allTags.map(t => (
-                  <button key={t} onClick={() => setTag(tag===t ? null : t)}
-                    style={{ padding:'3px 10px', borderRadius:'20px', border:`1px solid ${tag===t ? '#c9a84c' : 'rgba(255,255,255,0.2)'}`, background: tag===t ? 'rgba(201,168,76,0.2)' : 'transparent', color: tag===t ? '#e8c97a' : 'rgba(255,255,255,0.55)', fontSize:'0.65rem', cursor:'pointer', fontFamily:'inherit' }}>
+                  <button key={t} onClick={() => setTag(tag === t ? null : t)}
+                    style={{ padding: '3px 10px', borderRadius: '20px', border: `1px solid ${tag === t ? '#c9a84c' : 'rgba(255,255,255,0.2)'}`, background: tag === t ? 'rgba(201,168,76,0.2)' : 'transparent', color: tag === t ? '#e8c97a' : 'rgba(255,255,255,0.55)', fontSize: '0.65rem', cursor: 'pointer', fontFamily: 'inherit' }}>
                     🏷️ {t}
                   </button>
                 ))}
@@ -393,124 +393,126 @@ export default function PhotosPage() {
 
           {/* Zone Upload */}
           {showUp && (
-            <div style={{ ...S.card, marginBottom:'16px', border:'1px solid rgba(201,168,76,0.3)' }}>
-              <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'14px' }}>
-                <span style={{ color:'#e8c97a', fontSize:'0.8rem', fontWeight:600 }}>📤 Téléverser des photos</span>
-                <button onClick={()=>setShowUp(false)} style={{ background:'none', border:'none', color:'rgba(255,255,255,0.5)', cursor:'pointer', fontSize:'1rem' }}>✕</button>
+            <div style={{ ...S.card, marginBottom: '16px', border: '1px solid rgba(201,168,76,0.3)' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '14px' }}>
+                <span style={{ color: '#e8c97a', fontSize: '0.8rem', fontWeight: 600 }}>📤 Téléverser des photos</span>
+                <button onClick={() => setShowUp(false)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '1rem' }}>✕</button>
               </div>
               <UploadZone folder={folder} onUploaded={() => { setShowUp(false); load(); showToast('✅ Photos uploadées !') }} />
             </div>
           )}
 
           {/* Barre outils */}
-          <div style={{ display:'flex', gap:'8px', flexWrap:'wrap', alignItems:'center', marginBottom:'16px' }}>
+          <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap', alignItems: 'center', marginBottom: '16px' }}>
             {/* Recherche */}
-            <div style={{ position:'relative', flex:1, minWidth:'200px' }}>
-              <input value={search} onChange={e=>setSearch(e.target.value)}
+            <div style={{ position: 'relative', flex: 1, minWidth: '200px' }}>
+              <input value={search} onChange={e => setSearch(e.target.value)}
                 placeholder="🔍 Rechercher..."
-                style={{ width:'100%', padding:'9px 14px 9px 36px', borderRadius:'10px', border:'1px solid rgba(201,168,76,0.3)', background:'rgba(255,255,255,0.08)', color:'white', fontSize:'0.85rem', outline:'none', boxSizing:'border-box', fontFamily:'inherit' }} />
-              <span style={{ position:'absolute', left:'12px', top:'50%', transform:'translateY(-50%)', fontSize:'0.9rem' }}>🔍</span>
-              {search && <button onClick={()=>setSearch('')} style={{ position:'absolute', right:'10px', top:'50%', transform:'translateY(-50%)', background:'none', border:'none', color:'rgba(255,255,255,0.5)', cursor:'pointer' }}>✕</button>}
+                style={{ width: '100%', padding: '9px 14px 9px 36px', borderRadius: '10px', border: '1px solid rgba(201,168,76,0.3)', background: 'rgba(255,255,255,0.08)', color: 'white', fontSize: '0.85rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }} />
+              <span style={{ position: 'absolute', left: '12px', top: '50%', transform: 'translateY(-50%)', fontSize: '0.9rem' }}>🔍</span>
+              {search && <button onClick={() => setSearch('')} style={{ position: 'absolute', right: '10px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer' }}>✕</button>}
             </div>
 
             {/* Tri */}
-            <select value={sort} onChange={e=>setSort(e.target.value)}
-              style={{ padding:'9px 12px', borderRadius:'10px', border:'1px solid rgba(255,255,255,0.15)', background:'rgba(255,255,255,0.08)', color:'white', fontSize:'0.78rem', outline:'none', cursor:'pointer', fontFamily:'inherit' }}>
-              {SORTS.map(s => <option key={s.v} value={s.v} style={{background:'#1a4a2e'}}>{s.l}</option>)}
+            <select value={sort} onChange={e => setSort(e.target.value)}
+              style={{ padding: '9px 12px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.08)', color: 'white', fontSize: '0.78rem', outline: 'none', cursor: 'pointer', fontFamily: 'inherit' }}>
+              {SORTS.map(s => <option key={s.v} value={s.v} style={{ background: '#1a4a2e' }}>{s.l}</option>)}
             </select>
 
-            <button onClick={()=>setSortDir(d=>d==='asc'?'desc':'asc')} style={{ ...S.btn }}>
-              {sortDir==='asc'?'↑':'↓'}
+            <button onClick={() => setSortDir(d => d === 'asc' ? 'desc' : 'asc')} style={{ ...S.btn }}>
+              {sortDir === 'asc' ? '↑' : '↓'}
             </button>
 
             {/* Vue */}
             {VIEWS.map(v => (
-              <button key={v} onClick={()=>setView(v)}
-                style={view===v ? S.btnAct : S.btn}>
-                {v==='grid' ? '⊞' : '☰'}
+              <button key={v} onClick={() => setView(v)}
+                style={view === v ? S.btnAct : S.btn}>
+                {v === 'grid' ? '⊞' : '☰'}
               </button>
             ))}
 
-            <span style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.7rem' }}>
-              {photos.length} photo{photos.length>1?'s':''}
+            <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.7rem' }}>
+              {photos.length} photo{photos.length > 1 ? 's' : ''}
             </span>
           </div>
 
           {/* Grille/Liste photos */}
           {loading ? (
-            <div style={{ textAlign:'center', padding:'64px', color:'rgba(255,255,255,0.4)', fontSize:'2rem' }}>⏳</div>
+            <div style={{ textAlign: 'center', padding: '64px', color: 'rgba(255,255,255,0.4)', fontSize: '2rem' }}>⏳</div>
           ) : photos.length === 0 ? (
-            <div style={{ textAlign:'center', padding:'64px', ...S.card }}>
-              <div style={{ fontSize:'3rem', marginBottom:'12px' }}>{trash?'🗑️':favOnly?'⭐':'📷'}</div>
-              <p style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.9rem', fontStyle:'italic' }}>
+            <div style={{ textAlign: 'center', padding: '64px', ...S.card }}>
+              <div style={{ fontSize: '3rem', marginBottom: '12px' }}>{trash ? '🗑️' : favOnly ? '⭐' : '📷'}</div>
+              <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.9rem', fontStyle: 'italic' }}>
                 {trash ? 'Corbeille vide' : favOnly ? 'Aucun favori' : 'Aucune photo — uploadez-en !'}
               </p>
             </div>
           ) : view === 'grid' ? (
-            <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(200px,1fr))', gap:'12px' }}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill,minmax(200px,1fr))', gap: '12px' }}>
               {photos.map(p => (
                 <div key={p.id}
-                  style={{ ...S.card, padding:0, overflow:'hidden', cursor:'pointer', transition:'transform 0.2s, box-shadow 0.2s', position:'relative',
-                    border: selected.has(p.id) ? '2px solid #c9a84c' : '1px solid rgba(255,255,255,0.10)' }}
-                  onMouseEnter={e=>{e.currentTarget.style.transform='translateY(-4px)';e.currentTarget.style.boxShadow='0 12px 32px rgba(0,0,0,0.4)'}}
-                  onMouseLeave={e=>{e.currentTarget.style.transform='none';e.currentTarget.style.boxShadow='none'}}>
+                  style={{
+                    ...S.card, padding: 0, overflow: 'hidden', cursor: 'pointer', transition: 'transform 0.2s, box-shadow 0.2s', position: 'relative',
+                    border: selected.has(p.id) ? '2px solid #c9a84c' : '1px solid rgba(255,255,255,0.10)'
+                  }}
+                  onMouseEnter={e => { e.currentTarget.style.transform = 'translateY(-4px)'; e.currentTarget.style.boxShadow = '0 12px 32px rgba(0,0,0,0.4)' }}
+                  onMouseLeave={e => { e.currentTarget.style.transform = 'none'; e.currentTarget.style.boxShadow = 'none' }}>
 
                   {/* Image */}
-                  <div style={{ position:'relative' }} onClick={() => setLightbox(p)}>
+                  <div style={{ position: 'relative' }} onClick={() => setLightbox(p)}>
                     <img src={imgUrl(p.public_id)} alt={p.name}
-                      style={{ width:'100%', height:'160px', objectFit:'cover', display:'block' }}
+                      style={{ width: '100%', height: '160px', objectFit: 'cover', display: 'block' }}
                       loading="lazy" />
                     {/* Overlay actions */}
-                    <div style={{ position:'absolute', inset:0, background:'rgba(0,0,0,0)', transition:'background 0.2s', display:'flex', alignItems:'center', justifyContent:'center', gap:'8px', opacity:0 }}
+                    <div style={{ position: 'absolute', inset: 0, background: 'rgba(0,0,0,0)', transition: 'background 0.2s', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', opacity: 0 }}
                       className="photo-overlay"
-                      onMouseEnter={e=>{e.currentTarget.style.background='rgba(0,0,0,0.5)';e.currentTarget.style.opacity='1'}}
-                      onMouseLeave={e=>{e.currentTarget.style.background='rgba(0,0,0,0)';e.currentTarget.style.opacity='0'}}>
-                      <button onClick={(e)=>{e.stopPropagation();setLightbox(p)}}
-                        style={{ padding:'6px 10px', borderRadius:'8px', border:'none', background:'rgba(255,255,255,0.2)', color:'white', cursor:'pointer', fontSize:'1rem' }}>🔍</button>
+                      onMouseEnter={e => { e.currentTarget.style.background = 'rgba(0,0,0,0.5)'; e.currentTarget.style.opacity = '1' }}
+                      onMouseLeave={e => { e.currentTarget.style.background = 'rgba(0,0,0,0)'; e.currentTarget.style.opacity = '0' }}>
+                      <button onClick={(e) => { e.stopPropagation(); setLightbox(p) }}
+                        style={{ padding: '6px 10px', borderRadius: '8px', border: 'none', background: 'rgba(255,255,255,0.2)', color: 'white', cursor: 'pointer', fontSize: '1rem' }}>🔍</button>
                     </div>
                   </div>
 
                   {/* Infos */}
-                  <div style={{ padding:'10px' }}>
-                    <div style={{ color:'white', fontSize:'0.75rem', fontWeight:600, overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap', marginBottom:'6px' }}>
+                  <div style={{ padding: '10px' }}>
+                    <div style={{ color: 'white', fontSize: '0.75rem', fontWeight: 600, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '6px' }}>
                       {p.name}
                     </div>
-                    <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center' }}>
-                      <span style={{ color:'rgba(255,255,255,0.35)', fontSize:'0.62rem' }}>
-                        {p.format?.toUpperCase()} · {fmtSize(p.size||0)}
+                    <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                      <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '0.62rem' }}>
+                        {p.format?.toUpperCase()} · {fmtSize(p.size || 0)}
                       </span>
-                      <div style={{ display:'flex', gap:'4px' }}>
+                      <div style={{ display: 'flex', gap: '4px' }}>
                         {/* Favori */}
-                        <button onClick={()=>toggleFav(p)}
-                          style={{ background:'none', border:'none', cursor:'pointer', fontSize:'0.85rem', opacity: p.favorite ? 1 : 0.4 }}>
+                        <button onClick={() => toggleFav(p)}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', opacity: p.favorite ? 1 : 0.4 }}>
                           ⭐
                         </button>
                         {/* Modifier */}
-                        <button onClick={()=>setEditing({...p, tags:(p.tags||[]).join(',')})}
-                          style={{ background:'none', border:'none', cursor:'pointer', fontSize:'0.85rem', opacity:0.6 }}>
+                        <button onClick={() => setEditing({ ...p, tags: (p.tags || []).join(',') })}
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', opacity: 0.6 }}>
                           ✏️
                         </button>
                         {/* Télécharger */}
                         <a href={p.url} download target="_blank" rel="noreferrer"
-                          style={{ background:'none', border:'none', cursor:'pointer', fontSize:'0.85rem', opacity:0.6, textDecoration:'none' }}>
+                          style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', opacity: 0.6, textDecoration: 'none' }}>
                           ⬇️
                         </a>
                         {/* Corbeille/Restaurer */}
                         {trash ? (
                           <>
-                            <button onClick={()=>restore(p.id)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'0.85rem', opacity:0.6 }}>♻️</button>
-                            <button onClick={()=>deletePermanent(p.id)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'0.85rem', opacity:0.6 }}>💥</button>
+                            <button onClick={() => restore(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', opacity: 0.6 }}>♻️</button>
+                            <button onClick={() => deletePermanent(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', opacity: 0.6 }}>💥</button>
                           </>
                         ) : (
-                          <button onClick={()=>moveToTrash(p.id)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'0.85rem', opacity:0.6 }}>🗑️</button>
+                          <button onClick={() => moveToTrash(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', opacity: 0.6 }}>🗑️</button>
                         )}
                       </div>
                     </div>
                     {/* Tags */}
                     {p.tags?.length > 0 && (
-                      <div style={{ display:'flex', gap:'4px', flexWrap:'wrap', marginTop:'6px' }}>
+                      <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', marginTop: '6px' }}>
                         {p.tags.map(t => (
-                          <span key={t} style={{ padding:'2px 6px', borderRadius:'10px', background:'rgba(201,168,76,0.15)', color:'#c9a84c', fontSize:'0.58rem' }}>
+                          <span key={t} style={{ padding: '2px 6px', borderRadius: '10px', background: 'rgba(201,168,76,0.15)', color: '#c9a84c', fontSize: '0.58rem' }}>
                             {t}
                           </span>
                         ))}
@@ -522,34 +524,34 @@ export default function PhotosPage() {
             </div>
           ) : (
             /* Vue liste */
-            <div style={{ display:'flex', flexDirection:'column', gap:'6px' }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {photos.map(p => (
-                <div key={p.id} style={{ ...S.card, display:'flex', alignItems:'center', gap:'14px' }}>
+                <div key={p.id} style={{ ...S.card, display: 'flex', alignItems: 'center', gap: '14px' }}>
                   <img src={imgUrl(p.public_id, 80, 60)} alt={p.name}
-                    style={{ width:'80px', height:'56px', objectFit:'cover', borderRadius:'8px', flexShrink:0, cursor:'pointer' }}
+                    style={{ width: '80px', height: '56px', objectFit: 'cover', borderRadius: '8px', flexShrink: 0, cursor: 'pointer' }}
                     onClick={() => setLightbox(p)} />
-                  <div style={{ flex:1, minWidth:0 }}>
-                    <div style={{ color:'white', fontWeight:600, fontSize:'0.85rem', overflow:'hidden', textOverflow:'ellipsis', whiteSpace:'nowrap' }}>{p.name}</div>
-                    <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.68rem', marginTop:'2px' }}>
-                      {p.format?.toUpperCase()} · {fmtSize(p.size||0)} · {p.width}×{p.height}
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ color: 'white', fontWeight: 600, fontSize: '0.85rem', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{p.name}</div>
+                    <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.68rem', marginTop: '2px' }}>
+                      {p.format?.toUpperCase()} · {fmtSize(p.size || 0)} · {p.width}×{p.height}
                     </div>
                     {p.tags?.length > 0 && (
-                      <div style={{ display:'flex', gap:'4px', marginTop:'4px' }}>
-                        {p.tags.map(t => <span key={t} style={{ padding:'1px 6px', borderRadius:'10px', background:'rgba(201,168,76,0.15)', color:'#c9a84c', fontSize:'0.58rem' }}>{t}</span>)}
+                      <div style={{ display: 'flex', gap: '4px', marginTop: '4px' }}>
+                        {p.tags.map(t => <span key={t} style={{ padding: '1px 6px', borderRadius: '10px', background: 'rgba(201,168,76,0.15)', color: '#c9a84c', fontSize: '0.58rem' }}>{t}</span>)}
                       </div>
                     )}
                   </div>
-                  <div style={{ display:'flex', gap:'6px', flexShrink:0 }}>
-                    <button onClick={()=>toggleFav(p)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1rem', opacity: p.favorite ? 1 : 0.35 }}>⭐</button>
-                    <button onClick={()=>setEditing({...p, tags:(p.tags||[]).join(',')})} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1rem', opacity:0.5 }}>✏️</button>
-                    <a href={p.url} download target="_blank" rel="noreferrer" style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1rem', opacity:0.5, textDecoration:'none' }}>⬇️</a>
+                  <div style={{ display: 'flex', gap: '6px', flexShrink: 0 }}>
+                    <button onClick={() => toggleFav(p)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: p.favorite ? 1 : 0.35 }}>⭐</button>
+                    <button onClick={() => setEditing({ ...p, tags: (p.tags || []).join(',') })} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: 0.5 }}>✏️</button>
+                    <a href={p.url} download target="_blank" rel="noreferrer" style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: 0.5, textDecoration: 'none' }}>⬇️</a>
                     {trash ? (
                       <>
-                        <button onClick={()=>restore(p.id)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1rem', opacity:0.5 }}>♻️</button>
-                        <button onClick={()=>deletePermanent(p.id)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1rem', opacity:0.5 }}>💥</button>
+                        <button onClick={() => restore(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: 0.5 }}>♻️</button>
+                        <button onClick={() => deletePermanent(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: 0.5 }}>💥</button>
                       </>
                     ) : (
-                      <button onClick={()=>moveToTrash(p.id)} style={{ background:'none', border:'none', cursor:'pointer', fontSize:'1rem', opacity:0.5 }}>🗑️</button>
+                      <button onClick={() => moveToTrash(p.id)} style={{ background: 'none', border: 'none', cursor: 'pointer', fontSize: '1rem', opacity: 0.5 }}>🗑️</button>
                     )}
                   </div>
                 </div>
@@ -561,23 +563,23 @@ export default function PhotosPage() {
 
       {/* ── Lightbox ── */}
       {lightbox && (
-        <div onClick={()=>setLightbox(null)} style={{ position:'fixed', inset:0, zIndex:999, background:'rgba(0,0,0,0.94)', display:'flex', alignItems:'center', justifyContent:'center', padding:'20px', cursor:'zoom-out' }}>
-          <button onClick={()=>setLightbox(null)} style={{ position:'absolute', top:'20px', right:'24px', background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.3)', borderRadius:'50%', width:'44px', height:'44px', color:'white', fontSize:'1.3rem', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>✕</button>
+        <div onClick={() => setLightbox(null)} style={{ position: 'fixed', inset: 0, zIndex: 999, background: 'rgba(0,0,0,0.94)', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px', cursor: 'zoom-out' }}>
+          <button onClick={() => setLightbox(null)} style={{ position: 'absolute', top: '20px', right: '24px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '50%', width: '44px', height: '44px', color: 'white', fontSize: '1.3rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>✕</button>
 
           {/* Navigation */}
-          <button onClick={(e)=>{e.stopPropagation();const i=photos.findIndex(p=>p.id===lightbox.id);setLightbox(photos[(i-1+photos.length)%photos.length])}}
-            style={{ position:'absolute', left:'20px', background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.3)', borderRadius:'50%', width:'44px', height:'44px', color:'white', fontSize:'1.3rem', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>‹</button>
-          <button onClick={(e)=>{e.stopPropagation();const i=photos.findIndex(p=>p.id===lightbox.id);setLightbox(photos[(i+1)%photos.length])}}
-            style={{ position:'absolute', right:'80px', background:'rgba(255,255,255,0.15)', border:'1px solid rgba(255,255,255,0.3)', borderRadius:'50%', width:'44px', height:'44px', color:'white', fontSize:'1.3rem', cursor:'pointer', display:'flex', alignItems:'center', justifyContent:'center' }}>›</button>
+          <button onClick={(e) => { e.stopPropagation(); const i = photos.findIndex(p => p.id === lightbox.id); setLightbox(photos[(i - 1 + photos.length) % photos.length]) }}
+            style={{ position: 'absolute', left: '20px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '50%', width: '44px', height: '44px', color: 'white', fontSize: '1.3rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>‹</button>
+          <button onClick={(e) => { e.stopPropagation(); const i = photos.findIndex(p => p.id === lightbox.id); setLightbox(photos[(i + 1) % photos.length]) }}
+            style={{ position: 'absolute', right: '80px', background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)', borderRadius: '50%', width: '44px', height: '44px', color: 'white', fontSize: '1.3rem', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>›</button>
 
           <img src={lightbox.url} alt={lightbox.name}
-            style={{ maxWidth:'88vw', maxHeight:'88vh', objectFit:'contain', borderRadius:'12px', boxShadow:'0 24px 80px rgba(0,0,0,0.8)', cursor:'default' }}
-            onClick={e=>e.stopPropagation()} />
+            style={{ maxWidth: '88vw', maxHeight: '88vh', objectFit: 'contain', borderRadius: '12px', boxShadow: '0 24px 80px rgba(0,0,0,0.8)', cursor: 'default' }}
+            onClick={e => e.stopPropagation()} />
 
-          <div style={{ position:'absolute', bottom:'24px', left:'50%', transform:'translateX(-50%)', textAlign:'center' }}>
-            <div style={{ color:'#e8c97a', fontSize:'0.85rem', letterSpacing:'0.2em', textTransform:'uppercase' }}>{lightbox.name}</div>
-            <div style={{ color:'rgba(255,255,255,0.4)', fontSize:'0.68rem', marginTop:'4px' }}>
-              {lightbox.format?.toUpperCase()} · {fmtSize(lightbox.size||0)} · {lightbox.width}×{lightbox.height}
+          <div style={{ position: 'absolute', bottom: '24px', left: '50%', transform: 'translateX(-50%)', textAlign: 'center' }}>
+            <div style={{ color: '#e8c97a', fontSize: '0.85rem', letterSpacing: '0.2em', textTransform: 'uppercase' }}>{lightbox.name}</div>
+            <div style={{ color: 'rgba(255,255,255,0.4)', fontSize: '0.68rem', marginTop: '4px' }}>
+              {lightbox.format?.toUpperCase()} · {fmtSize(lightbox.size || 0)} · {lightbox.width}×{lightbox.height}
             </div>
           </div>
         </div>
@@ -585,35 +587,35 @@ export default function PhotosPage() {
 
       {/* ── Modal édition ── */}
       {editing && (
-        <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.78)', zIndex:100, display:'flex', alignItems:'center', justifyContent:'center', padding:'20px' }}
-          onClick={e=>e.target===e.currentTarget&&setEditing(null)}>
-          <div style={{ background:'linear-gradient(160deg,#1a4a2e,#0d2b1a)', border:'1px solid rgba(201,168,76,0.4)', borderRadius:'20px', padding:'28px', width:'100%', maxWidth:'420px', boxShadow:'0 24px 80px rgba(0,0,0,0.6)' }}>
-            <div style={{ display:'flex', justifyContent:'space-between', alignItems:'center', marginBottom:'20px' }}>
-              <h3 style={{ fontFamily:'"Playfair Display",serif', fontStyle:'italic', color:'#e8c97a', fontSize:'1.2rem', margin:0 }}>✏️ Modifier la photo</h3>
-              <button onClick={()=>setEditing(null)} style={{ background:'none', border:'none', color:'rgba(255,255,255,0.5)', cursor:'pointer', fontSize:'1.2rem' }}>✕</button>
+        <div style={{ position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.78)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}
+          onClick={e => e.target === e.currentTarget && setEditing(null)}>
+          <div style={{ background: 'linear-gradient(160deg,#1a4a2e,#0d2b1a)', border: '1px solid rgba(201,168,76,0.4)', borderRadius: '20px', padding: '28px', width: '100%', maxWidth: '420px', boxShadow: '0 24px 80px rgba(0,0,0,0.6)' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+              <h3 style={{ fontFamily: '"Playfair Display",serif', fontStyle: 'italic', color: '#e8c97a', fontSize: '1.2rem', margin: 0 }}>✏️ Modifier la photo</h3>
+              <button onClick={() => setEditing(null)} style={{ background: 'none', border: 'none', color: 'rgba(255,255,255,0.5)', cursor: 'pointer', fontSize: '1.2rem' }}>✕</button>
             </div>
 
-            <img src={imgUrl(editing.public_id,400,200)} alt={editing.name}
-              style={{ width:'100%', height:'160px', objectFit:'cover', borderRadius:'10px', marginBottom:'16px' }} />
+            <img src={imgUrl(editing.public_id, 400, 200)} alt={editing.name}
+              style={{ width: '100%', height: '160px', objectFit: 'cover', borderRadius: '10px', marginBottom: '16px' }} />
 
             {[
-              { label:'Nom', key:'name', placeholder:'Nom de la photo' },
-              { label:'Légende', key:'caption', placeholder:'Description...' },
-              { label:'Tags (séparés par virgule)', key:'tags', placeholder:'mariage, cérémonie, famille...' },
+              { label: 'Nom', key: 'name', placeholder: 'Nom de la photo' },
+              { label: 'Légende', key: 'caption', placeholder: 'Description...' },
+              { label: 'Tags (séparés par virgule)', key: 'tags', placeholder: 'mariage, cérémonie, famille...' },
             ].map(f => (
-              <div key={f.key} style={{ marginBottom:'14px' }}>
-                <label style={{ display:'block', color:'rgba(255,255,255,0.55)', fontSize:'0.62rem', letterSpacing:'0.2em', textTransform:'uppercase', marginBottom:'5px' }}>{f.label}</label>
-                <input value={editing[f.key]||''} onChange={e=>setEditing({...editing,[f.key]:e.target.value})}
+              <div key={f.key} style={{ marginBottom: '14px' }}>
+                <label style={{ display: 'block', color: 'rgba(255,255,255,0.55)', fontSize: '0.62rem', letterSpacing: '0.2em', textTransform: 'uppercase', marginBottom: '5px' }}>{f.label}</label>
+                <input value={editing[f.key] || ''} onChange={e => setEditing({ ...editing, [f.key]: e.target.value })}
                   placeholder={f.placeholder}
-                  style={{ width:'100%', padding:'9px 13px', borderRadius:'9px', border:'2px solid rgba(255,255,255,0.12)', background:'rgba(255,255,255,0.07)', color:'white', fontSize:'0.88rem', outline:'none', boxSizing:'border-box', fontFamily:'inherit' }}
-                  onFocus={e=>e.target.style.borderColor='#c9a84c'}
-                  onBlur={e=>e.target.style.borderColor='rgba(255,255,255,0.12)'} />
+                  style={{ width: '100%', padding: '9px 13px', borderRadius: '9px', border: '2px solid rgba(255,255,255,0.12)', background: 'rgba(255,255,255,0.07)', color: 'white', fontSize: '0.88rem', outline: 'none', boxSizing: 'border-box', fontFamily: 'inherit' }}
+                  onFocus={e => e.target.style.borderColor = '#c9a84c'}
+                  onBlur={e => e.target.style.borderColor = 'rgba(255,255,255,0.12)'} />
               </div>
             ))}
 
-            <div style={{ display:'flex', gap:'10px', marginTop:'20px' }}>
-              <button onClick={()=>setEditing(null)} style={{ flex:1, padding:'11px', borderRadius:'10px', border:'1px solid rgba(255,255,255,0.15)', background:'rgba(255,255,255,0.05)', color:'rgba(255,255,255,0.55)', fontSize:'0.75rem', cursor:'pointer', fontFamily:'inherit' }}>Annuler</button>
-              <button onClick={saveEdit} style={{ flex:2, padding:'11px', borderRadius:'10px', border:'none', background:'linear-gradient(135deg,#c9a84c,#f0d080)', color:'#1a4a2e', fontSize:'0.75rem', fontWeight:700, cursor:'pointer', fontFamily:'inherit' }}>💾 Enregistrer</button>
+            <div style={{ display: 'flex', gap: '10px', marginTop: '20px' }}>
+              <button onClick={() => setEditing(null)} style={{ flex: 1, padding: '11px', borderRadius: '10px', border: '1px solid rgba(255,255,255,0.15)', background: 'rgba(255,255,255,0.05)', color: 'rgba(255,255,255,0.55)', fontSize: '0.75rem', cursor: 'pointer', fontFamily: 'inherit' }}>Annuler</button>
+              <button onClick={saveEdit} style={{ flex: 2, padding: '11px', borderRadius: '10px', border: 'none', background: 'linear-gradient(135deg,#c9a84c,#f0d080)', color: '#1a4a2e', fontSize: '0.75rem', fontWeight: 700, cursor: 'pointer', fontFamily: 'inherit' }}>💾 Enregistrer</button>
             </div>
           </div>
         </div>
