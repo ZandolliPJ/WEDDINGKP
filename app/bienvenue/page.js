@@ -68,6 +68,8 @@ const PHOTOS = [
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8770_rthxol.jpg', caption: 'Sortir de la mairie', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8707_vfg2lp.jpg', caption: 'Signature Katty JUDITH', height: '380px' },
   { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_800,h_600,c_fill,q_auto,f_auto/DSC_8714_qfot0h.jpg', caption: 'Signature Pascal JUDITH', height: '380px' },
+  { url: 'https://res.cloudinary.com/kmilvqsi/image/upload/w_1200,q_auto,f_auto/v1784573887/IMG_20260630_154949_uxqumd.jpg', caption: 'Cortège', height: '380px' },
+
 ]
 
 
@@ -572,6 +574,46 @@ export default function Bienvenue() {
               {
                 url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/v1784286411/VID_20260630_222754_gmtb3p.mp4', caption: 'Vivre Amour',
                 poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_3/v1784286411/VID_20260630_222754_gmtb3p.jpg'
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/Lv_0_20260708113812_1_xwjrzw.mp4',
+                caption: 'Mixage Mariage',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/Lv_0_20260708113812_1_xwjrzw.jpg'
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/VID_20260701_122133_xuwvaq.mp4',
+                caption: 'Les témoins',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/VID_20260701_122133_xuwvaq.jpg'
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/VID_20260712_182147_gva2dn.mp4',
+                caption: 'Cortège homme',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/VID_20260701_122133_xuwvaq.jpg'
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/VID_20260712_181659_jpdpe9.mp4',
+                caption: 'Cortège homme et femme',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/VID_20260712_181659_jpdpe9.jpg'
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/VID_20260712_182340_qpnxx9.mp4',
+                caption: 'Bienvenu',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/VID_20260712_182340_qpnxx9.jpg',
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/VID_20260630_223241_krkcai.mp4',
+                caption: 'Table du marier',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/VID_20260630_223241_krkcai.jpg'
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/VID_20260630_220345_gitp0n.mp4',
+                caption: 'Groupe de Danse',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/VID_20260630_220345_gitp0n.jpg'
+              },
+              {
+                url: 'https://res.cloudinary.com/kmilvqsi/video/upload/vc_auto,q_auto,w_720/VID_20260630_220606_rbrc0v.mp4',
+                caption: 'Groupe de Danse suite',
+                poster: 'https://res.cloudinary.com/kmilvqsi/video/upload/so_2/VID_20260630_220606_rbrc0v.jpg'
               },
             ].map((v, i) => (
               <div key={i} style={{ borderRadius: '16px', overflow: 'hidden', border: '1px solid rgba(201,168,76,0.3)' }}>
