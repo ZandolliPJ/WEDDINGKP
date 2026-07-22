@@ -53,7 +53,7 @@ export function proxy(request) {
   const isApiProtected = pathname.startsWith('/api') &&
     !pathname.startsWith('/api/auth') &&
     !pathname.startsWith('/api/public-tables') &&
-    !pathname.startsWith('/api/livredor') &&
+    !pathname.startsWith('/api/livredor') && !pathname.startsWith('/api/visits') &&
     !pathname.startsWith('/api/test-email')
 
   if (isApiProtected) {

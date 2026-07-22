@@ -1,6 +1,7 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { WEDDING, TIMELINE, MENU, HOTELS, TABLES } from '../../lib/data'
+import VisitCounter from '../../components/VisitCounter'
 
 /* ── helpers ── */
 const Section = ({ id, children, bg = 'transparent' }) => (
@@ -692,6 +693,9 @@ export default function Bienvenue() {
         </div>
 
         <p style={{ color: 'rgba(255,255,255,0.2)', fontSize: '0.72rem', margin: 0, textAlign: 'center' }}>Avec tout notre amour 🌺</p>
+        <div style={{ marginTop: '12px', display: 'flex', justifyContent: 'center' }}>
+          <VisitCounter />
+        </div>
       </footer>
     </div>
   )

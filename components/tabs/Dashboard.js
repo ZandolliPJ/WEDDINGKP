@@ -1,8 +1,25 @@
 // Dashboard.js — Couleurs sémantiques tropicales
 'use client'
+import { useState, useEffect } from 'react'
 import { TABLES, GROUP_COLORS } from '../../lib/data'
 
 export default function Dashboard({ guests }) {
+  const [visits, setVisits] = useState(null)
+  const [todayVisits, setTodayVisits] = useState(null)
+
+  useEffect(() => {
+    fetch('/api/visits')
+      .then(r => r.json())
+      .then(d => setVisits(d.count || 0))
+  }, [])
+
+  useEffect(() => {
+    // Visites du jour
+    fetch('/api/visits/stats')
+      .then(r => r.json())
+      .then(d => setTodayVisits(d.today || 0))
+      .catch(() => setTodayVisits(0))
+  }, [])
   const total     = guests.length
   const confirmed = guests.filter(g=>g.status==='confirmed').length
   const pending   = guests.filter(g=>g.status==='pending').length
@@ -39,6 +56,22 @@ export default function Dashboard({ guests }) {
       }}>
         Vue d'ensemble — Balade Tropicale · 30 Juin 2026
       </p>
+
+      {/* ── Compteur visites ── */}
+      <div style={{ display:'flex', gap:'12px', flexWrap:'wrap', marginBottom:'24px' }}>
+        {[
+          { l:'Visites totales', v: visits !== null ? visits.toLocaleString('fr-FR') : '…', c:'#e8c97a', icon:'👁️' },
+          { l:'Aujourd\'hui',    v: todayVisits !== null ? todayVisits : '…',                c:'#22c55e', icon:'📅' },
+        ].map(s => (
+          <div key={s.l} style={{ display:'flex', alignItems:'center', gap:'10px', padding:'10px 18px', borderRadius:'12px', background:'rgba(255,255,255,0.06)', border:'1px solid rgba(255,255,255,0.10)' }}>
+            <span style={{ fontSize:'1.1rem' }}>{s.icon}</span>
+            <div>
+              <div style={{ color:s.c, fontWeight:700, fontSize:'1.3rem', lineHeight:1 }}>{s.v}</div>
+              <div style={{ color:'rgba(255,255,255,0.45)', fontSize:'0.6rem', letterSpacing:'0.15em', textTransform:'uppercase', marginTop:'2px' }}>{s.l}</div>
+            </div>
+          </div>
+        ))}
+      </div>
 
       {/* ── Stats principales ── */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-10">
